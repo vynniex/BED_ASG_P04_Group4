@@ -1,0 +1,23 @@
+{
+  "name": "bed_asg_p04_group4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vynniex/BED_ASG_P04_Group4.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vynniex/BED_ASG_P04_Group4/issues"
+  },
+  "homepage": "https://github.com/vynniex/BED_ASG_P04_Group4#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
