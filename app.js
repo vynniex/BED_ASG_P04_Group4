@@ -1,29 +1,56 @@
 const path = require("path");
 const express = require("express");
-const sql = require("mssql");
 const dotenv = require("dotenv");
+const cors = require("cors")  // For API development
+
 // Load environment variables
 dotenv.config();
 
-// Controllers
+// Import Routes
+const medsController = require("./medicine-api-xinyi/controllers/medsController.js")
 
-
-// Create Express app
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middlewares (Parsing request bodies)
+app.use(cors());  // For Frontend connections
 app.use(express.json()); // Parse JSON request bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
-// --- Add other general middleware here (e.g., logging, security headers) ---
-// --- Serve static files from the 'public' directory ---
-// When a request comes in for a static file (like /index.html, /styles.css, /script.js),
-// Express will look for it in the 'public' folder relative to the project root.
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public"))); // Static files
+
+// Routes
+// MEDICATION ROUTES - XY
+app.post("/api/medications", medsController.createMed);
+app.get("/api/medications", medsController.getAllMeds);
+app.get("/api/medications/:medName", medsController.getMedByName);
+app.put("/api/medications/:medName", medsController.updateMed);
+app.delete("/api/medications/:medName", medsController.deleteMed);
+
+// Health check
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ 
+    status: "OK", 
+    timestamp: new Date() });
+});
+
+// 404 Handler
+app.use((req, res) => {
+  res.status(404).json({ 
+    error: "Endpoint not found" 
+  });
+});
+
+// Error Handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: "Internal server error" 
+  });
+});
 
 // Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log('Medication API: http://localhost:${port}/api/medications');
 });
 
 // Graceful shutdown

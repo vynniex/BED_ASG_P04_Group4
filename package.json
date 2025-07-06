@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/vynniex/BED_ASG_P04_Group4#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "@firebase/firestore": "^4.8.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "firebase": "^11.10.0"
   }
 }
