@@ -50,13 +50,11 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-  console.log('Medication API: http://localhost:${port}/api/medications');
+  console.log(`Medication API: http://localhost:${port}/api/medications`);
 });
 
 // Graceful shutdown
-process.on("SIGINT", async () => {
+process.on("SIGINT", () => {
   console.log("Server is gracefully shutting down");
-  await sql.close();
-  console.log("Database connections closed");
   process.exit(0);
 });
