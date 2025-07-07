@@ -12,6 +12,8 @@ const {
   validateMedName,
 } = require("./medicine-api-xinyi/middlewares/medsValidation.js");
 
+const apptController = require("./appointments-api-grace/controllers/apptsController.js");
+
 // Create express app
 const app = express();
 const port = process.env.PORT || 3000;
@@ -28,6 +30,11 @@ app.get("/api/medications", medsController.getAllMeds);
 app.get("/api/medications/:medName", validateMedName, medsController.getMedByName);
 app.put("/api/medications/:medName", validateMedName, validateMedInput, medsController.updateMed);
 app.delete("/api/medications/:medName", validateMedName, medsController.deleteMed);
+// APPOINTMENT ROUTES - Grace
+app.get("/appointments/users/:nric/:fullName", apptController.getAllAppointmentsByUser);
+app.post("/appointments", apptController.createAppointment);
+app.post("/appointments/login", apptController.login);
+
 
 // Health check
 app.get("/api/health", (req, res) => {
