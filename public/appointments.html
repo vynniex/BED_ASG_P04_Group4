@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Marck+Script&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <title>Appointments page</title>
+  </head>
+  <body>
+    <nav class="navbar inter-regular">
+      <ul>
+        <li><a href="#">HOME</a></li>
+        <li><a href="#">RECORDS</a></li>
+        <li><a href="#">MEDICATION</a></li>
+        <li><a href="appointments.html">APPOINTMENTS</a></li>
+      </ul>
+    </nav>
+
+    <section id="card">
+      <h2 class="inter-regular">Book An Appointment Online</h2>
+      <p class="lato-regular">Booking an appointment is quick and easy. Simply choose the service you need, 
+        pick a date and time that fits your schedule, and provide your details</p>
+      <div><button class="green-button" onclick="makeAppointment()">Make an appointment</button></div>
+    </section>
+
+    <section id="card">
+      <h2 class="inter-regular">Manage Your Appointment</h2>
+      <p class="lato-regular">Need to make a change? You can easily view your upcoming appointments, 
+        make updates to the details, or cancel if something comes up.</p>
+      <div class="terms">
+        <p class="merriweather-sans-regular">Terms:<br>
+          Appointments are subjected to availability.<br>
+          Any changes or cancellations should be made at least 24 hours in advance.<br>
+          All information provided is accurate and up to date.
+        </p>
+      </div>
+      <div><button class="blue-button" onclick="login()">Login</button></div>
+    </section>
+
+    <section id="card">
+      <h2 class="inter-regular">Call Us For An Appointment</h2>
+      <p class="lato-regular">Booking an appointment is quick and easy. Simply choose the service you need, pick a date and time that fits your schedule, and provide your details.</p>
+      <div class="info merriweather-sans-regular">
+        <div>
+          <p><strong>Contact information:</strong><br>+65 6623 4678</p>
+          <p><strong>Email:</strong><br>contact@lionbefriender.sg</p>
+        </div>
+        <div>
+          <p><strong>Operating Hours:</strong><br>
+            Monday to Friday: 9am – 6pm<br>
+            Saturday: 10am – 12am<br>
+            Closed on Sundays and Public Holidays</p>
+        </div>
+      </div>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
