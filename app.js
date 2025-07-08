@@ -8,6 +8,7 @@ dotenv.config();
 
 // Import Routes
 const medsController = require("./medicine-api-xinyi/controllers/medsController.js")
+const recsController = require("./records-api-xuening/controllers/recsController");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,6 +25,12 @@ app.get("/api/medications", medsController.getAllMeds);
 app.get("/api/medications/:medName", medsController.getMedByName);
 app.put("/api/medications/:medName", medsController.updateMed);
 app.delete("/api/medications/:medName", medsController.deleteMed);
+
+// MEDICAL RECORDS ROUTES - XN (validation tba)
+app.get("/api/records", recsController.getAllRecords);
+app.post("/api/records", recsController.createRecord);
+app.put("/api/records/:id", recsController.updateRecordById);
+app.delete("/api/records/:id", recsController.deleteRecordById);
 
 // Health check
 app.get("/api/health", (req, res) => {
@@ -51,6 +58,7 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
   console.log(`Medication API: http://localhost:${port}/api/medications`);
+  console.log(`Medical Records API: http://localhost:${port}/api/records`);
 });
 
 // Graceful shutdown
