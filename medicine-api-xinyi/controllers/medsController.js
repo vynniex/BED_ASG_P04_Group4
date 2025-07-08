@@ -6,34 +6,17 @@ const {
   updateDoc, 
   deleteDoc, 
   collection, 
-  getDocs, 
-  query,
-  where
+  getDocs
  } = require("firebase/firestore");
-
-function validateMedInput(medData) {
-  const { medName, purpose, perDay, foodTiming } = medData;
-  if (!medName || !purpose || !perDay || !foodTiming) {
-    throw new Error("All fields are required");
-  }
-  if (typeof perDay !== 'number' || perDay <= 0) {
-    throw new Error("Frequency per day must be a positive number");
-  }
-}
 
 // Get all medicines
 async function getAllMeds(req, res) {
   try {
-    const medsCollection = collection(db, "medications");
-    const snapshot = await getDocs(medsCollection);
-    
-    const medications = [];
-    snapshot.forEach(doc => {
-      medications.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
+    const snapshot = await getDocs(collection(db, "medications"));
+    const medications = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
 
     res.json({
       success: true,
@@ -52,16 +35,7 @@ async function getAllMeds(req, res) {
 async function getMedByName(req, res) {
   try {
     const medName = req.params.medName;
-
-    if (!medName || typeof medName !== "string") {
-      return res.status(400).json({ 
-        success: false,
-        error: "Invalid medicine name" 
-      });
-    }
-
-    const medRef = doc(db, "medications", medName);
-    const docSnapshot = await getDoc(medRef);
+    const docSnapshot = await getDoc(doc(db, "medications", medName));
 
     if (!docSnapshot.exists()) {
       return res.status(404).json({ 
@@ -89,39 +63,30 @@ async function getMedByName(req, res) {
 // Create new medicine record
 async function createMed(req, res) {
   try {
-    const medData = req.body;
-    validateMedInput(medData);
+    const { medName } = req.body;
+    const medRef = doc(db, "medications", medName);
 
-    const medRef = doc(db, "medications", medData.medName);
-    const docSnapshot = await getDoc(medRef);
-
-    if (docSnapshot.exists()) {
-      return res.status(404).json({ 
+    if ((await getDoc(medRef)).exists()) {
+      return res.status(400).json({
         success: false,
-        error: "Medicine already exists" 
+        message: "Medicine already exists",
       });
     }
-
+  
     await setDoc(medRef, {
-      ...medData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      ...req.body,
+      createdAt: new Date().toISOString()
     });
 
     res.status(201).json({
       success: true,
-      message: "Medicine added successfully",
-      data: {
-        id: medData.medName,
-        ...medData
-      }
+      data: req.body
     });
   } catch (error) {
-    console.error("Controller error:", error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      error: error.message || "Error creating medicine" 
-    });
+      error: error.message || "Could not create medicine"
+    })
   }
 }
 
@@ -129,16 +94,9 @@ async function createMed(req, res) {
 async function deleteMed(req, res) {
   try {
     const medName = req.params.medName;
-
-    if (!medName || typeof medName !== "string") {
-      return res.status(400).json({ 
-        success: false,
-        error: "Invalid medicine name" 
-      });
-    }
-
     const medRef = doc(db, "medications", medName);
     const docSnapshot = await getDoc(medRef);
+
     if (!docSnapshot.exists()) {
       return res.status(404).json({ 
         success: false,
@@ -147,7 +105,6 @@ async function deleteMed(req, res) {
     }
 
     await deleteDoc(medRef);
-
     res.status(200).json({
       success: true,
       message: "Medicine deleted successfully"
@@ -165,22 +122,6 @@ async function deleteMed(req, res) {
 async function updateMed(req, res) {
   try{ 
     const medName = req.params.medName;
-    const updates = req.body;
-
-    if (!medName || typeof medName !== "string") {
-      return res.status(400).json({ 
-        success: false,
-        error: "Invalid medicine name" 
-      });
-    }
-
-    if (!updates || Object.keys(updates).length === 0) {
-      return res.status(400).json({ 
-        success: false,
-        error: "No update data provided" 
-      });
-    }
-
     const medRef = doc(db, "medications", medName);
     const docSnapshot = await getDoc(medRef);
 
@@ -189,21 +130,13 @@ async function updateMed(req, res) {
         success: false,
         error: "Medicine not found" });
     }
-    
-    // Prevent changing medName (doc ID)
-    if (updates.medName && updates.medName !== medName) {
-      return res.status(400).json({
-        success: false,
-        error: "Cannot change medication name - delete and create a new record"
-      });
-    }
 
-    await updateDoc(medRef, {
-      ...updates,
+    const updatedData = {
+      ...req.body,
       updatedAt: new Date().toISOString()
-    });
+    };
 
-    // Get update
+    await updateDoc(medRef, updatedData);
     const updatedDoc = await getDoc(medRef);
 
     res.json({

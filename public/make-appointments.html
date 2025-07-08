@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Marck+Script&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <title>Make Appointments Form</title>
+  </head>
+  <body>
+    <nav class="navbar inter-regular">
+      <ul>
+        <li><a href="#">HOME</a></li>
+        <li><a href="#">RECORDS</a></li>
+        <li><a href="#">MEDICATION</a></li>
+        <li><a href="appointments.html">APPOINTMENTS</a></li>
+      </ul>
+    </nav>
+
+    <section id="appointment-container">
+        <form id="appointment-form" class="form-card merriweather-sans-regular">
+            <h2 class="inter-regular">Online Medical Appointment Form</h2>
+
+            <label for="nric">NRIC / FIN:</label>
+            <input type="text" id="nric" name="nric/fin" required>
+
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="name" autocomplete="on" required>
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" autocomplete="on" required>
+
+            <div class="row">
+                <div>
+                    <label for="contactNum">Contact Number:</label>
+                    <input type="tel" id="contactNum" name="contact">
+                </div>
+                <div>
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob">
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label for="appointmentDate">Appointment Date:</label>
+                    <input type="date" id="appointmentDate" name="appointmentDate" required>
+                </div>
+                <div>
+                    <label for="appointmentTime">Appointment Time:</label>
+                    <select id="appointmentTime" name="appointmentTime" required>
+                        <option value="">Choose from list</option>
+                        <option>9:00 AM</option>
+                        <option>10:00 AM</option>
+                        <option>11:00 AM</option>
+                        <option>2:00 PM</option>
+                        <option>3:00 PM</option>
+                        <option>4:00 PM</option>
+                        <option>5:00 PM</option>
+                    </select>
+                </div>
+            </div>
+
+            <label for="clinic">Clinic:</label>
+            <select id="clinic" name="clinic" class="lato-regular" required>
+                <option value="">Choose from list</option>
+                <option>Bedok Polyclinic</option>
+                <option>Bukit Merah Polyclinic</option>
+                <option>Eunos Polyclinic</option>
+                <option>Marine Parade Polyclinic</option>
+                <option>Paris Ris Polyclinic</option>
+                <option>Punggol Polyclinic</option>
+                <option>Outram Polyclinic</option>
+                <option>Sengkang Polyclinic</option>
+                <option>Tampines Polyclinic</option>
+            </select>
+
+            <label for="reason" class="merriweather-sans-regular">Reason for Appointment:</label>
+            <div class="radio-group lato-regular">
+                <label><input type="radio" name="reason" value="General Consultation"> General Consultation</label>
+                <label><input type="radio" name="reason" value="Headache / Migraine"> Headache / Migraine</label>
+                <label><input type="radio" name="reason" value="Follow-up Appointment"> Follow-up Appointment</label>
+                <label><input type="radio" name="reason" value="Referral Request"> Referral Request</label>
+                <label><input type="radio" name="reason" value="Vaccination / Immunization"> Vaccination / Immunization</label>
+                <label><input type="radio" name="reason" value="Mental Health Consultation"> Mental Health Consultation</label>
+            </div>
+
+            <button type="submit" class="green-button">Make an appointment</button>
+        </form>
+        <button type="button" class="back-button" onclick="goBack()">BACK</button>
+    </section>
+
+    <script src="create-script.js"></script>
+  </body>
+</html>
