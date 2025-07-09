@@ -1,40 +1,53 @@
-const sql = require("mssql");
-const dbConfig = require("../dbConfig");
+const {
+  collection,
+  getDocs,
+  setDoc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  query,
+  where,
+} = require("firebase/firestore");
+const {db} = require("../../config/firebase");
+
 
 // Get all appointments
 async function getAllAppointmentsByUser(nric, fullName) {
-    let connection;
     try {
-        connection = await sql.connect(dbConfig);
-        const query = `Select appointment_id, appointment_date, appointment_time, clinic, reason 
-                      From Appointments WHERE nric_fin = @nric and full_name = @name`;
-        const request = connection.request();
-        request.input("nric", nric);
-        request.input("name", fullName);
-        const result = await request.query(query);
+        const connection = await collection(db, "appointments");
+        const q = query(
+          connection,
+          where("nric_fin", "==", nric),
+          where("full_name", "==", fullName)
+        );
 
-        return result.recordset.map(appt => {
-            const dateStr = new Date(appt.appointment_date).toLocaleDateString('en-SG', {
-                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-                timeZone: 'Asia/Singapore'
-            });
+        const snapshot = await getDocs(q);
+        const results = snapshot.docs.map(doc => {
+          const data = doc.data();
 
-            const timeStr = appt.appointment_time
+          // Convert Firestore Timestamp to JS Date and format it
+          const dateStr = data.appointment_date.toDate().toLocaleString('en-SG', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+            timeZone: 'Asia/Singapore'
+          });
 
-            return { ...appt, formatted_datetime: `${dateStr} at ${timeStr}` };
+          // Return only selected fields
+          return {
+            appointment_id: data.appointment_id,
+            appointment_date: data.appointment_date,
+            appointment_time: data.appointment_time,
+            clinic: data.clinic,
+            reason: data.reason,
+            formatted_datetime: `${dateStr} at ${data.appointment_time}`,
+          };
         });
-        
+
+        return results;
+
     } catch(error) {
-        console.error("Database error: ", error);
+        console.error("Error getting appointments: ", error);
         throw error;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch(err) {
-                console.error("Error closing database:", err);
-            }
-        }
     }
 }
 

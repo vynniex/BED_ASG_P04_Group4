@@ -1,4 +1,3 @@
-const { rows } = require("mssql");
 const appointmentModel = require("../models/apptsModel");
 
 // Get all appointments
