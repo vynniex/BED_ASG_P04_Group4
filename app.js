@@ -36,7 +36,9 @@ app.delete("/api/medications/:medName", validateMedName, medsController.deleteMe
 // APPOINTMENT ROUTES - Grace
 app.get("/appointments/users/:nric/:fullName", apptController.getAllAppointmentsByUser);
 app.post("/appointments", apptController.createAppointment);
+app.put("/appointments/:id", apptController.updateAppointmentById);
 app.post("/appointments/login", apptController.login);
+app.delete("/appointments/:id", apptController.deleteAppointmentById);
 
 // MEDICAL RECORDS ROUTES - XN (validation tba)
 app.get("/api/records", recsController.getAllRecords);

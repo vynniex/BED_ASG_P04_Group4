@@ -45,8 +45,57 @@ async function createAppointment(req, res) {
   }
 }
 
+// Update existing appointment
+async function updateAppointmentById(req, res) {
+  try {
+    const id = req.params.id.trim();
+    const { contact, appointment_date, appointment_time, clinic } = req.body;
+    console.log("Updating doc with ID:", id);
+
+    const updateData = {
+      contact: contact?.trim(),
+      appointmentDate: appointment_date?.trim(),
+      appointmentTime: appointment_time?.trim(),
+      clinic: clinic?.trim()
+    };
+
+    const appointment = await appointmentModel.updateAppointmentById(id,updateData);
+    if (!appointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+    res.json(appointment);
+  } catch (error) {
+    console.error("Controller error:", error);
+    res.status(500).json({ error: "Error updating appointment" });
+  }
+}
+
+// Delete appointment by Id
+async function deleteAppointmentById(req,res) {
+  try {
+    const id = req.params.id;
+    if (!id || typeof id != "string") {
+      return res.status(400).json({ error: "Invalid appointment ID" });
+    }
+
+    const rowsDeleted = await appointmentModel.deleteAppointmentById(id);
+    if (rowsDeleted === 0) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+    
+    return res.status(204).send();
+  } catch (error) {
+    console.error("Controller error:", error);
+    res.status(500).json({ error: "Error deleting Appointment." });
+  }
+}
+
+
 module.exports = {
   getAllAppointmentsByUser,
   createAppointment,
   login,
+  updateAppointmentById,
+  deleteAppointmentById
 }
