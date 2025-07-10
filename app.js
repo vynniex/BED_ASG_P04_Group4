@@ -34,11 +34,11 @@ app.put("/api/medications/:medName", validateMedName, validateMedInput, medsCont
 app.delete("/api/medications/:medName", validateMedName, medsController.deleteMed);
 
 // APPOINTMENT ROUTES - Grace
-app.get("/appointments/users/:nric/:fullName", apptController.getAllAppointmentsByUser);
-app.post("/appointments", apptController.createAppointment);
-app.put("/appointments/:id", apptController.updateAppointmentById);
-app.post("/appointments/login", apptController.login);
-app.delete("/appointments/:id", apptController.deleteAppointmentById);
+app.get("/api/appointments/users/:nric/:fullName", apptController.getAllAppointmentsByUser);
+app.post("/api/appointments", apptController.createAppointment);
+app.put("/api/appointments/:id", apptController.updateAppointmentById);
+app.post("/api/appointments/login", apptController.login);
+app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 
 // MEDICAL RECORDS ROUTES - XN (validation tba)
 app.get("/api/records", recsController.getAllRecords);
@@ -64,6 +64,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
   console.log(`Medication API: http://localhost:${port}/api/medications`);
   console.log(`Medical Records API: http://localhost:${port}/api/records`);
+  console.log(`Appointment API: http://localhost:3000/api/appointments`);
 });
 
 // Graceful shutdown

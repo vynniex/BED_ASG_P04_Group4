@@ -35,8 +35,8 @@ async function getAllAppointmentsByUser(nric, fullName) {
 
           // Return only selected fields
           return {
-            appointment_id: data.appointment_id,
-            appointment_date: data.appointment_date,
+            appointment_id: doc.id,
+            appointment_date: dateStr,
             appointment_time: data.appointment_time,
             clinic: data.clinic,
             reason: data.reason,

@@ -21,7 +21,7 @@ appointmentForm.addEventListener("submit", async (event) => {
 
     try {
         // Make a POST request to your API endpoint
-        const response = await fetch(`${apiBaseUrl}/appointments`, {
+        const response = await fetch(`${apiBaseUrl}/api/appointments`, {
         method: "POST", // Specify the HTTP method
         headers: {
             "Content-Type": "application/json", // Tell the API we are sending JSON

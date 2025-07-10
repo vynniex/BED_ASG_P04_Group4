@@ -14,7 +14,7 @@ async function fetchAppointments() {
     // }
 
     // Make a GET request to your API endpoint
-    const response = await fetch(`${apiBaseUrl}/appointments/users/${nric}/${fullName}`);
+    const response = await fetch(`${apiBaseUrl}/api/appointments/users/${nric}/${fullName}`);
 
     if (!response.ok) {
       // Handle HTTP errors (e.g., 404, 500)
@@ -37,6 +37,7 @@ async function fetchAppointments() {
       const card = document.createElement("div");
       const now = new Date();
       const appointmentDate = new Date(appt.appointment_date);
+      console.log(appt.appointment_date);
       const status = appointmentDate >= now ? "Upcoming" : "Completed";
       card.className = "appointment-card";
       card.innerHTML = `
@@ -92,7 +93,7 @@ async function handleDeleteClick(event) {
   console.log("Attempting to delete appointment with ID:", appointmentId);
 
   try {
-    const response = await fetch(`${apiBaseUrl}/appointments/${appointmentId}`, {
+    const response = await fetch(`${apiBaseUrl}/api/appointments/${appointmentId}`, {
       method: "DELETE",
     });
 

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courgette&family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Marck+Script&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css" />
-    <title>Make Appointments Form</title>
+    <title>Edit Appointment page</title>
   </head>
   <body>
     <nav class="navbar inter-regular">
@@ -19,29 +19,12 @@
       </ul>
     </nav>
 
-    <section id="appointment-container">
-        <form id="appointment-form" class="form-card merriweather-sans-regular">
-            <h2 class="inter-regular">Online Medical Appointment Form</h2>
+    <section id="edit-form">
+        <form class="form-card merriweather-sans-regular" onsubmit="return submitForm(event)">
+            <h2 class="inter-regular">Welcome Back!</h2>
 
-            <label for="nric">NRIC / FIN:</label>
-            <input type="text" id="nric" name="nric/fin" required>
-
-            <label for="fullName">Full Name:</label>
-            <input type="text" id="fullName" name="name" autocomplete="on" required>
-
-            <label for="email">Email Address:</label>
-            <input type="email" id="email" name="email" autocomplete="on" required>
-
-            <div class="row">
-                <div>
-                    <label for="contactNum">Contact Number:</label>
-                    <input type="tel" id="contactNum" name="contact">
-                </div>
-                <div>
-                    <label for="dob">Date of Birth:</label>
-                    <input type="date" id="dob" name="dob">
-                </div>
-            </div>
+            <label for="contactnum">Contact Number:</label>
+            <input type="text" id="contactnum" name="contact" required>
 
             <div class="row">
                 <div>
@@ -77,21 +60,14 @@
                 <option>Tampines Polyclinic</option>
             </select>
 
-            <label for="reason" class="merriweather-sans-regular">Reason for Appointment:</label>
-            <div class="radio-group lato-regular">
-                <label><input type="radio" name="reason" value="General Consultation"> General Consultation</label>
-                <label><input type="radio" name="reason" value="Headache / Migraine"> Headache / Migraine</label>
-                <label><input type="radio" name="reason" value="Follow-up Appointment"> Follow-up Appointment</label>
-                <label><input type="radio" name="reason" value="Referral Request"> Referral Request</label>
-                <label><input type="radio" name="reason" value="Vaccination / Immunization"> Vaccination / Immunization</label>
-                <label><input type="radio" name="reason" value="Mental Health Consultation"> Mental Health Consultation</label>
+            <div class="edit-actions merriweather-sans-regular">
+                <button type="submit" class="change-btn">Save Changes</button>
+                <button class="cancel-btn" onclick="goBack()">Cancel</button>
             </div>
 
-            <button type="submit" class="green-button">Make an appointment</button>
         </form>
-        <button type="button" class="back-button" onclick="goBack()">BACK</button>
     </section>
-
-    <script src="../javascript/createAppt-script.js"></script>
+    
+    <script src="../javascript/editAppt-script.js"></script>
   </body>
 </html>

@@ -14,7 +14,7 @@ form.addEventListener('submit', async (event) => {
     const fullName = document.getElementById('name').value.trim();
 
     try {
-      const response = await fetch(`${apiBaseUrl}/appointments/login`, {
+      const response = await fetch(`${apiBaseUrl}/api/appointments/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
