@@ -19,6 +19,8 @@ appointmentForm.addEventListener("submit", async (event) => {
         reason: document.querySelector('input[name="reason"]:checked')?.value,
     }
 
+    console.log(newAppointmentData);
+
     try {
         // Make a POST request to your API endpoint
         const response = await fetch(`${apiBaseUrl}/api/appointments`, {

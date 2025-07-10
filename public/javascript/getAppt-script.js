@@ -32,6 +32,9 @@ async function fetchAppointments() {
     // Parse the JSON response
     const appointments = await response.json();
 
+    // Sort by appointment date
+    appointments.sort((a, b) => new Date(a.appointment_date) - new Date(b.appointment_date));
+
     // Loop through each appointment and create the HTML
     appointments.forEach(appt => {
       const card = document.createElement("div");
@@ -92,6 +95,12 @@ async function handleDeleteClick(event) {
   const appointmentId = event.target.getAttribute("data-id");
   console.log("Attempting to delete appointment with ID:", appointmentId);
 
+  // Show confirmation dialog
+  const confirmed = window.confirm("Are you sure you want to delete this appointment?");
+  if (!confirmed) {
+    return; // User canceled the deletion
+  }
+
   try {
     const response = await fetch(`${apiBaseUrl}/api/appointments/${appointmentId}`, {
       method: "DELETE",
@@ -127,6 +136,7 @@ async function logoutUser() {
   try {
     localStorage.removeItem("nric");
     localStorage.removeItem("fullName");
+    localStorage.removeItem("appointmentId");
 
     // Redirect to login
     window.location.href = "login-appointments.html";

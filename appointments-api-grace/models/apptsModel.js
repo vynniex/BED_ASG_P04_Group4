@@ -80,7 +80,7 @@ async function createAppointment(appointmentData) {
     const connection = await collection(db, "appointments");
 
     const dob = new Date(appointmentData.dob);
-    const appt_date = new Date(appointmentData.appointment_date)
+    const appt_date = new Date(appointmentData.appointmentDate)
 
     const newAppt = {
       nric_fin: appointmentData.nric,
