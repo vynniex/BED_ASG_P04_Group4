@@ -371,6 +371,13 @@ button {
     font-weight: 600;
 }
 
+.medication-empty-state h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: bold;
+}
+
 /* form */
 .medication-form {
     display: flex;
@@ -440,7 +447,7 @@ button {
     box-shadow: 0 0 0 2px grey;
 }
 
-/* button */
+/* buttons */
 .button-group {
     display: flex;
     justify-content: space-between;
@@ -448,7 +455,7 @@ button {
     gap: 1rem;
 }
 
-.btn-back, .btn-submit {
+.btn-back, .btn-submit, .btn-add {
     padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 5px;
@@ -470,10 +477,20 @@ button {
     font-weight: bold;
 }
 
+.btn-add {
+    background-color: rgb(210, 210, 12);
+    color: white;
+    font-weight: bold;
+}
+
 .btn-back:hover {
     background-color: #c0392b;
 }
 
 .btn-submit:hover {
     background-color: green;
+}
+
+.btn-add:hover {
+    background-color: rgb(195, 195, 9);
 }
