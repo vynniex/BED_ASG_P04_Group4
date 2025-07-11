@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Marck+Script&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css" />
+    <title>Add Medicine page</title>
+</head>
+<body>
+    <nav class="navbar inter-regular">
+      <ul>
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="#">RECORDS</a></li>
+        <li><a href="medicine.html">MEDICATION</a></li>
+        <li><a href="appointments.html">APPOINTMENTS</a></li>
+      </ul>
+    </nav>
+
+    <main class="medication-container">
+        <h1 class="inter-regular">Enter Medication Details</h1>
+
+        <form id="medication-form" class="medication-form">
+          <div class="form-group">
+            <label class="inter-regular" for="medicine-name">Medicine Name:</label>
+            <input type="text" id="medicine-name" name="medicineName" required>
+          </div>
+
+          <div class="form-group">
+            <label class="inter-regular" for="purpose">For:</label>
+            <input type="text" id="purpose" name="purpose" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-row">
+              <label class="inter-regular" for="times-per-day">Times per day:</label>
+              <input type="number" id="times-per-day" name="timesPerDay" min="1" required>
+            </div>
+          </div>
+
+          <div class="form-group form-col">
+            <label class="inter-regular" for="food-timing">Before/After Food:</label>
+            <select id="food-timing" name="foodTiming" required>
+              <option value="">-- Select --</option>
+              <option value="before">Before Food</option>
+              <option value="after">After Food</option>
+            </select>
+          </div>
+
+          <div class="button-group">
+            <button type="button" class="btn-back">BACK</button>
+            <button type="submit" class="btn-submit">DONE</button>
+          </div>
+        </form>
+    </main>
+
+    <script src="../js/createMedicine.js"></script>
+</body>
+</html>
