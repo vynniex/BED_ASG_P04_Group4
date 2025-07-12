@@ -40,10 +40,10 @@ app.put("/api/appointments/:id", apptController.updateAppointmentById);
 app.post("/api/appointments/login", apptController.login);
 app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 
-// MEDICAL RECORDS ROUTES - XN (validation tba)
+// MEDICAL RECORDS ROUTES - XN
 app.get("/api/records", recsController.getAllRecords);
-app.post("/api/records", recsController.createRecord);
-app.put("/api/records/:id", recsController.updateRecordById);
+app.post("/api/records", validateRecord, recsController.createRecord);
+app.put("/api/records/:id", validateRecord, recsController.updateRecordById);
 app.delete("/api/records/:id", recsController.deleteRecordById);
 
 // Health check
