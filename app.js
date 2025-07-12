@@ -35,7 +35,7 @@ app.delete("/api/medications/:medName", validateMedName, medsController.deleteMe
 app.get("/api/appointments/users/:nric/:fullName", apptController.getAllAppointmentsByUser);
 app.post("/api/appointments", apptController.createAppointment);
 app.put("/api/appointments/:id", apptController.updateAppointmentById);
-app.post("/api/appointments/login", apptController.login);
+app.post("/api/appointments/login", apptController.loginUser);
 app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 
 // MEDICAL RECORDS ROUTES - XN
