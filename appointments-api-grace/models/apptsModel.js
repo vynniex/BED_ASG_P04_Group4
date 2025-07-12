@@ -53,7 +53,7 @@ async function getAllAppointmentsByUser(nric, fullName) {
 }
 
 // Login user 
-async function findUser(nric, fullName) {
+async function loginUser(nric, fullName) {
   try {
     const connection = await collection(db, "appointments");
     const q = query(
@@ -149,7 +149,7 @@ async function deleteAppointmentById(id) {
 module.exports = {
   getAllAppointmentsByUser,
   createAppointment,
-  findUser,
+  loginUser,
   updateAppointmentById,
   deleteAppointmentById,
 }

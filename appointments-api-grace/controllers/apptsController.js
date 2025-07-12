@@ -13,7 +13,7 @@ async function getAllAppointmentsByUser(req,res) {
 };
 
 // login user
-async function login(req, res) {
+async function loginUser(req, res) {
   const { nric, fullName } = req.body;
 
   if (!nric || !fullName) {
@@ -95,7 +95,7 @@ async function deleteAppointmentById(req,res) {
 module.exports = {
   getAllAppointmentsByUser,
   createAppointment,
-  login,
+  loginUser,
   updateAppointmentById,
   deleteAppointmentById
 }

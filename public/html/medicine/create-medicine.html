@@ -35,8 +35,8 @@
 
           <div class="form-row">
             <div class="form-group form-row">
-              <label class="inter-regular" for="times-per-day">Times per day:</label>
-              <input type="number" id="times-per-day" name="timesPerDay" min="1" required>
+              <label class="inter-regular" for="per-Day">Times per day:</label>
+              <input type="number" id="times-per-day" name="perDay" min="1" required>
             </div>
           </div>
 
@@ -50,12 +50,18 @@
           </div>
 
           <div class="button-group">
-            <a href="medicine.html" class="inter-regular btn-back">BACK</a>
-            <button type="submit" class="btn-submit">DONE</button>
+            <button type="button" class="inter-regular btn-back">BACK</button>
+            <button type="submit" class="inter-regular btn-submit">DONE</button>
           </div>
         </form>
     </main>
 
-    <script src="../../js/createMedicine.js"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Your firebase.js (must initialize Firebase here) -->
+    <script src="../../javascript/firebase-browser.js"></script>
+    <!-- Create medicine script -->
+    <script src="../../javascript/createMedicine-script.js"></script>
 </body>
 </html>
