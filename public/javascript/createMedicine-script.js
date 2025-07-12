@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const medRef = db.collection("medications").doc(medication.medicineName);
       const docSnap = await medRef.get();
 
-      if (docSnap.exists()) {
+      if (docSnap.exists) {
         alert('This medicine already exists!');
         submitBtn.disabled = false;
         submitBtn.textContent = 'DONE';

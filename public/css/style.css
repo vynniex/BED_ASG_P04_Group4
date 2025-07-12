@@ -378,6 +378,14 @@ button {
     font-weight: bold;
 }
 
+.medication-item {
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
 /* form */
 .medication-form {
     display: flex;
