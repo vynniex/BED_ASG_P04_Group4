@@ -7,10 +7,7 @@ const path = require("path");
 dotenv.config();
 
 const medsController = require("./medicine-api-xinyi/controllers/medsController.js");
-const {
-  validateMedInput,
-  validateMedName,
-} = require("./medicine-api-xinyi/middlewares/medsValidation.js");
+const { validateMedInput, validateMedName } = require("./medicine-api-xinyi/middlewares/medsValidation.js");
 
 const apptController = require("./appointments-api-grace/controllers/apptsController.js");
 
@@ -65,7 +62,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
   console.log(`Medication API: http://localhost:${port}/api/medications`);
   console.log(`Medical Records API: http://localhost:${port}/api/records`);
-  console.log(`Appointment API: http://localhost:3000/api/appointments`);
+  console.log(`Appointment API: http://localhost:${port}/api/appointments`);
 });
 
 // Graceful shutdown

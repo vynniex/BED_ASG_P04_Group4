@@ -1,32 +1,14 @@
-const { db } = require("../../config/firebase");  // Import Firebase db instance
-const { 
-  doc, 
-  setDoc, 
-  getDoc, 
-  updateDoc, 
-  deleteDoc, 
-  collection, 
-  getDocs
- } = require("firebase/firestore");
+const medsModel = require('../models/medsModel');
 
 // Get all medicines
 async function getAllMeds(req, res) {
   try {
-    const snapshot = await getDocs(collection(db, "medications"));
-    const medications = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-
-    res.json({
-      success: true,
-      data: medications
-    });
+    const medications = await medsModel.getAllMeds();
+    res.json(medications);
   } catch (error) {
-    console.error("Controller error:", error);
-    res.status(500).json({ 
-      success: false, 
-      error: "Error retrieving medicines" 
+    console.error('Controller Error: ', error);
+    res.status(500).json({
+      error: 'Error retrieving medicine records'
     });
   }
 }
@@ -34,28 +16,22 @@ async function getAllMeds(req, res) {
 // Get medicine by name
 async function getMedByName(req, res) {
   try {
-    const medName = req.params.medName;
-    const docSnapshot = await getDoc(doc(db, "medications", medName));
+    const medicineName = req.params.medName;
 
-    if (!docSnapshot.exists()) {
-      return res.status(404).json({ 
-        success: false,
-        error: "Medicine not found" 
-      });
+    if (!medicineName) {
+      return res.status(400).json({ error: 'Medicine name is not recognised'})
     }
 
-    res.json({ 
-      success: true, 
-      data: {
-        id: docSnapshot.id,
-        ...docSnapshot.data()
-      }
-    });
+    const medication = await medsModel.getMedByName(medicineName);
+    if (!medication) {
+      return res.status(404).json({ error: 'Medicine not found'})
+    }
+
+    res.json(medication);
   } catch (error) {
-    console.error("Controller error:", error);
+    console.error('Controller Error: ', error)
     res.status(500).json({ 
-      success: false,
-      error: "Error retrieving medicine" 
+      error: error.message || "Error retrieving medicine" 
     });
   }
 }
@@ -63,102 +39,63 @@ async function getMedByName(req, res) {
 // Create new medicine record
 async function createMed(req, res) {
   try {
-    const { medName } = req.body;
-    const medRef = doc(db, "medications", medName);
-
-    if ((await getDoc(medRef)).exists()) {
-      return res.status(400).json({
-        success: false,
-        message: "Medicine already exists",
-      });
-    }
-  
-    await setDoc(medRef, {
-      ...req.body,
-      createdAt: new Date().toISOString()
-    });
-
-    res.status(201).json({
-      success: true,
-      data: req.body
-    });
+    const newMed = await medsModel.createMed(req.body);
+    res.status(201).json(newMed);
   } catch (error) {
-    res.status(500).json({
-      success: false,
+    console.error('Controller Error: ', error);
+    const status = error.message.includes('exists') ? 400 : 500;
+    res.status(status).json({
       error: error.message || "Could not create medicine"
     })
+  }
+}
+
+// Update medicine by name (PUT)
+async function updateMed(req, res) {
+  try { 
+    const medicineName = req.params.medName;
+
+    if (!medicineName) {
+      return res.status(400).json({ error: "Invalid medicine name"});
+    }
+
+    const updateMed = await medsModel.updateMed(medicineName, req.body);
+    if (!updateMed) {
+      return res.status(404).json({ error: 'Medicine not found'});
+    }
+
+    res.json(updateMed);
+  } catch (error) {
+    console.error("Controller Error: ", error);
+    res.status(500).json({ 
+      error: error.message || "Error updating medicine" 
+    });
   }
 }
 
 // Delete medicine by name
 async function deleteMed(req, res) {
   try {
-    const medName = req.params.medName;
-    const medRef = doc(db, "medications", medName);
-    const docSnapshot = await getDoc(medRef);
-
-    if (!docSnapshot.exists()) {
-      return res.status(404).json({ 
-        success: false,
-        error: "Medicine not found" 
-      });
+    const medicineName = req.params.medName;
+    if (!medicineName) {
+      return res.status(400).json({ error: 'Invalid medicine name'});
     }
 
-    await deleteDoc(medRef);
-    res.status(200).json({
-      success: true,
-      message: "Medicine deleted successfully"
-    })
+    await medsModel.deleteMed(medicineName);
+    res.json({ message: 'Medicine successfully deleted'});
   } catch (error) {
-    console.error("Controller error:", error);
-    res.status(500).json({ 
-      success: false,
-      error: "Error deleting medicine" 
+    console.error('Controller Error: ', error);
+    const status = error.message.includes('not found') ? 404 : 500;
+    res.status(status).json({ 
+      error: error.message || "Error deleting medicine" 
     });
-  }
-}
-
-// Update medicine by name (PUT)
-async function updateMed(req, res) {
-  try{ 
-    const medName = req.params.medName;
-    const medRef = doc(db, "medications", medName);
-    const docSnapshot = await getDoc(medRef);
-
-    if (!docSnapshot.exists()) {
-      return res.status(404).json({ 
-        success: false,
-        error: "Medicine not found" });
-    }
-
-    const updatedData = {
-      ...req.body,
-      updatedAt: new Date().toISOString()
-    };
-
-    await updateDoc(medRef, updatedData);
-    const updatedDoc = await getDoc(medRef);
-
-    res.json({
-      success: true,
-      message: "Medicine updated successfully",
-      data: {
-        id: updatedDoc.id,
-        ...updatedDoc.data()
-      }
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ 
-      success: false,
-      error: error.message || "Error updating medicine" });
   }
 }
 
 module.exports = {
-  createMed,
   getAllMeds,
   getMedByName,
+  createMed,
   updateMed,
   deleteMed
 };
