@@ -494,3 +494,26 @@ button {
 .btn-add:hover {
     background-color: rgb(195, 195, 9);
 }
+
+/* ============================================================= */
+/* records */
+.record-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px grey;
+}
+
+.record-container h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+/* buttons */
+.default-button {
+    text-align: center;
+}
