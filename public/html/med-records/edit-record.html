@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Marck+Script&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css" />
+    <title>Medical Records</title>
+  </head>
+  <body>
+    <nav class="navbar inter-regular">
+      <ul>
+        <li><a href="../index.html">HOME</a></li>
+        <li><a href="records.html">RECORDS</a></li>
+        <li><a href="../medicine/medicine.html">MEDICATION</a></li>
+        <li><a href="../appointments/appointments.html">APPOINTMENTS</a></li>
+      </ul>
+    </nav>
+
+    <main class="record-container">
+      <h1 class="inter-regular">New Medical Record</h1>
+
+        <form id="record-form" class="record-form">
+          <div class="form-group">
+            <label class="inter-regular" for="date-recorded">Date of Entry</label>
+            <input type="date" id="record-date" name="recordDate" required class="inter-regular">
+          </div>
+          <br>
+
+          <div class="form-group">
+            <label class="inter-regular" for="feeling">How are you feeling today?</label>
+            <div id="feeling group">
+              <button type="button" class="feeling-btn" data-value="Good">Good</button>
+              <button type="button" class="feeling-btn" data-value="Okay">Okay</button>
+              <button type="button" class="feeling-btn" data-value="Bad">Bad</button>
+            </div>
+            <input type="hidden" id="feeling" name="feeling" required>
+          </div>
+          <br>
+
+          <div class="form-row">
+            <div class="form-group form-row">
+              <label class="inter-regular" for="blood-pressure">Blood Pressure</label>
+              <div class="form-row">
+                <label class="inter-regular" for="systolic">Systolic :</label>
+                <input type="number" id="systolic" name="systolic" min="80" max="200" required>
+                <span class="inter-regular">mmHg</span>
+              </div>
+              <div class="form-row">
+                <label class="inter-regular" for="diastolic">Diastolic :</label>
+                <input type="number" id="diastolic" name="diastolic" min="50" max="130" required >
+                <span class="inter-regular">mmHg</span>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="form-row">
+            <div class="form-group form-row">
+              <label class="inter-regular" for="blood-sugar">Blood Sugar</label>
+              <div>
+                <input type="number" id="blood-sugar" name="bloodSugar" min="1" required>
+                <span class="inter-regular">mg/dL</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-row">
+              <label class="inter-regular" for="weight">Weight</label>
+              <div>
+                <input type="number" step="0.1" id="weight" name="weight" min="30" max="200" required>
+                <span class="inter-regular">kg</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn-submit">SAVE RECORD</button>
+            <a href="records.html" class="inter-regular btn-back">CANCEL</a>
+          </div>
+        </form>
+    </main>
+
+    <script src="../../javascript/editRecord-script.js"></script>
+  </body>
+</html>

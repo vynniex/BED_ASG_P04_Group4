@@ -21,18 +21,69 @@
 
     <main class="record-container">
       <h1 class="inter-regular">New Medical Record</h1>
-        <div class="record-empty-state">
-            <h2 class="inter-regular">You have no medical records</h2>
-        </div> 
-    </main>
-    <div class="default-button">
-      <a href="record.html" class="inter-regular btn-add">Save Record</a>
-    </div>
-    <!--
-    <a href="../html/edit.record.html" class="inter-regular btn-back">EDIT</a>
-    <a href="TBA" class="inter-regular btn-back">DELETE</a>
-    -->
 
-    <script src="records-script.js"></script>
+        <form id="record-form" class="record-form">
+          <div class="form-group">
+            <label class="inter-regular" for="date-recorded">Date of Entry</label>
+            <input type="date" id="record-date" name="recordDate" required class="inter-regular">
+          </div>
+          <br>
+
+          <div class="form-group">
+            <label class="inter-regular" for="feeling">How are you feeling today?</label>
+            <div id="feeling group">
+              <button type="button" class="feeling-btn" data-value="Good">Good</button>
+              <button type="button" class="feeling-btn" data-value="Okay">Okay</button>
+              <button type="button" class="feeling-btn" data-value="Bad">Bad</button>
+            </div>
+            <input type="hidden" id="feeling" name="feeling" required>
+          </div>
+          <br>
+
+          <div class="form-row">
+            <div class="form-group form-row">
+              <label class="inter-regular" for="blood-pressure">Blood Pressure</label>
+              <div class="form-row">
+                <label class="inter-regular" for="systolic">Systolic :</label>
+                <input type="number" id="systolic" name="systolic" min="80" max="200" required>
+                <span class="inter-regular">mmHg</span>
+              </div>
+              <div class="form-row">
+                <label class="inter-regular" for="diastolic">Diastolic :</label>
+                <input type="number" id="diastolic" name="diastolic" min="50" max="130" required >
+                <span class="inter-regular">mmHg</span>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="form-row">
+            <div class="form-group form-row">
+              <label class="inter-regular" for="blood-sugar">Blood Sugar</label>
+              <div>
+                <input type="number" id="blood-sugar" name="bloodSugar" min="1" required>
+                <span class="inter-regular">mg/dL</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-row">
+              <label class="inter-regular" for="weight">Weight</label>
+              <div>
+                <input type="number" step="0.1" id="weight" name="weight" min="30" max="200" required>
+                <span class="inter-regular">kg</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn-submit">SAVE RECORD</button>
+            <a href="records.html" class="inter-regular btn-back">CANCEL</a>
+          </div>
+        </form>
+    </main>
+
+    <script src="../../javascript/createRecord-script.js"></script>
   </body>
 </html>

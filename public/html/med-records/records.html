@@ -13,7 +13,7 @@
     <nav class="navbar inter-regular">
       <ul>
         <li><a href="../index.html">HOME</a></li>
-        <li><a href="records.html">RECORDS</a></li>
+        <li><a href="records.html" class="active">RECORDS</a></li>
         <li><a href="../medicine/medicine.html">MEDICATION</a></li>
         <li><a href="../appointments/appointments.html">APPOINTMENTS</a></li>
       </ul>
@@ -21,18 +21,18 @@
 
     <main class="record-container">
       <h1 class="inter-regular">Medical records</h1>
-        <div class="record-empty-state">
-            <h2 class="inter-regular">You have no medical records</h2>
-        </div> 
+      <!-- Medical records are inserted here -->
+      <div id="records-list"></div>
+      <!-- Shown if there are no saved medical records -->
+      <div class="record-empty-state">
+        <h2 class="inter-regular">You have no medical records</h2>
+      </div> 
     </main>
+    
     <div class="default-button">
       <a href="create-record.html" class="inter-regular btn-add">Add New Record</a>
     </div>
-    <!--
-    <a href="../html/edit.record.html" class="inter-regular btn-back">EDIT</a>
-    <a href="TBA" class="inter-regular btn-back">DELETE</a>
-    -->
 
-    <script src="records-script.js"></script>
+    <script src="../../javascript/getRecords-script.js"></script>
   </body>
 </html>
