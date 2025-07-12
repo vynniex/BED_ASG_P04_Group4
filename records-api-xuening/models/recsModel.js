@@ -6,7 +6,8 @@ const {
   getDoc,
   updateDoc,
   deleteDoc,
-  doc
+  doc,
+  Timestamp
 } = require("firebase/firestore");
 
 const COLLECTION_NAME = "records";
@@ -21,22 +22,36 @@ async function getAllRecords() {
   return records;
 }
 
-// Create or update a record (one per date)
+// Create or update a record
 async function createOrUpdateRecord(recordData) {
-  const date = recordData.date.replace(/-/g, "_");
-  const docId = `${date}_record`;
+  const dateStr = recordData.date;
+  const docId = `${dateStr.replace(/-/g, "_")}_record`;
 
   const recordRef = doc(db, COLLECTION_NAME, docId);
-  await setDoc(recordRef, recordData);
-  return { id: docId, ...recordData };
+
+  // Convert string date to Firestore Timestamp
+  const timestampDate = Timestamp.fromDate(new Date(dateStr));
+
+  const newRecord = {
+    ...recordData,
+    date: timestampDate // use timestamp instead of string
+  };
+
+  await setDoc(recordRef, newRecord);
+  return { id: docId, ...newRecord };
 }
 
-// Update by document ID (optional use case)
+// Update by document ID
 async function updateRecordById(id, updatedData) {
   const recordRef = doc(db, COLLECTION_NAME, id);
   const docSnap = await getDoc(recordRef);
 
   if (!docSnap.exists()) return null;
+
+  // if date changes, convert it
+  if (updatedData.date) {
+    updatedData.date = Timestamp.fromDate(new Date(updatedData.date));
+  }
 
   await updateDoc(recordRef, updatedData);
   return { id, ...updatedData };

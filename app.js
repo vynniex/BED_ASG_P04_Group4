@@ -15,6 +15,7 @@ const {
 const apptController = require("./appointments-api-grace/controllers/apptsController.js");
 
 const recsController = require("./records-api-xuening/controllers/recsController");
+const { validateRecord } = require("./records-api-xuening/middlewares/recsValidation");
 
 // Create express app
 const app = express();

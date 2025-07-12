@@ -25,7 +25,7 @@ async function createRecord(req, res) {
 // Update existing record by ID 
 async function updateRecordById(req, res) {
   try {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;;
 
     if (!id) {
       return res.status(400).json({ error: "Invalid record ID" });
