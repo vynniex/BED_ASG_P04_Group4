@@ -495,6 +495,12 @@ button {
     background-color: rgb(195, 195, 9);
 }
 
+.btn-submit:disabled {
+    background-color: lightgray;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
 /* ============================================================= */
 /* records */
 .record-container {
