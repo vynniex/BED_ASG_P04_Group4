@@ -9,24 +9,56 @@ document.addEventListener('DOMContentLoaded', async () => {
     const medsSnapshot = await db.collection('medications').get();
 
     if (medsSnapshot.empty) {
-      medicineListEl.innerHTML = `<p>No medication records found.</p>`;
+      medicineListEl.innerHTML = `<p>No medicine records</p>`;
       return;
     }
 
     // Clear container
     medicineListEl.innerHTML = '';
 
-    medsSnapshot.forEach(doc => {
-      const med = doc.data();
+    medsSnapshot.forEach(docSnap => {
+      const med = docSnap.data();
+      const docId = docSnap.id;
 
       const medItem = document.createElement('div');
-      medItem.classList.add('medication-item');
+      medItem.classList.add('medicine-card');
+
+      const foodTimingText = med.foodTiming
+        ? med.foodTiming.charAt(0).toUpperCase() + med.foodTiming.slice(1)
+        : 'N/A';
+      
       medItem.innerHTML = `
-        <h3>${med.medicineName}</h3>
-        <p>Purpose: ${med.purpose}</p>
-        <p>Times per day: ${med.perDay}</p>
-        <p>Timing: ${med.foodTiming === 'before' ? 'Before Food' : 'After Food'}</p>
+        <div class="medicine-info">
+          <h2 class="inter-regular"><u><b>${med.medicineName}</b></u></h2>
+          <p class="inter-regular"><b>For:</b> ${med.purpose}</p>
+          <p class="inter-regular"><b>Times / day:</b> ${med.perDay}</p>
+          <p class="inter-regular"><b>B/A:</b> ${foodTimingText}</p>
+        </div>
+        <div class="medicine-actions">
+          <button class="btn-edit inter-regular">EDIT</button>
+          <button class="btn-remove inter-regular">REMOVE</button>
+        </div>
       `;
+
+      // Edit button (you can later replace this with actual edit logic)
+      medItem.querySelector('.btn-edit').addEventListener('click', () => {
+        alert(`Edit not implemented yet!`);
+      });
+
+      // Remove button
+      medItem.querySelector('.btn-remove').addEventListener('click', async () => {
+        const confirmDelete = confirm(`Confirm removal of ${med.medicineName}?`);
+        if (!confirmDelete) return;
+
+        try {
+          await db.collection('medications').doc(docId).delete();
+          medItem.remove();
+          alert(`${med.medicineName} successfully removed!`);
+        } catch (err) {
+          console.error('Failed to remove:', err);
+          alert(`Failed to remove: ${med.medicineName}`);
+        }
+      });
 
       medicineListEl.appendChild(medItem);
     });

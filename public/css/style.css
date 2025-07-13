@@ -386,6 +386,39 @@ button {
   background-color: #fafafa;
 }
 
+.medicine-card {
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0 2px 6px black;
+}
+
+.medicine-info h2 {
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    font-weight: bold;
+}
+
+.medicine-info p {
+    margin: 0.4rem 0;
+    font-size: 1.1rem;
+}
+
+.medicine-info p b {
+    font-weight: 700;
+}
+
+.medicine-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
 /* form */
 .medication-form {
     display: flex;
@@ -463,7 +496,16 @@ button {
     gap: 1rem;
 }
 
-.btn-back, .btn-submit, .btn-add {
+.medicine-actions button {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-back, .btn-submit, .btn-add, .btn-edit, .btn-remove {
     padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 5px;
@@ -491,6 +533,18 @@ button {
     font-weight: bold;
 }
 
+.btn-edit {
+    background-color: lightslategray;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-remove {
+    background-color: orangered;
+    color: white;
+    font-weight: bold;
+}
+
 .btn-back:hover {
     background-color: #c0392b;
 }
@@ -501,6 +555,14 @@ button {
 
 .btn-add:hover {
     background-color: rgb(195, 195, 9);
+}
+
+.btn-edit:hover {
+    background-color: gray;
+}
+
+.btn-remove:hover {
+    background-color: darkred;
 }
 
 .btn-submit:disabled {
