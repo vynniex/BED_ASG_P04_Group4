@@ -44,6 +44,12 @@ app.post("/api/records", validateRecord, recsController.createRecord);
 app.put("/api/records/:id", validateRecord, recsController.updateRecordById);
 app.delete("/api/records/:id", recsController.deleteRecordById);
 
+// NOTIFICATION ROUTES - Dalton
+app.post("/api/notifications", validateNotif, notifsController.createNotification);
+app.get("/api/notifications", notifsController.getAllNotifications);
+app.put("/api/notifications/:id", validateNotif, notifsController.updateNotification);
+app.delete("/api/notifications/:id", notifsController.deleteNotification);
+
 // Health check
 app.get("/api/health", (req, res) => {
   res.status(200).json({ 
@@ -64,6 +70,7 @@ app.listen(port, () => {
   console.log(`Medical Records API: http://localhost:${port}/api/records`);
   console.log(`Appointment API: http://localhost:${port}/api/appointments/users/{nric}/{fullName}`);
   console.log(`Replace {nric} and {fullName} with user details`);
+  console.log(`Notification API: http://localhost:${port}/api/notifications`);
 });
 
 // Graceful shutdown
