@@ -5,8 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle feeling selection
   feelingButtons.forEach(button => {
     button.addEventListener("click", () => {
+      // Remove "selected" class from all buttons
       feelingButtons.forEach(btn => btn.classList.remove("selected"));
+
+      // Add "selected" class to clicked button
       button.classList.add("selected");
+
+      // Set hidden input value
       feelingInput.value = button.dataset.value;
     });
   });

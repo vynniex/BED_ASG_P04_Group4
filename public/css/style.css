@@ -528,6 +528,14 @@ button {
 }
 
 /* buttons */
-.default-button {
+.default-btn {
     text-align: center;
+}
+
+.feeling-btn:hover {
+    background-color: rgb(208, 208, 208);
+}
+
+.feeling-btn.selected {
+    background-color: rgb(161, 161, 161);
 }
