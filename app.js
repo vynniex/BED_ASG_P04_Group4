@@ -14,6 +14,10 @@ const apptController = require("./appointments-api-grace/controllers/apptsContro
 const recsController = require("./records-api-xuening/controllers/recsController");
 const { validateRecord } = require("./records-api-xuening/middlewares/recsValidation");
 
+const notifsController = require("./notifs-api-dalton/controllers/notifsController.js");
+const { validateNotif } = require("./notifs-api-dalton/middlewares/notifsValidation.js");
+
+
 // Create express app
 const app = express();
 const port = process.env.PORT || 3000;
