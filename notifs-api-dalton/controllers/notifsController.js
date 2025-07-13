@@ -20,6 +20,20 @@ const getAllNotifications = async (req, res) => {
   }
 };
 
+// GET a single notification by ID
+const getNotificationById = async (req, res) => {
+  try {
+    const notif = await notifModel.getNotifById(req.params.id);
+    if (!notif) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+    res.status(200).json(notif);
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting notification', error: error.message });
+  }
+};
+
+
 // UPDATE a notification by ID
 const updateNotification = async (req, res) => {
   try {
@@ -46,6 +60,7 @@ const deleteNotification = async (req, res) => {
 module.exports = {
   createNotification,
   getAllNotifications,
+  getNotificationById,   
   updateNotification,
   deleteNotification,
 };

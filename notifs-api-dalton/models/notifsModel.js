@@ -27,6 +27,17 @@ const getAllNotifs = async () => {
   return notifs;
 };
 
+// READ: Get a single notification by ID
+const getNotifById = async (id) => {
+  const notifDoc = doc(db, 'notifications', id);
+  const docSnap = await getDoc(notifDoc);
+
+  if (!docSnap.exists()) {
+    return null;
+  }
+  return { id: docSnap.id, ...docSnap.data() };
+};
+
 // UPDATE: Update a notification in Firestore by its ID
 const updateNotifById = async (id, data) => {
   const notifDoc = doc(db, 'notifications', id);
@@ -44,6 +55,7 @@ const deleteNotifById = async (id) => {
 module.exports = {
   addNotif,
   getAllNotifs,
+  getNotifById,  
   updateNotifById,
   deleteNotifById,
 };

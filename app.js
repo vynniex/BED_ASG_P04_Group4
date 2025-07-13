@@ -49,10 +49,13 @@ app.put("/api/records/:id", validateRecord, recsController.updateRecordById);
 app.delete("/api/records/:id", recsController.deleteRecordById);
 
 // NOTIFICATION ROUTES - Dalton
+// NOTIFICATION ROUTES - Dalton
 app.post("/api/notifications", validateNotif, notifsController.createNotification);
 app.get("/api/notifications", notifsController.getAllNotifications);
+app.get("/api/notifications/:id", notifsController.getNotificationById); // 
 app.put("/api/notifications/:id", validateNotif, notifsController.updateNotification);
 app.delete("/api/notifications/:id", notifsController.deleteNotification);
+
 
 // Health check
 app.get("/api/health", (req, res) => {
