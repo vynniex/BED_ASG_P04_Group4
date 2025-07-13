@@ -378,14 +378,6 @@ button {
     font-weight: bold;
 }
 
-.medication-item {
-  border: 1px solid #ccc;
-  padding: 12px;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  background-color: #fafafa;
-}
-
 .medicine-card {
     background-color: lightgrey;
     border-radius: 10px;
@@ -395,6 +387,12 @@ button {
     justify-content: space-between;
     align-items: flex-start;
     box-shadow: 0 2px 6px black;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.medicine-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px black;
 }
 
 .medicine-info h2 {
@@ -402,21 +400,90 @@ button {
     margin-top: 0;
     margin-bottom: 0.8rem;
     font-weight: bold;
+    color: #2c3e50;
 }
 
 .medicine-info p {
     margin: 0.4rem 0;
     font-size: 1.1rem;
+    color: #34495e;
 }
 
 .medicine-info p b {
     font-weight: 700;
+    color: #2c3e50;
 }
 
 .medicine-actions {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+    min-width: 100px;
+}
+/* modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  z-index: 1001;
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* toast notif styling */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 2px 10px lightgrey;
+    z-index: 1050;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.toast.show {
+    opacity: 0.5;
+}
+
+.toast.success {
+    background-color: green;
+    font-family: "Merriweather Sans", sans-serif;
+}
+
+.toast.error {
+    background-color: #b30000;
+    font-family: "Merriweather Sans", sans-serif;
 }
 
 /* form */
@@ -445,6 +512,17 @@ button {
     flex-direction: column;
     gap: 1rem;
   }
+
+  .medicine-card {
+    flex-direction: column;
+  }
+
+  .medicine-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    width: 100%;
+  }
 }
 
 .form-group {
@@ -469,6 +547,7 @@ button {
     width: 100%;
     box-sizing: border-box;
     background-color: white;
+    transition: border-color 0.15s ease;
 }
 
 .form-group select {
@@ -502,47 +581,53 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-.btn-back, .btn-submit, .btn-add, .btn-edit, .btn-remove {
+.btn-back, .btn-submit, .btn-add, .btn-edit, .btn-remove, .btn-cancel, .btn-confirm {
     padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     flex: 0.3;
+    font-weight: bold;
 }
 
 .btn-back {
     background-color: orangered;
     color: white;
-    font-weight: bold;
 }
 
 .btn-submit {
     background-color: rgb(3, 185, 3);
     color: white;
-    font-weight: bold;
 }
 
 .btn-add {
     background-color: rgb(210, 210, 12);
     color: white;
-    font-weight: bold;
 }
 
 .btn-edit {
     background-color: lightslategray;
     color: white;
-    font-weight: bold;
 }
 
 .btn-remove {
     background-color: orangered;
     color: white;
-    font-weight: bold;
+}
+
+.btn-cancel {
+    background-color: orangered;
+    color: white;
+}
+
+.btn-confirm {
+    background-color: rgb(3, 185, 3);
+    color: white;
 }
 
 .btn-back:hover {
@@ -563,6 +648,14 @@ button {
 
 .btn-remove:hover {
     background-color: darkred;
+}
+
+.btn-cancel:hover {
+    background-color: darkred;
+}
+
+.btn-confirm:hover {
+    background-color: green;
 }
 
 .btn-submit:disabled {
