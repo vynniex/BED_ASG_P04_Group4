@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 method: "DELETE"
               });
               if (!delRes.ok) throw new Error("Failed to delete record");
-              alert("Record deleted successfully.");
+              alert("Record has been deleted successfully.");
               location.reload(); // Refresh page
             } catch (err) {
               alert("Error deleting record: " + err.message);

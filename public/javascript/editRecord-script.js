@@ -63,7 +63,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         body: JSON.stringify(updatedRecord),
       });
 
+      // Notify if medical record is edited successfully
       if (updateRes.ok) {
+        alert('Medical record has been edited.');
         window.location.href = "records.html";
       } else {
         const error = await updateRes.json();
