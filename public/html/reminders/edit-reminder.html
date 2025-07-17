@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Marck+Script&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css" />
+    <title>Edit Reminder</title>
+</head>
+<body>
+    <nav class="navbar inter-regular">
+        <ul>
+            <li><a href="../../index.html">HOME</a></li>
+            <li><a href="../med-records/records.html">RECORDS</a></li>
+            <li><a href="../medicine/medicine.html">MEDICATION</a></li>
+            <li><a href="../appointments/appointments.html">APPOINTMENTS</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content form-page">
+        <h2>Edit Reminder</h2>
+        <form id="editReminderForm" class="reminder-form">
+            <input type="hidden" id="reminderId" name="id"> <!-- Hidden field to store reminder ID -->
+
+            <div class="form-group">
+                <label for="editReminderType">Reminder Type :</label>
+                <select id="editReminderType" name="type" required>
+                    <option value="">Choose Type</option>
+                    <option value="Medication">Medication</option>
+                    <option value="Appointment">Appointment</option>
+                    <option value="Exercise">Exercise</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="editReminderTitle">Reminder Title :</label>
+                <input type="text" id="editReminderTitle" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editReminderDescription">Description :</label>
+                <textarea id="editReminderDescription" name="description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="editReminderDate">Date :</label>
+                <input type="date" id="editReminderDate" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editReminderTime">Time :</label>
+                <input type="time" id="editReminderTime" name="time" required>
+            </div>
+
+            <div class="form-group">
+                <label>Frequency :</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="editFreqOneTime" name="frequency" value="One-time">
+                    <label for="editFreqOneTime">One-time</label>
+                    <input type="checkbox" id="editFreqDaily" name="frequency" value="Daily">
+                    <label for="editFreqDaily">Daily</label>
+                    <input type="checkbox" id="editFreqWeekly" name="frequency" value="Weekly">
+                    <label for="editFreqWeekly">Weekly</label>
+                    <input type="checkbox" id="editFreqMonthly" name="frequency" value="Monthly">
+                    <label for="editFreqMonthly">Monthly</label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">SAVE CHANGES</button>
+                <button type="button" onclick="history.back()">CANCEL</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Toast Notification Element -->
+    <div id="toastNotification" class="toast"></div>
+
+    <script src="../../javascript/edit-reminder.js"></script>
+</body>
+</html>
