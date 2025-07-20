@@ -23,5 +23,9 @@
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "firebase": "^11.10.0"
+  },
+  "devDependencies": {
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1"
   }
 }
