@@ -32,7 +32,7 @@ async function getRecordById(req, res) {
   }
 }
 
-// CREATE a new record
+// POST a new record
 async function createRecord(req, res) {
   const data = req.body;
   if (!data) return res.status(400).json({ message: "Missing record data" });

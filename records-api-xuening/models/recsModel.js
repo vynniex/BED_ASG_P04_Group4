@@ -88,7 +88,7 @@ async function getRecordById(id) {
   }
 }
 
-// CREATE a new record
+// POST a new record
 async function createRecord(data) {
   let connection;
   try {
