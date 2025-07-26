@@ -94,8 +94,10 @@ async function createRecord(data) {
   try {
     connection = await sql.connect(dbConfig);
     const query = `
-      INSERT INTO Records (userId, date, doctorName, diagnosis, notes)
-      VALUES (@userId, @date, @doctorName, @diagnosis, @notes);
+      INSERT INTO Records 
+        (userId, date, doctorName, diagnosis, notes, systolic, diastolic, bloodSugar, weight)
+      VALUES 
+        (@userId, @date, @doctorName, @diagnosis, @notes, @systolic, @diastolic, @bloodSugar, @weight);
       SELECT SCOPE_IDENTITY() AS recordId;
     `;
     const request = connection.request();
@@ -104,6 +106,11 @@ async function createRecord(data) {
     request.input("doctorName", sql.NVarChar(100), data.doctorName);
     request.input("diagnosis", sql.NVarChar(255), data.diagnosis);
     request.input("notes", sql.NVarChar(100), data.notes);
+    request.input("systolic", sql.Int, data.systolic || null);
+    request.input("diastolic", sql.Int, data.diastolic || null);
+    request.input("bloodSugar", sql.Int, data.bloodSugar || null);
+    request.input("weight", sql.Float, data.weight || null);
+
     const result = await request.query(query);
 
     const newRecordId = result.recordset[0].recordId;
@@ -133,7 +140,11 @@ async function updateRecordById(id, data) {
           date = @date,
           doctorName = @doctorName,
           diagnosis = @diagnosis,
-          notes = @notes
+          notes = @notes,
+          systolic = @systolic,
+          diastolic = @diastolic,
+          bloodSugar = @bloodSugar,
+          weight = @weight
       WHERE recordId = @id;
     `;
     const request = connection.request();
@@ -143,6 +154,11 @@ async function updateRecordById(id, data) {
     request.input("doctorName", sql.NVarChar(100), data.doctorName);
     request.input("diagnosis", sql.NVarChar(255), data.diagnosis);
     request.input("notes", sql.NVarChar(100), data.notes);
+    request.input("systolic", sql.Int, data.systolic || null);
+    request.input("diastolic", sql.Int, data.diastolic || null);
+    request.input("bloodSugar", sql.Int, data.bloodSugar || null);
+    request.input("weight", sql.Float, data.weight || null);
+    
     const result = await request.query(query);
 
     if (result.rowsAffected[0] === 0) {

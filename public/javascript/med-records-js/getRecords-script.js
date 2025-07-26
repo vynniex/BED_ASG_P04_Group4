@@ -9,39 +9,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     const records = await response.json();
 
-    // Check if medical records exist in database 
     if (records.length === 0) {
       emptyState.style.display = "block";
       recordsList.style.display = "none";
     } else {
       emptyState.style.display = "none";
       recordsList.style.display = "block";
+      recordsList.innerHTML = ""; // clear before appending
 
-      let html = '<ul class="records-ul">';
       records.forEach(record => {
-        const dateStr = record.date?.seconds
-          ? new Date(record.date.seconds * 1000).toLocaleDateString()
-          : "Invalid Date";
-
-        html += `
-          <li class="record-item inter-regular">
-            <strong>Date:</strong> ${dateStr}<br/>
-            <strong>Feeling:</strong> ${record.feeling}<br/>
-            <strong>Blood Pressure:</strong> ${record.systolic}/${record.diastolic} mmHg<br/>
-            <strong>Blood Sugar:</strong> ${record.bloodSugar} mg/dL<br/>
-            <strong>Weight:</strong> ${record.weight} kg<br/>
-            <button class="btn-edit" data-id="${record.id}">Edit</button>
-            <button class="btn-delete" data-id="${record.id}">Delete</button>
-          </li><br/>
-        `;
+        const recordCard = createRecordCard(record);
+        recordsList.appendChild(recordCard);
       });
-      html += "</ul>";
-      recordsList.innerHTML = html;
 
-      // Add event listeners for Delete buttons
-      document.querySelectorAll(".btn-delete").forEach(btn => {
+      // Add event listeners for delete buttons
+      document.querySelectorAll(".btn-remove").forEach(btn => {
         btn.addEventListener("click", async (e) => {
-          const id = e.target.dataset.id;
+          const id = e.target.closest('.record-card').dataset.id;
           if (confirm("Are you sure you want to delete this record?")) {
             try {
               const delRes = await fetch(`http://localhost:3000/api/records/${id}`, {
@@ -49,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               });
               if (!delRes.ok) throw new Error("Failed to delete record");
               alert("Record has been deleted successfully.");
-              location.reload(); // Refresh page
+              location.reload();
             } catch (err) {
               alert("Error deleting record: " + err.message);
             }
@@ -57,10 +41,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
       });
 
-      // Add event listeners for Edit buttons
+      // Add event listeners for edit buttons
       document.querySelectorAll(".btn-edit").forEach(btn => {
         btn.addEventListener("click", (e) => {
-          const id = e.target.dataset.id;
+          const id = e.target.closest('.record-card').dataset.id;
           window.location.href = `edit-record.html?id=${encodeURIComponent(id)}`;
         });
       });
@@ -72,3 +56,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     recordsList.style.display = "none";
   }
 });
+
+function createRecordCard(record) {
+  const card = document.createElement('div');
+  card.classList.add('record-card');
+  card.dataset.id = record.recordId || record.id;
+
+  const dateStr = record.date ? new Date(record.date).toLocaleDateString() : 'Invalid Date';
+  const systolic = record.systolic || '-';
+  const diastolic = record.diastolic || '-';
+  const bloodSugar = record.bloodSugar || '-';
+  const weight = record.weight || '-';
+
+  card.innerHTML = `
+    <div class="record-info">
+      <h2 class="inter-regular"><u><b>${dateStr}</b></u></h2>
+      <p class="inter-regular"><b>Blood Pressure:</b> ${systolic} / ${diastolic} mmHg</p>
+      <p class="inter-regular"><b>Blood Sugar:</b> ${bloodSugar} mg/dL</p>
+      <p class="inter-regular"><b>Weight:</b> ${weight} kg</p>
+      <p class="inter-regular"><b>Doctor:</b> ${record.doctorName || '-'}</p>
+      <p class="inter-regular"><b>Diagnosis:</b> ${record.diagnosis || '-'}</p>
+      <p class="inter-regular"><b>Notes:</b> ${record.notes || '-'}</p>
+    </div>
+    <div class="record-actions">
+      <button class="btn-edit inter-regular">EDIT</button>
+      <button class="btn-remove inter-regular">REMOVE</button>
+    </div>
+  `;
+
+  return card;
+}
