@@ -29,7 +29,7 @@ async function getRecordById(id) {
   let connection;
   try {
     connection = await sql.connect(dbConfig);
-    const query = "'SELECT * FROM Records WHERE recordId = @id'";
+    const query = "SELECT * FROM Records WHERE recordId = @id";
     const request = connection.request();
     request.input("id", id);
     const result = await request.query(query);

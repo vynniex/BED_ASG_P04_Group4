@@ -46,6 +46,7 @@ app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 
 // MEDICAL RECORDS ROUTES - XN
 app.get("/api/records", recsController.getAllRecords);
+app.get("/api/records/:id", recsController.getRecordById);
 app.post("/api/records", validateRecord, recsController.createRecord);
 app.put("/api/records/:id", validateRecord, recsController.updateRecordById);
 app.delete("/api/records/:id", recsController.deleteRecordById);
