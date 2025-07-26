@@ -1,4 +1,5 @@
 const recsModel = require("../models/recsModel");
+const { isDuplicateDate } = require("../models/recsModel");
 
 // GET all records
 async function getAllRecords(req, res) {
@@ -37,6 +38,12 @@ async function createRecord(req, res) {
   if (!data) return res.status(400).json({ message: "Missing record data" });
 
   try {
+    // Check for duplicate date for the user before creating
+    const duplicate = await isDuplicateDate(data.userId, data.date);
+    if (duplicate) {
+      return res.status(400).json({ error: "A record for this date already exists." });
+    }
+
     const newRecord = await recsModel.createRecord(data);
     res.status(201).json(newRecord);
   } catch (error) {
@@ -48,10 +55,16 @@ async function createRecord(req, res) {
 // UPDATE record by ID 
 async function updateRecordById(req, res) {
   try {
-    const id = req.params.id;;
+    const id = parseInt(req.params.id);
 
-    if (!id) {
+    if (isNaN(id) || id <= 0) {
       return res.status(400).json({ error: "Invalid record ID" });
+    }
+
+    // Check for duplicate date excluding this record's own id
+    const duplicate = await isDuplicateDate(req.body.userId, req.body.date, id);
+    if (duplicate) {
+      return res.status(400).json({ error: "Another record with this date already exists." });
     }
 
     const updatedRecord = await recsModel.updateRecordById(id, req.body);

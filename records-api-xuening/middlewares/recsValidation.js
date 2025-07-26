@@ -60,7 +60,7 @@ function validateRecord(req, res, next) {
   }
 
   // Convert date to yyyy-mm-dd format for SQL before passing to controller
-  const [dd, mm, yyyy] = value.date.split("-");
+  const [dd, mm, yyyy] = req.body.date.split("-");
   req.body.date = `${yyyy}-${mm}-${dd}`;
 
   next();

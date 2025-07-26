@@ -1,6 +1,41 @@
 const sql = require("mssql");
 const dbConfig = require("../../dbConfig");
 
+async function isDuplicateDate(userId, date, excludeRecordId = null) {
+  let connection;
+  try {
+    connection = await sql.connect(dbConfig);
+
+    // Count how many records exist for the user on that date
+    let query = `SELECT COUNT(*) AS count FROM Records WHERE userId = @userId AND date = @date`;
+    // If updating a record: exclude the record itself from the duplicate check
+    if (excludeRecordId) {
+      query += ` AND recordId != @excludeId`;
+    }
+
+    // query parameters
+    const request = connection.request();
+    request.input("userId", sql.Int, userId);
+    request.input("date", sql.Date, date);
+    if (excludeRecordId) {
+      request.input("excludeId", sql.Int, excludeRecordId);
+    }
+
+    const result = await request.query(query);
+
+    // Return true if count > 0 (duplicate exists)
+    return result.recordset[0].count > 0;
+
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+
+  } finally {
+    if (connection) await connection.close();
+  }
+}
+
+
 // GET all records
 async function getAllRecords() {
   let connection; 
@@ -154,6 +189,7 @@ async function deleteRecordById(id) {
 }
 
 module.exports = {
+  isDuplicateDate,
   getAllRecords,
   getRecordById,
   createRecord,
