@@ -1,18 +1,5 @@
-const {
-  collection,
-  getDocs,
-  addDoc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  query,
-  where,
-  Timestamp,
-} = require("firebase/firestore");
-const {db} = require("../../config/firebase");
-
+const sql = require("mssql");
+const dbConfig = require("../../dbConfig");
 
 // Get all appointments
 async function getAllAppointmentsByUser(nric, fullName) {
@@ -53,24 +40,27 @@ async function getAllAppointmentsByUser(nric, fullName) {
 }
 
 // Login user 
-async function loginUser(nric, fullName) {
+async function loginUser(fullName) {
+  let connection;
   try {
-    const connection = await collection(db, "appointments");
-    const q = query(
-      connection,
-      where("nric_fin", "==", nric),
-      where("full_name", "==", fullName)
-    );
-    const snapshot = await getDocs(q);
-    const results = snapshot.docs.map(doc => ({
-      id: doc.id, // Firestore document ID
-      ...doc.data()
-    }));
+    connection = await sql.connect(dbConfig);
+    const query = `SELECT * FROM Appointments WHERE full_name = @name`;
+    const request = connection.request();
+    request.input("name", fullName);
+    const result = await request.query(query);
 
-    return results;
+    return result.recordset; // Return all users with that name
   } catch(error) {
-    console.error("Firebase error: ", error);
+    console.error("Database error: ", error);
     throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch(err) {
+        console.error("Error closing database: ", err);
+      }
+    }
   }
 }
 
