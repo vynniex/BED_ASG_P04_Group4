@@ -69,6 +69,9 @@ describe("Records Controller", () => {
         doctorName: "Dr. A",
         diagnosis: "Fever",
         notes: null,
+        weight: 65.5,
+        systolicBP: 120,
+        diastolicBP: 80
       },
     };
     const res = mockResponse();
@@ -117,6 +120,9 @@ describe("Records Controller", () => {
         doctorName: "Updated",
         diagnosis: "Cold",
         notes: "New notes",
+        weight: 70,
+        systolicBP: 125,
+        diastolicBP: 85
       },
     };
     const res = mockResponse();

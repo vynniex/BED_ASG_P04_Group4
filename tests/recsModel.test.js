@@ -87,6 +87,9 @@ describe("createRecord", () => {
       doctorName: "Dr. Alex Ng",
       diagnosis: "Flu",
       notes: null, // test nullable notes
+      weight: 55.2,
+      systolic: 118,
+      diastolic: 76,
     };
 
     // 1st call: insert query
@@ -110,6 +113,9 @@ describe("createRecord", () => {
     expect(mockRequest.input).toHaveBeenCalledWith("doctorName", sql.NVarChar(100), newRecordData.doctorName);
     expect(mockRequest.input).toHaveBeenCalledWith("diagnosis", sql.NVarChar(255), newRecordData.diagnosis);
     expect(mockRequest.input).toHaveBeenCalledWith("notes", sql.NVarChar(100), null);
+    expect(mockRequest.input).toHaveBeenCalledWith("weight", sql.Float, 55.2);
+    expect(mockRequest.input).toHaveBeenCalledWith("systolic", sql.Int, 118);
+    expect(mockRequest.input).toHaveBeenCalledWith("diastolic", sql.Int, 76);
   });
 });
 
@@ -122,6 +128,9 @@ describe("updateRecordById", () => {
       doctorName: "Dr. Updated",
       diagnosis: "Cold",
       notes: "Take rest",
+      weight: 60.5,
+      systolic: 120,
+      diastolic: 80,
     };
 
     // 1st call: update query
@@ -142,6 +151,9 @@ describe("updateRecordById", () => {
 
     expect(mockRequest.input).toHaveBeenCalledWith("id", sql.Int, 1);
     expect(mockRequest.input).toHaveBeenCalledWith("notes", sql.NVarChar(100), updateData.notes);
+    expect(mockRequest.input).toHaveBeenCalledWith("weight", sql.Float, 60.5);
+    expect(mockRequest.input).toHaveBeenCalledWith("systolic", sql.Int, 120);
+    expect(mockRequest.input).toHaveBeenCalledWith("diastolic", sql.Int, 80);
   });
 
   test("returns null if record not found", async () => {
