@@ -38,7 +38,7 @@ app.put("/api/medications/:medName", validateMedName, validateMedInput, medsCont
 app.delete("/api/medications/:medName", validateMedName, medsController.deleteMed);
 
 // APPOINTMENT ROUTES - Grace
-app.get("/api/appointments/users/:nric/:fullName", verifyJWT, apptController.getAllAppointmentsByUser);
+app.get("/api/appointments/login/users", verifyJWT, apptController.getAllAppointmentsByUser);
 app.post("/api/appointments", validateAppt, apptController.createAppointment);
 app.put("/api/appointments/:id", apptController.updateAppointmentById);
 app.post("/api/appointments/login", validateLogin, apptController.loginUser);

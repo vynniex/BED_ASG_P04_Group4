@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 // Get all appointments
 async function getAllAppointmentsByUser(req,res) {
-  const {fullName} = req.params;
+  const {fullName} = req.user;
   try {
         const appointments = await appointmentModel.getAllAppointmentsByUser(fullName);
         res.json(appointments);
@@ -28,16 +28,16 @@ async function loginUser(req, res) {
 
     for (const user of users) {
       const isMatch = await bcrypt.compare(nric, user.nric_fin); // compare hash
-        if (isMatch) {
-          const payload = {
-            id: user.appointment_id,
-            fullName: user.full_name,
-          };
-          console.log(payload);
-          const token = jwt.sign(payload, "your_appointment_secret", { expiresIn: "24h" });
+      if (isMatch) {
+        const payload = {
+          id: user.appointment_id,
+          fullName: user.full_name,
+        };
+        console.log(payload);
+        const token = jwt.sign(payload, "your_appointment_secret", { expiresIn: "24h" });
 
-          return res.status(200).json({ message: "Login successful", token });
-        }
+        return res.status(200).json({ message: `Login successful! Welcome + ${user.full_name}`, token });
+      }
     } 
   } catch (err) {
     console.error(err);
@@ -48,7 +48,13 @@ async function loginUser(req, res) {
 // Create new appointment
 async function createAppointment(req, res) {
   try {
-    const newAppointment = await appointmentModel.createAppointment(req.body);
+    const appointmentData= req.body;
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    appointmentData.nric = await bcrypt.hash(appointmentData.nric, salt);
+
+    const newAppointment = await appointmentModel.createAppointment(appointmentData);
     res.status(201).json(newAppointment);
   } catch (error) {
     console.error("Controller error:", error);

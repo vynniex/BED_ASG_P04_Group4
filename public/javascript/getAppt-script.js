@@ -7,14 +7,21 @@ async function fetchAppointments() {
   try {
     const nric = localStorage.getItem('nric');
     const fullName = localStorage.getItem('fullName');
-
-    // if (!nric || !fullName) {
-    //   alert("NRIC and Full Name are required.");
-    //   return;
-    // }
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      alert("User not logged in. Please log in again.");
+      window.location.href = "login-appointments.html";
+      return;
+    }
 
     // Make a GET request to your API endpoint
-    const response = await fetch(`${apiBaseUrl}/api/appointments/users/${nric}/${fullName}`);
+    const response = await fetch(`${apiBaseUrl}/api/appointments/login/users`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
 
     if (!response.ok) {
       // Handle HTTP errors (e.g., 404, 500)
@@ -134,7 +141,7 @@ async function logoutUser() {
   if (!confirmLogout) return;
 
   try {
-    localStorage.removeItem("nric");
+    localStorage.removeItem("token");
     localStorage.removeItem("fullName");
     localStorage.removeItem("appointmentId");
 

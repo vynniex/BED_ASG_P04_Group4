@@ -9,7 +9,7 @@ appointmentForm.addEventListener("submit", async (event) => {
     // collect form data
     const newAppointmentData = {
         nric: document.getElementById("nric").value.trim(),
-        fullName: document.getElementById("fullName").value.trim(),
+        fullName: document.getElementById("fullName").value.trim().toUpperCase(),
         email: document.getElementById("email").value.trim(),
         contact: document.getElementById("contactNum").value.trim(),
         dob: document.getElementById("dob").value,

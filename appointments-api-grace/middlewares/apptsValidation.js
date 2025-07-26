@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Joi = require("joi"); // Import Joi for validation
 
-
 function verifyJWT(req, res, next) {
     const authHeader = req.headers.authorization;
 
@@ -12,18 +11,17 @@ function verifyJWT(req, res, next) {
     const token = authHeader.split(" ")[1];
 
     jwt.verify(token, "your_appointment_secret", (err, decoded) => {
-        if (err) {
-        return res.status(403).json({ message: "Forbidden: Invalid token" });
-        }
+      if (err) {
+      return res.status(403).json({ message: "Forbidden: Invalid token" });
+      }
 
-        // Attach NRIC and fullName (or whatever data you encoded) to req.user
-        req.user = decoded;
-        console.log(req.user);
-        next();
+      // Attach NRIC and fullName (or whatever data you encoded) to req.user
+      req.user = decoded;
+      console.log(req.user);
+      next();
     });
 };
 
-// still have things to do, i want fullname to be in caps after formatting for database 
 const apptSchema = Joi.object({
   nric: Joi.string()
     .alphanum()

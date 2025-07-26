@@ -30,12 +30,10 @@ form.addEventListener('submit', async (event) => {
 
       const data = await response.json();
       console.log(data);
-      console.log(data.user[0].full_name);
-      alert('Login successful! Welcome, ' + data.user[0].full_name || 'User');
-      
+
       // After login success
-      localStorage.setItem('nric', nric);
       localStorage.setItem('fullName', fullName);
+      localStorage.setItem('token', data.token);
       window.location.href = "manage-appointments.html";
 
 

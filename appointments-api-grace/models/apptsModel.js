@@ -2,42 +2,49 @@ const sql = require("mssql");
 const dbConfig = require("../../dbConfig");
 
 // Get all appointments
-async function getAllAppointmentsByUser(nric, fullName) {
-    try {
-        const connection = collection(db, "appointments");
-        const q = query(
-          connection,
-          where("nric_fin", "==", nric),
-          where("full_name", "==", fullName)
-        );
-        const snapshot = await getDocs(q);
-        const results = snapshot.docs.map(doc => {
-          const data = doc.data();
+async function getAllAppointmentsByUser(fullName) {
+  let connection;
+  try {
+    connection = await sql.connect(dbConfig);
+    const query = `Select * 
+      From Appointments WHERE full_name = @name`; // appointment_id, contact_num, appointment_date, appointment_time, clinic, reason 
+    const request = connection.request();
+    request.input("name", fullName);
+    const result = await request.query(query);
 
-          // Convert Firestore Timestamp to JS Date and format it
-          const dateStr = data.appointment_date.toDate().toLocaleString('en-SG', {
-            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-            timeZone: 'Asia/Singapore'
-          });
+    return result.recordset.map(appt => {
+      const dateStr = new Date(appt.appointment_date).toLocaleDateString('en-SG', {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+        timeZone: 'Asia/Singapore'
+      });
 
-          // Return only selected fields
-          return {
-            appointment_id: doc.id,
-            appointment_date: dateStr,
-            appointment_time: data.appointment_time,
-            clinic: data.clinic,
-            reason: data.reason,
-            formatted_datetime: `${dateStr} at ${data.appointment_time}`,
-          };
-        });
-
-        return results;
-
+      const timeStr = appt.appointment_time
+      console.log({...appt, formatted_datetime: `${dateStr} at ${timeStr}`});
+      return { ...appt, formatted_datetime: `${dateStr} at ${timeStr}` };
+            
+    });
     } catch(error) {
-        console.error("Error getting appointments: ", error);
-        throw error;
+      console.error("Database error: ", error);
+      throw error;
+    } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch(err) {
+        console.error("Error closing database:", err);
+      }
     }
-}
+  }
+};
+          // Return only selected fields
+          // return {
+          //   appointment_id: doc.id,
+          //   appointment_date: dateStr,
+          //   appointment_time: data.appointment_time,
+          //   clinic: data.clinic,
+          //   reason: data.reason,
+          //   formatted_datetime: `${dateStr} at ${data.appointment_time}`,
+          // };
 
 // Login user 
 async function loginUser(fullName) {
@@ -66,31 +73,38 @@ async function loginUser(fullName) {
 
 // Create new appointment
 async function createAppointment(appointmentData) {
+  let connection;
   try {
-    const connection = await collection(db, "appointments");
+    connection = await sql.connect(dbConfig);
+    const query =
+      `INSERT INTO Appointments (nric_fin, full_name, email, contact_num, dob, appointment_date, appointment_time, clinic, reason) 
+        VALUES (@nric_fin, @full_name, @email, @contact_num, @dob, @appointment_date, @appointment_time, @clinic, @reason); SELECT SCOPE_IDENTITY() AS appointment_id;`;
+    const request = connection.request();
+    console.log("Test:" ,appointmentData);
+    request.input("nric_fin", appointmentData.nric);
+    request.input("full_name", appointmentData.fullName);
+    request.input("email", appointmentData.email);
+    request.input("contact_num", appointmentData.contact);
+    request.input("dob", appointmentData.dob);
+    request.input("appointment_date", appointmentData.appointmentDate);
+    request.input("appointment_time", appointmentData.appointmentTime);
+    request.input("clinic", appointmentData.clinic);
+    request.input("reason", appointmentData.reason);
+    const result = await request.query(query);
 
-    const dob = new Date(appointmentData.dob);
-    const appt_date = new Date(appointmentData.appointmentDate)
-
-    const newAppt = {
-      nric_fin: appointmentData.nric,
-      full_name: appointmentData.fullName,
-      email: appointmentData.email,
-      contact_num: appointmentData.contact,
-      dob: Timestamp.fromDate(dob),
-      appointment_date: Timestamp.fromDate(appt_date),
-      appointment_time: appointmentData.appointmentTime,
-      clinic: appointmentData.clinic,
-      reason: appointmentData.reason,
-    };
-    console.log(newAppt);
-    const docRef = await addDoc(connection, newAppt);
-
-    console.log("Appointment created with ID:", docRef.id);
-    return docRef.id;
+    const newAppointmentId = result.recordset[0].appointment_id;
+    return newAppointmentId;
   } catch (error) {
-    console.error("Firebase error:", error);
+    console.error("Database error:", error);
     throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error("Error closing connection:", err);
+      }
+    }
   }
 }
 
