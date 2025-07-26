@@ -1,10 +1,12 @@
 const appointmentModel = require("../models/apptsModel");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // Get all appointments
 async function getAllAppointmentsByUser(req,res) {
-  const { nric, fullName} = req.params;
+  const {fullName} = req.params;
   try {
-        const appointments = await appointmentModel.getAllAppointmentsByUser(nric,fullName);
+        const appointments = await appointmentModel.getAllAppointmentsByUser(fullName);
         res.json(appointments);
     } catch (error) {
         console.error("Controller error: ", error);
@@ -15,19 +17,28 @@ async function getAllAppointmentsByUser(req,res) {
 // login user
 async function loginUser(req, res) {
   const { nric, fullName } = req.body;
+  console.log(req.body);
 
   if (!nric || !fullName) {
     return res.status(400).json({ message: "NRIC and Full Name are required." });
   }
 
   try {
-    const user = await appointmentModel.loginUser(nric, fullName);
+    const users = await appointmentModel.loginUser(fullName);
 
-    if (user && user.length > 0) {
-      return res.status(200).json({ message: "Login successful", user });
-    } else {
-      return res.status(401).json({ message: "Invalid NRIC or Full Name" });
-    }
+    for (const user of users) {
+      const isMatch = await bcrypt.compare(nric, user.nric_fin); // compare hash
+        if (isMatch) {
+          const payload = {
+            id: user.appointment_id,
+            fullName: user.full_name,
+          };
+          console.log(payload);
+          const token = jwt.sign(payload, "your_appointment_secret", { expiresIn: "24h" });
+
+          return res.status(200).json({ message: "Login successful", token });
+        }
+    } 
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });

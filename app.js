@@ -11,6 +11,7 @@ const medsController = require("./medicine-api-xinyi/controllers/medsController.
 const { validateMedInput, validateMedName } = require("./medicine-api-xinyi/middlewares/medsValidation.js");
 
 const apptController = require("./appointments-api-grace/controllers/apptsController.js");
+const {verifyJWT, validateAppt, validateLogin } = require("./appointments-api-grace/middlewares/apptsValidation.js");
 
 const recsController = require("./records-api-xuening/controllers/recsController");
 const { validateRecord } = require("./records-api-xuening/middlewares/recsValidation");
@@ -37,10 +38,10 @@ app.put("/api/medications/:medName", validateMedName, validateMedInput, medsCont
 app.delete("/api/medications/:medName", validateMedName, medsController.deleteMed);
 
 // APPOINTMENT ROUTES - Grace
-app.get("/api/appointments/users/:nric/:fullName", apptController.getAllAppointmentsByUser);
-app.post("/api/appointments", apptController.createAppointment);
+app.get("/api/appointments/users/:nric/:fullName", verifyJWT, apptController.getAllAppointmentsByUser);
+app.post("/api/appointments", validateAppt, apptController.createAppointment);
 app.put("/api/appointments/:id", apptController.updateAppointmentById);
-app.post("/api/appointments/login", apptController.loginUser);
+app.post("/api/appointments/login", validateLogin, apptController.loginUser);
 app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 
 // MEDICAL RECORDS ROUTES - XN

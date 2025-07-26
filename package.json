@@ -19,10 +19,13 @@
   "homepage": "https://github.com/vynniex/BED_ASG_P04_Group4#readme",
   "dependencies": {
     "@firebase/firestore": "^4.8.0",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
-    "firebase": "^11.10.0"
+    "firebase": "^11.10.0",
+    "joi": "^17.13.3",
+    "mssql": "^11.0.1"
   },
   "devDependencies": {
     "swagger-autogen": "^2.23.7",
