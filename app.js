@@ -49,7 +49,6 @@ app.put("/api/records/:id", validateRecord, recsController.updateRecordById);
 app.delete("/api/records/:id", recsController.deleteRecordById);
 
 // NOTIFICATION ROUTES - Dalton
-// NOTIFICATION ROUTES - Dalton
 app.post("/api/notifications", validateNotif, notifsController.createNotification);
 app.get("/api/notifications", notifsController.getAllNotifications);
 app.get("/api/notifications/:id", notifsController.getNotificationById); // 

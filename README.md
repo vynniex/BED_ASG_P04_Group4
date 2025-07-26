@@ -10,7 +10,7 @@ BED 2025 Assignment
 - **Chua Wee Teng Grace** - S10269093
 
 ## Introduction
-(Project Name) is a web application designed to assist the elderly with their health needs like medications, appointments, daily mood tracking, etc. with ease.
+Lions Befriender is a web application designed to assist the elderly with their health needs like medications, appointments, daily mood tracking, etc. with ease.
 
 ## CRUD Operations
 CRUD Operations done by each member is listed below.
