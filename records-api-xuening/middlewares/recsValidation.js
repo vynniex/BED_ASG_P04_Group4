@@ -52,6 +52,8 @@ const recordSchema = Joi.object({
     "number.base": "Weight must be a number",
     "number.positive": "Weight must be a positive number",
   }),
+  bloodSugar: Joi.number().min(0).max(600).allow(null),
+  
   systolic: Joi.number().integer().min(70).max(250).allow(null).optional().messages({
     "number.base": "Systolic must be a number",
     "number.integer": "Systolic must be an integer",
