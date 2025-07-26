@@ -2,6 +2,19 @@ USE bed_asg1_db;
 /* Xin YI */
 
 /* Grace */ 
+CREATE TABLE Appointments (
+    appointment_id INT PRIMARY KEY IDENTITY(1,1),
+    nric_fin VARCHAR(100) NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    contact_num VARCHAR(20) NOT NULL,
+    dob DATE NOT NULL,
+    appointment_date DATE NOT NULL,
+    appointment_time VARCHAR(15) NOT NULL,
+    clinic VARCHAR(100) NOT NULL,
+    reason VARCHAR(50) NOT NULL,
+    created_at DATETIME DEFAULT GETDATE(),
+);
 
 /* Xue Ning */
 DROP TABLE IF EXISTS Records;
