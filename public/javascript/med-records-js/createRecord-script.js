@@ -1,52 +1,51 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const feelingButtons = document.querySelectorAll(".feeling-btn");
-  const feelingInput = document.getElementById("feeling");
+// createRecord-script.js
 
-  // Handle feeling selection
-  feelingButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      // Remove "selected" class from all buttons
-      feelingButtons.forEach(btn => btn.classList.remove("selected"));
+function convertDateToDDMMYYYY(dateStr) {
+  const [year, month, day] = dateStr.split("-");
+  return `${day}-${month}-${year}`;
+}
 
-      // Add "selected" class to clicked button
-      button.classList.add("selected");
+document.getElementById("record-form").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-      // Set hidden input value
-      feelingInput.value = button.dataset.value;
-    });
-  });
+  // Get the date value from input (YYYY-MM-DD)
+  const inputDate = document.getElementById("date").value;
 
-  // Handle form submission
-  const form = document.getElementById("record-form");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  // Convert to DD-MM-YYYY format
+  const formattedDate = convertDateToDDMMYYYY(inputDate);
 
-    const data = {
-      date: document.getElementById("record-date").value,
-      feeling: document.getElementById("feeling").value,
-      systolic: parseInt(document.getElementById("systolic").value),
-      diastolic: parseInt(document.getElementById("diastolic").value),
-      bloodSugar: parseInt(document.getElementById("blood-sugar").value),
-      weight: parseFloat(document.getElementById("weight").value)
-    };
+  const newRecord = {
+    userId: parseInt(document.getElementById("userId").value), // Assuming userId input exists and is filled
+    date: formattedDate,
+    doctorName: document.getElementById("doctorName").value,
+    diagnosis: document.getElementById("diagnosis").value,
+    notes: document.getElementById("notes").value,
+    systolic: document.getElementById("systolic").value ? parseInt(document.getElementById("systolic").value) : null,
+    diastolic: document.getElementById("diastolic").value ? parseInt(document.getElementById("diastolic").value) : null,
+    bloodSugar: document.getElementById("bloodSugar").value ? parseFloat(document.getElementById("bloodSugar").value) : null,
+    weight: document.getElementById("weight").value ? parseFloat(document.getElementById("weight").value) : null,
+  };
 
-    try {
-      const response = await fetch("http://localhost:3000/api/records", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert("Record added successfully!");
-        window.location.href = "records.html";
-      } else {
-        alert(result.error || "Failed to add record.");
-      }
-    } catch (err) {
-      alert("Error connecting to backend.");
-      console.error(err);
+  fetch("http://localhost:3000/api/records", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(newRecord)
+  })
+  .then(async (res) => {
+    if (!res.ok) {
+      const errorBody = await res.json().catch(() => ({}));
+      throw new Error(errorBody.error || errorBody.message || "Create failed");
     }
+    return res.json();
+  })
+  .then(() => {
+    alert("Record created successfully!");
+    window.location.href = "records.html";  // Redirect after creation
+  })
+  .catch(err => {
+    console.error("Create error:", err);
+    alert("Failed to create record: " + err.message);
   });
 });
