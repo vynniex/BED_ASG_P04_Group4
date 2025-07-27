@@ -25,8 +25,8 @@ function verifyJWT(req, res, next) {
 const apptSchema = Joi.object({
   nric: Joi.string()
     .alphanum()
-    .min(6)
-    .max(12)
+    .min(9)
+    .max(9)
     .required()
     .label("NRIC/FIN"),
 
@@ -117,8 +117,8 @@ function validateAppt(req, res, next) {
 }
 
 const loginSchema = Joi.object({
-  nric: Joi.string().required(),
-  fullName: Joi.string().required(),
+  nric: Joi.string().min(9).max(9).required(),
+  fullName: Joi.string().min(3).max(100).required(),
 })
 
 function validateLogin(req, res, next) {

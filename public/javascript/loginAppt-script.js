@@ -30,6 +30,7 @@ form.addEventListener('submit', async (event) => {
 
       const data = await response.json();
       console.log(data);
+      alert(`Login sucessful! Welcome ${fullName}.`);
 
       // After login success
       localStorage.setItem('fullName', fullName);

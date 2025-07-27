@@ -230,6 +230,11 @@ button {
     font-weight: bold;
 }
 
+.noApptMsg {
+    display: none;
+    text-align: center;
+}
+
 .appointment-card {
     background-color: #DFD5D3;
     padding: 20px;

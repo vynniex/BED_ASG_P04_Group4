@@ -83,8 +83,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
   console.log(`Medication API: http://localhost:${port}/api/medications`);
   console.log(`Medical Records API: http://localhost:${port}/api/records`);
-  console.log(`Appointment API: http://localhost:${port}/api/appointments/users/{nric}/{fullName}`);
-  console.log(`Replace {nric} and {fullName} with user details`);
+  console.log(`Appointment API: http://localhost:${port}/api/appointments/login/users`);
   console.log(`Notification API: http://localhost:${port}/api/notifications`);
 });
 

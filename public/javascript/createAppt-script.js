@@ -2,6 +2,29 @@
 const appointmentForm = document.getElementById("appointment-form");
 const apiBaseUrl = "http://localhost:3000";
 
+document.addEventListener("DOMContentLoaded", () => {
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("appointmentDate").setAttribute("min", today);
+
+  const token = localStorage.getItem("token");
+  if (!token)
+    return;
+  
+  try {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const dob = userInfo.dob.split("T")[0];
+    console.log(dob);
+
+    // nric and fullname still undefined maybe try verifyJWT
+    document.getElementById("nric").value = userInfo.nric;
+    document.getElementById("fullName").value = userInfo.fullName;
+    document.getElementById("email").value = userInfo.email;
+    document.getElementById("contactNum").value = userInfo.contactNum;
+    document.getElementById("dob").value = dob;
+  } catch(error) {
+    console.error("Error: ", error);
+  }
+});
 
 appointmentForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -20,6 +43,15 @@ appointmentForm.addEventListener("submit", async (event) => {
     }
 
     console.log(newAppointmentData);
+    let userInfo = {}
+    // User's Info
+    userInfo = {
+        nric: newAppointmentData.nric,
+        fullName: newAppointmentData.full_name,
+        email: newAppointmentData.email,
+        contactNum: newAppointmentData.contact_num,
+        dob: newAppointmentData.dob 
+    }
 
     try {
         // Make a POST request to your API endpoint
@@ -41,6 +73,7 @@ appointmentForm.addEventListener("submit", async (event) => {
         if (response.status === 201) {
             alert("Appointment booked successfully!");
             console.log("Created Appointment:", responseBody);
+            localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
             appointmentForm.reset();
         } else if (response.status === 400) {

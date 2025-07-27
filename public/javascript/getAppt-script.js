@@ -39,6 +39,17 @@ async function fetchAppointments() {
     // Parse the JSON response
     const appointments = await response.json();
 
+    // Show message if there are no appointments
+    if (appointments.length === 0) {
+      const noApptElement = document.querySelector(".noApptMsg");
+      if (noApptElement) {
+        noApptElement.style.display = "block";
+      }
+    }
+
+    // let userInfo = {} // Use {} instead of null to store user data for autofill; avoids null checks later.
+    let updatedFields = {};
+
     // Sort by appointment date
     appointments.sort((a, b) => new Date(a.appointment_date) - new Date(b.appointment_date));
 
@@ -78,14 +89,27 @@ async function fetchAppointments() {
       // Insert before the footer (optional)
       const footer = document.querySelector(".appointment-footer");
       dashboard.insertBefore(card, footer);
+
+
+
+      // Selected Fields that can be updated
+      updatedFields[appt.appointment_id] = {
+        contactNum: appt.contact_num,
+        appointmentDate: appt.appointment_date,
+        appointmentTime: appt.appointment_time,
+        clinic: appt.clinic
+      }
     });
+    // localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    // console.log(userInfo);
+    sessionStorage.setItem("updatedFields", JSON.stringify(updatedFields));
+    console.log(updatedFields);
     document.querySelectorAll(".delete-btn").forEach((button) => {
       button.addEventListener("click", handleDeleteClick);
     });
 
   } catch (error) {
     console.error("Failed to fetch appointments:", error.message);
-    alert("Unable to load appointments. Please try again later.");
   }
 }
 

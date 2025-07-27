@@ -110,43 +110,60 @@ async function createAppointment(appointmentData) {
 
 // update appointment
 async function updateAppointmentById(id, updatedData) {
+  let connection;
   try {
-    const docRef = doc(db, "appointments", id);
-    const docSnap = await getDoc(docRef);
-
-    console.log(docSnap.data());
-    if (!docSnap.exists()) {
-      throw new Error("Document does not exist.");
-    }
-
-    const updateFields = {
-      contact_num: updatedData.contact,
-      clinic: updatedData.clinic,
-      appointment_date: Timestamp.fromDate(new Date(updatedData.appointmentDate)),
-      appointment_time: updatedData.appointmentTime,
-    };
-    console.log(updateFields);
-
-    await updateDoc(docRef, updateFields);
+    connection = await sql.connect(dbConfig);
+    const query = `
+    UPDATE Appointments
+    SET contact_num = @contact_num, appointment_date = @apptDate, appointment_time = @apptTime, clinic = @clinic
+    WHERE appointment_id = @id
+    `;
+    const request = connection.request();
+    request.input("contact_num", updatedData.contact);
+    request.input("apptDate", updatedData.appointmentDate);
+    request.input("apptTime", updatedData.appointmentTime);
+    request.input("clinic", updatedData.clinic);
+    request.input("id", id);
+    
+    await request.query(query);
 
     return {success: true};
-  } catch (error) {
-    console.error("Firebase error:", error);
+  }catch (error) {
+    console.error("Database error:", error);
     throw error;
-  } 
+  } finally {
+    if (connection) {
+      try {
+         await connection.close();
+      } catch (err) {
+        console.error("Error closing connection:", err);
+      }
+    }
+  }
 }
 
 // Delete appointment
 async function deleteAppointmentById(id) {
+  let connection;
   try {
-    console.log("ID type:", typeof id, "| value:", id);
-    await deleteDoc(doc(db, "appointments", id));
-    console.log("Deleted appointment with document ID:", id);
-    return 1; // success
+    connection = await sql.connect(dbConfig);
+    const query = `Delete From Appointments where appointment_id = @id`;
+    const request = connection.request();
+    request.input("id", id);
+    const result = await request.query(query);
 
+    return result.rowsAffected[0];
   } catch(error) {
-    console.error("Error in deleting appointments: ", error);
+    console.error("Error in Delete /appointments: ", error);
     throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch(closeError){
+        console.error("Error closing database collection: ", closeError);
+      }
+    }
   }
 }
 

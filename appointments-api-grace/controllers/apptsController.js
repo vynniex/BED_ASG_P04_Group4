@@ -36,9 +36,12 @@ async function loginUser(req, res) {
         console.log(payload);
         const token = jwt.sign(payload, "your_appointment_secret", { expiresIn: "24h" });
 
-        return res.status(200).json({ message: `Login successful! Welcome + ${user.full_name}`, token });
+        return res.status(200).json({ message: `Login successful`, token });
       }
     } 
+
+    // no match
+    return res.status(401).json({message: "Invalid NRIC or Full Name"});
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });

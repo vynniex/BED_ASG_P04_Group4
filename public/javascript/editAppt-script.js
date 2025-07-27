@@ -1,7 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
-    appointmentId = localStorage.getItem("appointmentId");
-    console.log("Edit appointment with appointmentId:", appointmentId);
+  appointmentId = localStorage.getItem("appointmentId");
+  console.log("Edit appointment with appointmentId:", appointmentId);
+
+  // Call this when opening the edit form
+  autofillAppointmentForm(appointmentId);
 });
+
+async function autofillAppointmentForm(appointmentId) {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem("updatedFields"));
+    const appt = stored[appointmentId];    
+    const date = appt.appointmentDate.split("T")[0];
+
+    document.getElementById("contactNum").value = appt.contactNum;
+    document.getElementById("appointmentDate").value = date;
+    document.getElementById("appointmentTime").value = appt.appointmentTime;
+    document.getElementById("clinic").value = appt.clinic;
+
+  } catch(error) {
+    console.error("Error: ", error);
+  }
+};
 
 function goBack() {
     window.location.href = "manage-appointments.html";
@@ -11,7 +30,7 @@ async function submitForm(event) {
   event.preventDefault(); // Prevent page reload
 
   // Get the values from the form
-  const contact = document.getElementById("contactnum").value.trim();
+  const contact = document.getElementById("contactNum").value.trim();
   const appointmentDate = document.getElementById("appointmentDate").value;
   const appointmentTime = document.getElementById("appointmentTime").value;
   const clinic = document.getElementById("clinic").value;
