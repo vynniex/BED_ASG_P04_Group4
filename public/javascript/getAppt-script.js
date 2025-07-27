@@ -141,6 +141,12 @@ async function handleDeleteClick(event) {
       const appointmentItem = event.target.closest(".appointment-card");
       if (appointmentItem) {
         appointmentItem.remove();
+        
+        const remainingAppt = document.querySelectorAll(".appointment-card");
+        if (remainingAppt.length === 0) {
+          console.log("Reloading page because no appointments remain");
+          location.reload();
+        }
       }
     }
     else {

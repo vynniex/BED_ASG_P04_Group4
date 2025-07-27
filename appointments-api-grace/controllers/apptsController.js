@@ -51,12 +51,19 @@ async function loginUser(req, res) {
 // Create new appointment
 async function createAppointment(req, res) {
   try {
-    const appointmentData= req.body;
+    const appointmentData = req.body;
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    appointmentData.nric = await bcrypt.hash(appointmentData.nric, salt);
-
+    if (req.user) {
+      // if the user has logged in alr
+      appointmentData.nric = req.user.nric;
+      appointmentData.fullName = req.user.fullName;
+    }
+    else {
+      // Hash password
+      const salt = await bcrypt.genSalt(10);
+      appointmentData.nric = await bcrypt.hash(appointmentData.nric, salt);
+    }
+    
     const newAppointment = await appointmentModel.createAppointment(appointmentData);
     res.status(201).json(newAppointment);
   } catch (error) {

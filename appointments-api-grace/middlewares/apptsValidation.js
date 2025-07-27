@@ -17,7 +17,7 @@ function verifyJWT(req, res, next) {
 
       // Attach NRIC and fullName (or whatever data you encoded) to req.user
       req.user = decoded;
-      console.log(req.user);
+      console.log("decoded: ",req.user);
       next();
     });
 };

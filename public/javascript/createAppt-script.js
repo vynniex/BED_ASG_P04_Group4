@@ -42,14 +42,13 @@ appointmentForm.addEventListener("submit", async (event) => {
         reason: document.querySelector('input[name="reason"]:checked')?.value,
     }
 
-    console.log(newAppointmentData);
     let userInfo = {}
     // User's Info
     userInfo = {
-        nric: newAppointmentData.nric,
-        fullName: newAppointmentData.full_name,
+        // nric: newAppointmentData.nric,
+        // fullName: newAppointmentData.fullName,
         email: newAppointmentData.email,
-        contactNum: newAppointmentData.contact_num,
+        contactNum: newAppointmentData.contact,
         dob: newAppointmentData.dob 
     }
 
