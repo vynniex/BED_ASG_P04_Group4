@@ -1,10 +1,10 @@
-function createAccount() {
-    window.location.href = "create-account.html"
-}
-
 // Get references to the HTML elements you'll interact with:
 const form = document.getElementById('login-form');
 const apiBaseUrl = "http://localhost:3000";
+
+function createAccount() {
+    window.location.href = "create-account.html"
+}
 
 // login
 form.addEventListener('submit', async (event) => {

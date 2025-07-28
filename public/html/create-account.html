@@ -21,7 +21,10 @@
 
     <section id="login-container">
         <h2 class="inter-regular">Create Account</h2>
-        <form class="login-form lato-regular">
+        <form class="signUp-form lato-regular">
+            <label for="nric">NRIC / FIN:</label>
+            <input type="text" id="nric" name="nric/fin" required/>
+
             <label for="fullName">Full Name:</label>
             <input type="text" id="fullName" name="fullName" required />
 
@@ -44,7 +47,7 @@
 
 
             <div class="btn-row">
-              <button type="submit" class="blue-button" onclick="goLoginPage()">Create Account</button>
+              <button type="submit" class="blue-button">Create Account</button>
             </div>
         </form>
         <button type="button" class="back-button" onclick="goBack()">BACK</button>
