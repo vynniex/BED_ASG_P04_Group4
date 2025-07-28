@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courgette&family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Marck+Script&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css" />
-    <title>Login page</title>
+    <title>Sign Up page</title>
   </head>
   <body>
     <nav class="navbar inter-regular">
@@ -20,23 +20,36 @@
     </nav>
 
     <section id="login-container">
-        <h2 class="inter-regular">Login</h2>
+        <h2 class="inter-regular">Create Account</h2>
         <form class="login-form lato-regular">
-            <label for="fullName">Full Name</label>
+            <label for="fullName">Full Name:</label>
             <input type="text" id="fullName" name="fullName" required />
 
-            <label for="password">Password</label>
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" autocomplete="on" required>
+
+            <label for="password">Password:</label>
             <input type="password" id="password" name="password" required />
 
+            <div class="row">
+                <div>
+                    <label for="contactNum">Contact Number:</label>
+                    <input type="tel" id="contactNum" name="contact">
+                </div>
+                <div>
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob">
+                </div>
+            </div>
+
+
             <div class="btn-row">
-              <button type="submit" onclick="createAccount()" class="signUp-button">Sign Up</button>
-              <button type="submit" class="blue-button">Login</button>
+              <button type="submit" class="blue-button" onclick="goLoginPage()">Create Account</button>
             </div>
         </form>
+        <button type="button" class="back-button" onclick="goBack()">BACK</button>
     </section>
 
-
-
-    <script src="../javascript/login.js"></script>
+    <script src="../javascript/create-Account.js"></script>
   </body>
 </html>
