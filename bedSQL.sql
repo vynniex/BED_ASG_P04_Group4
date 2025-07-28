@@ -10,12 +10,12 @@ CREATE TABLE Users (
     nric_fin VARCHAR(100) UNIQUE NOT NULL,
     full_name VARCHAR(100) NOT NULL,
 	email VARCHAR(100) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     contact_num VARCHAR(20) NOT NULL,
     dob DATE NOT NULL,
 );
 
-INSERT INTO Users(nric_fin, full_name, email, password_hash, contact_num, dob) VALUES
+INSERT INTO Users(nric_fin, full_name, email, password, contact_num, dob) VALUES
 ('S4512345D', 'Tan Mei Ling', 'meiling.tan@example.com', 'password1', '91234567', '1945-08-15');
 
 /* Xin YI */

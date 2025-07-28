@@ -43,6 +43,7 @@ app.post("/api/appointments", validateAppt, apptController.createAppointment);
 app.put("/api/appointments/:id", apptController.updateAppointmentById);
 app.post("/api/appointments/login", validateLogin, apptController.loginUser);
 app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
+app.post("/api/users/signup", apptController.createUser);
 
 // MEDICAL RECORDS ROUTES - XN
 app.get("/api/records", recsController.getAllRecords);

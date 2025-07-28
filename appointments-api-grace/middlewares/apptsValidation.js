@@ -15,7 +15,7 @@ function verifyJWT(req, res, next) {
       return res.status(403).json({ message: "Forbidden: Invalid token" });
       }
 
-      // Attach NRIC and fullName (or whatever data you encoded) to req.user
+      // Attach id (or whatever data you encoded) to req.user
       req.user = decoded;
       console.log("decoded: ",req.user);
       next();
@@ -117,8 +117,8 @@ function validateAppt(req, res, next) {
 }
 
 const loginSchema = Joi.object({
-  nric: Joi.string().min(9).max(9).required(),
-  fullName: Joi.string().min(3).max(100).required(),
+  email: Joi.string().min(3).max(100).required(),
+  password: Joi.string().min(3).max(100).required(),
 })
 
 function validateLogin(req, res, next) {

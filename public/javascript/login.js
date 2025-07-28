@@ -10,8 +10,8 @@ function createAccount() {
 form.addEventListener('submit', async (event) => {
     event.preventDefault(); // Prevent page reload on submit
 
-    const nric = document.getElementById('nric').value.trim();
-    const fullName = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
 
     try {
       const response = await fetch(`${apiBaseUrl}/api/appointments/login`, {
@@ -19,7 +19,7 @@ form.addEventListener('submit', async (event) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nric, fullName }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -30,12 +30,13 @@ form.addEventListener('submit', async (event) => {
 
       const data = await response.json();
       console.log(data);
-      alert(`Login sucessful! Welcome ${fullName}.`);
+      console.log(data.user);
+      alert(`Login sucessful! Welcome ${data.user.fullName}.`);
 
       // After login success
-      localStorage.setItem('fullName', fullName);
+      localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('token', data.token);
-      window.location.href = "manage-appointments.html";
+      window.location.href = "index.html";
 
 
     } catch (error) {

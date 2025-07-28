@@ -16,28 +16,27 @@ async function getAllAppointmentsByUser(req,res) {
 
 // create user account
 async function createUser(req,res) {
-  const { nric, fullName, email, password, contact, dob} = req.body;
+  const userData = req.body;
   try {
-    if (!nric || !fullName || !email || !password || !contact || !dob) {
+    if (!userData) {
       return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const existingUser = await appointmentModel.findUser(userData.email);
+    console.log(existingUser);
+
+    if (existingUser) {
+      return res.status(409).json({message: "User already exisits. "}) // 409 conflict - prevent duplicates
     }
 
     // Hash password and nric
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    nric = await bcrypt.hash(nric, salt);
-
-    const userData= {
-      nric,
-      fullName,
-      email,
-      contact,
-      password: hashedPassword,
-      dob
-    }
+    userData.password = await bcrypt.hash(userData.password, salt);
+    userData.nric = await bcrypt.hash(userData.nric, salt);
 
     const newUser = await appointmentModel.createUser(userData);
-    res.json(newUser);
+    console.log(newUser);
+    res.status(201).json(newUser);
   } catch(error) {
     console.error("Controller error: ", error);
     res.status(500).json({error: "Error creating account for user."});
@@ -47,32 +46,39 @@ async function createUser(req,res) {
 
 // login user
 async function loginUser(req, res) {
-  const { nric, fullName } = req.body;
+  const { email, password } = req.body;
   console.log(req.body);
 
-  if (!nric || !fullName) {
-    return res.status(400).json({ message: "NRIC and Full Name are required." });
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and Password are required." });
   }
 
   try {
-    const users = await appointmentModel.loginUser(fullName);
+    const user = await appointmentModel.findUser(email);
+    console.log(user);
 
-    for (const user of users) {
-      const isMatch = await bcrypt.compare(nric, user.nric_fin); // compare hash
+    if (user) {
+      const isMatch = await bcrypt.compare(password, user.password); // compare hash
       if (isMatch) {
         const payload = {
-          id: user.appointment_id,
-          fullName: user.full_name,
+          id: user.userId,
         };
         console.log(payload);
-        const token = jwt.sign(payload, "your_appointment_secret", { expiresIn: "24h" });
+        const token = jwt.sign(payload, "your_appointment_secret", { expiresIn: "12h" });
 
-        return res.status(200).json({ message: `Login successful`, token });
+        return res.status(200).json({ message: `Login successful`, token, 
+          user: {
+            fullName: user.full_name,
+            email: user.email,
+            contact: user.contact_num,
+            dob: user.dob
+          }
+        });
       }
     } 
 
     // no match
-    return res.status(401).json({message: "Invalid NRIC or Full Name"});
+    return res.status(401).json({message: "Invalid Email or Password"});
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
@@ -153,6 +159,7 @@ async function deleteAppointmentById(req,res) {
 module.exports = {
   getAllAppointmentsByUser,
   createAppointment,
+  createUser,
   loginUser,
   updateAppointmentById,
   deleteAppointmentById
