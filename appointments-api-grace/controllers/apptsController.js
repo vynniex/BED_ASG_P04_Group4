@@ -6,13 +6,44 @@ const jwt = require("jsonwebtoken");
 async function getAllAppointmentsByUser(req,res) {
   const {fullName} = req.user;
   try {
-        const appointments = await appointmentModel.getAllAppointmentsByUser(fullName);
-        res.json(appointments);
-    } catch (error) {
-        console.error("Controller error: ", error);
-        res.status(500).json({error: "Error retrieving appointments for user."});
+    const appointments = await appointmentModel.getAllAppointmentsByUser(fullName);
+    res.json(appointments);
+  } catch (error) {
+    console.error("Controller error: ", error);
+    res.status(500).json({error: "Error retrieving appointments for user."});
   }
 };
+
+// create user account
+async function createUser(req,res) {
+  const { nric, fullName, email, password, contact, dob} = req.body;
+  try {
+    if (!nric || !fullName || !email || !password || !contact || !dob) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    // Hash password and nric
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    nric = await bcrypt.hash(nric, salt);
+
+    const userData= {
+      nric,
+      fullName,
+      email,
+      contact,
+      password: hashedPassword,
+      dob
+    }
+
+    const newUser = await appointmentModel.createUser(userData);
+    res.json(newUser);
+  } catch(error) {
+    console.error("Controller error: ", error);
+    res.status(500).json({error: "Error creating account for user."});
+  }
+};
+
 
 // login user
 async function loginUser(req, res) {
