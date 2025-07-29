@@ -20,7 +20,19 @@ INSERT INTO Users(nric_fin, full_name, email, password, contact_num, dob) VALUES
 ('S9988776A', 'Lim Wei Jie', 'weijie.lim@example.com', 'password2', '98765432', '1943-12-09');
 
 /* Xin YI */
+CREATE TABLE Medications (
+    medicine_id INT PRIMARY KEY IDENTITY(1,1),
+    userId INT NOT NULL, -- Foreign key to Users table
+    medicine_name VARCHAR(100) NOT NULL UNIQUE,
+    purpose VARCHAR(200) NOT NULL,
+    per_day INT NOT NULL CHECK(per_day > 0),
+    food_timing VARCHAR(10) NOT NULL CHECK(food_timing IN ('before', 'after')),
+    created_at DATETIME DEFAULT GETDATE(),
+    updated_at DATETIME NULL
+);
 
+INSERT INTO Medications (medicine_id, userId, medicine_name, purpose, per_day, food_timing, created_at)
+(1, 1, 'Aspirin', 'Pain Relief', 2, 'before', GETDATE())
 /* Grace */ 
 CREATE TABLE Appointments (
     appointment_id INT PRIMARY KEY IDENTITY(1,1),
