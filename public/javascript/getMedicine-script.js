@@ -1,52 +1,48 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const db = firebase.firestore();
-  
   const medicineListEl = document.getElementById('medicine-list');
   const modal = document.getElementById('confirmation-modal');
   const modalMessage = document.getElementById('modal-message');
   const modalCancel = document.getElementById('modal-cancel');
   const modalConfirm = document.getElementById('modal-confirm');
 
-  // load meds from firebase
   async function loadMedicines() {
     try {
-      const querySnapshot = await db.collection("medications").get();
-      
-      if (querySnapshot.empty) {
+      const response = await fetch('/api/medications');
+      if (!response.ok) throw new Error('Failed to fetch medicines');
+
+      const meds = await response.json();
+
+      if (!meds.length) {
         medicineListEl.innerHTML = `<p class="inter-regular">No medication records</p>`;
         return;
       }
 
       medicineListEl.innerHTML = '';
-      
-      querySnapshot.forEach(doc => {
-        const med = doc.data();
+
+      meds.forEach(med => {
         renderMedicineCard({
-          id: doc.id,
-          medicineName: med.medicineName || 'Unnamed Medication',
-          purpose: med.purpose || 'Not specified',
-          perDay: med.perDay || 0,
-          foodTiming: med.foodTiming || 'not specified'
+          id: med.medicineName,
+          medicineName: med.medicineName,
+          purpose: med.purpose,
+          perDay: med.perDay,
+          foodTiming: med.foodTiming
         });
       });
-
     } catch (error) {
       medicineListEl.innerHTML = `
         <div class="error-message inter-regular">
-          Failed to load medicines
-          <br>${error.message}
+          Failed to load medicines<br>${error.message}
         </div>
       `;
     }
   }
 
-  // render individual med cards
   function renderMedicineCard(med) {
     const medItem = document.createElement('div');
     medItem.classList.add('medicine-card');
     medItem.dataset.id = med.id;
 
-    const foodTimingText = med.foodTiming 
+    const foodTimingText = med.foodTiming
       ? med.foodTiming.charAt(0).toUpperCase() + med.foodTiming.slice(1)
       : 'Not specified';
 
@@ -63,13 +59,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
 
-    // rmv button
     medItem.querySelector('.btn-remove').addEventListener('click', () => {
       showConfirmationModal(
         `Are you sure you want to remove ${med.medicineName}?`,
         async () => {
           try {
-            await db.collection("medications").doc(med.id).delete();
+            const res = await fetch(`/api/medications/${encodeURIComponent(med.id)}`, {
+              method: 'DELETE',
+            });
+            if (!res.ok) throw new Error('Failed to delete medicine');
+
             medItem.remove();
             showToast(`${med.medicineName} successfully removed!`, 'success');
           } catch (error) {
@@ -83,7 +82,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     medicineListEl.appendChild(medItem);
   }
 
-  // cfm modal
   function showConfirmationModal(message, confirmCallback) {
     document.body.classList.add('modal-open');
     modalMessage.textContent = message;
@@ -104,7 +102,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     modalCancel.onclick = cleanUp;
   }
 
-  // toast notif
   function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -120,7 +117,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   loadMedicines();
 
-  // add button
   document.querySelector('.btn-add')?.addEventListener('click', () => {
     window.location.href = 'create-medicine.html';
   });

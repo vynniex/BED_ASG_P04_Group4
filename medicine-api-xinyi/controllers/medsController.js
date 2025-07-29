@@ -1,4 +1,6 @@
 const medsModel = require('../models/medsModel');
+const sql = require('mssql');
+const dbConfig = require('../../dbConfig');
 
 // Get all medicines
 async function getAllMeds(req, res) {
@@ -19,17 +21,17 @@ async function getMedByName(req, res) {
     const medicineName = req.params.medName;
 
     if (!medicineName) {
-      return res.status(400).json({ error: 'Medicine name is not recognised'})
+      return res.status(400).json({ error: 'Medicine name is not recognised' });
     }
 
     const medication = await medsModel.getMedByName(medicineName);
     if (!medication) {
-      return res.status(404).json({ error: 'Medicine not found'})
+      return res.status(404).json({ error: 'Medicine not found' });
     }
 
     res.json(medication);
   } catch (error) {
-    console.error('Controller Error: ', error)
+    console.error('Controller Error: ', error);
     res.status(500).json({ 
       error: error.message || "Error retrieving medicine" 
     });
@@ -43,28 +45,28 @@ async function createMed(req, res) {
     res.status(201).json(newMed);
   } catch (error) {
     console.error('Controller Error: ', error);
-    const status = error.message.includes('exists') ? 400 : 500;
+    const status = error.message.includes('already exists') ? 400 : 500;
     res.status(status).json({
       error: error.message || "Could not create medicine"
-    })
+    });
   }
 }
 
 // Update medicine by name (PUT)
 async function updateMed(req, res) {
-  try { 
+  try {
     const medicineName = req.params.medName;
 
     if (!medicineName) {
-      return res.status(400).json({ error: "Invalid medicine name"});
+      return res.status(400).json({ error: "Invalid medicine name" });
     }
 
-    const updateMed = await medsModel.updateMed(medicineName, req.body);
-    if (!updateMed) {
-      return res.status(404).json({ error: 'Medicine not found'});
+    const updated = await medsModel.updateMed(medicineName, req.body);
+    if (!updated) {
+      return res.status(404).json({ error: 'Medicine not found' });
     }
 
-    res.json(updateMed);
+    res.json(updated);
   } catch (error) {
     console.error("Controller Error: ", error);
     res.status(500).json({ 
@@ -78,11 +80,11 @@ async function deleteMed(req, res) {
   try {
     const medicineName = req.params.medName;
     if (!medicineName) {
-      return res.status(400).json({ error: 'Invalid medicine name'});
+      return res.status(400).json({ error: 'Invalid medicine name' });
     }
 
     await medsModel.deleteMed(medicineName);
-    res.json({ message: 'Medicine successfully deleted'});
+    res.json({ message: 'Medicine successfully deleted' });
   } catch (error) {
     console.error('Controller Error: ', error);
     const status = error.message.includes('not found') ? 404 : 500;

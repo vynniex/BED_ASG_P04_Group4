@@ -1,24 +1,15 @@
-const { db } = require("../../config/firebase");
-const {
-  collection,
-  getDocs,
-  setDoc,
-  getDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  Timestamp
-} = require("firebase/firestore");
+const sql = require('mssql');
+const dbConfig = require('../../dbConfig');
 
-const COLLECTION_NAME = "medications";
-
-// Get all medicine
+// Get all medicines
 async function getAllMeds() {
   try {
-    const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
-    return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+    const pool = await sql.connect(dbConfig);
+    const result = await pool.request().query('SELECT * FROM Medications');
+
+    return result.recordset.map(row => ({
+      id: row.medicine_id,
+      ...row
     }));
   } catch (error) {
     throw new Error(`Failed to retrieve medicines: ${error.message}`);
@@ -27,89 +18,124 @@ async function getAllMeds() {
 
 // Get medicine by name
 async function getMedByName(medicineName) {
-    try {
-        const docRef = doc(db, COLLECTION_NAME, medicineName);
-        const docSnap = await getDoc(docRef);
+  try {
+    const pool = await sql.connect(dbConfig);
+    const result = await pool.request()
+      .input('medicine_name', sql.VarChar, medicineName)
+      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
 
-        if (!docSnap.exists()) return null;
+    if (result.recordset.length === 0) return null;
 
-        return {
-            id: docSnap.id,
-            ...docSnap.data()
-        };
-    } catch (error) {
-        throw new Error(`Failed to retrieve medicine: ${error.message}`);
-    }
+    return {
+      id: result.recordset[0].medicine_id,
+      ...result.recordset[0]
+    };
+  } catch (error) {
+    throw new Error(`Failed to retrieve medicine: ${error.message}`);
+  }
 }
 
 // Create new medicine
 async function createMed(medData) {
   try {
-    if (!medData || !medData.medicineName) {
-        throw new Error('Data for medicine is incomplete');
+    const { userId, medicine_name, purpose, per_day, food_timing } = medData;
+
+    if (!medicine_name) {
+      throw new Error('Data for medicine is incomplete');
     }
 
-    const medRef = doc(db, COLLECTION_NAME, medData.medicineName);
+    const pool = await sql.connect(dbConfig);
 
-    // check for existing medicine record
-    if ((await getDoc(medRef)).exists()) {
-        throw new Error('Medication already exists');
+    // Check if exists
+    const check = await pool.request()
+      .input('medicine_name', sql.VarChar, medicine_name)
+      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
+
+    if (check.recordset.length > 0) {
+      throw new Error('Medication already exists');
     }
 
-    const medication = {
-        ...medData,
-        createdAt: Timestamp.now()
-    };
+    // Insert new
+    const result = await pool.request()
+      .input('userId', sql.Int, userId)
+      .input('medicine_name', sql.VarChar, medicine_name)
+      .input('purpose', sql.VarChar, purpose)
+      .input('per_day', sql.Int, per_day)
+      .input('food_timing', sql.VarChar, food_timing)
+      .query(`
+        INSERT INTO Medications (userId, medicine_name, purpose, per_day, food_timing)
+        OUTPUT INSERTED.*
+        VALUES (@userId, @medicine_name, @purpose, @per_day, @food_timing)
+      `);
 
-    await setDoc(medRef, medication);
     return {
-        id: medData.medicineName,
-        ...medication
+      id: result.recordset[0].medicine_id,
+      ...result.recordset[0]
     };
   } catch (error) {
     throw new Error(`Failed to create medicine: ${error.message}`);
   }
 }
 
-// Update medication
+// Update medicine
 async function updateMed(medicineName, updates) {
   try {
-    const medRef = doc(db, COLLECTION_NAME, medicineName);
-    const docSnap = await getDoc(medRef);
+    const { purpose, per_day, food_timing } = updates;
 
-    if (!docSnap.exists()) {
-        throw new Error('Medicine not found');
+    const pool = await sql.connect(dbConfig);
+
+    const check = await pool.request()
+      .input('medicine_name', sql.VarChar, medicineName)
+      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
+
+    if (check.recordset.length === 0) {
+      throw new Error('Medicine not found');
     }
 
-    const updatedData = {
-        ...updates,
-        updatedAt: Timestamp.now()
-    };
+    const result = await pool.request()
+      .input('medicine_name', sql.VarChar, medicineName)
+      .input('purpose', sql.VarChar, purpose)
+      .input('per_day', sql.Int, per_day)
+      .input('food_timing', sql.VarChar, food_timing)
+      .query(`
+        UPDATE Medications
+        SET purpose = @purpose,
+            per_day = @per_day,
+            food_timing = @food_timing,
+            updated_at = GETDATE()
+        OUTPUT INSERTED.*
+        WHERE medicine_name = @medicine_name
+      `);
 
-    await updateDoc(medRef, updatedData);
     return {
-        id: medicineName,
-        ...updatedData
+      id: result.recordset[0].medicine_id,
+      ...result.recordset[0]
     };
   } catch (error) {
     throw new Error(`Failed to update medicine: ${error.message}`);
   }
 }
 
-// Delete medicine record
+// Delete medicine
 async function deleteMed(medicineName) {
   try {
-    const medRef = doc(db, COLLECTION_NAME, medicineName);
-    const docSnap = await getDoc(medRef);
+    const pool = await sql.connect(dbConfig);
 
-    if (!docSnap.exists()) {
-        throw new Error('Medicine not found');
+    const check = await pool.request()
+      .input('medicine_name', sql.VarChar, medicineName)
+      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
+
+    if (check.recordset.length === 0) {
+      throw new Error('Medicine not found');
     }
 
-    await deleteDoc(medRef);
+    await pool.request()
+      .input('medicine_name', sql.VarChar, medicineName)
+      .query('DELETE FROM Medications WHERE medicine_name = @medicine_name');
+
     return medicineName;
   } catch (error) {
-    throw new Error(`Failed to delete medicine: ${error.message}`)
+    throw new Error(`Failed to delete medicine: ${error.message}`);
   }
 }
 

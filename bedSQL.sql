@@ -1,5 +1,6 @@
 USE bed_asg1_db;
 
+DROP TABLE IF EXISTS Medications;
 DROP TABLE IF EXISTS Records;
 DROP TABLE IF EXISTS Appointments;
 DROP TABLE IF EXISTS Users;

@@ -1,55 +1,48 @@
-const { doc, getDoc } = require('firebase/firestore');
-const { db } = require('../../config/firebase')
+const Joi = require('joi');
 
 const VALID_FOOD_TIMINGS = ['before', 'after'];
 
-async function validateMedInput(req, res, next) {
-  const { medicineName, purpose, perDay, foodTiming } = req.body;
+const medInputSchema = Joi.object({
+  medicine_name: Joi.string().trim().required().messages({
+    'string.empty': 'Medicine name must be a non-empty string',
+    'any.required': 'Medicine name is required'
+  }),
+  purpose: Joi.string().trim().required().messages({
+    'string.empty': 'Purpose must be a non-empty string',
+    'any.required': 'Purpose is required'
+  }),
+  per_day: Joi.number().integer().min(1).required().messages({
+    'number.base': 'Per day must be a number',
+    'number.integer': 'Per day must be an integer',
+    'number.min': 'Per day must be at least 1',
+    'any.required': 'Per day is required'
+  }),
+  food_timing: Joi.string().valid(...VALID_FOOD_TIMINGS).required().messages({
+    'any.only': `Food timing must be one of: ${VALID_FOOD_TIMINGS.join(', ')}`,
+    'any.required': 'Food timing is required'
+  }),
+});
 
-  if (!medicineName || !purpose || perDay == null || !foodTiming) {
-    return res.status(400).json({ error: 'All fields are required'})
+function validateMedInput(req, res, next) {
+  const { error } = medInputSchema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const errors = error.details.map(d => d.message);
+    return res.status(400).json({ error: errors.join(', ') });
   }
-
-  if (typeof medicineName !== 'string' || medicineName.trim().length === 0) {
-    return res.status(400).json({ error: 'Medicine name must be in alphabetical characters / must not be empty'});
-  }
-
-  if (typeof purpose !== 'string' || purpose.trim().length === 0) {
-    return res.status(400).json({ error: 'Purpose must be in alphabetical characters / must not be empty'});
-  }
-
-  if (!Number.isInteger(perDay) || perDay < 1) {
-    return res.status(400).json({ error: 'Per day must be a positive number'});
-  }
-
-  if (!VALID_FOOD_TIMINGS.includes(foodTiming)) {
-    return res.status(400).json({
-      error: `Food timing must be either one: ${VALID_FOOD_TIMINGS.join(', ')}`
-    });
-  }
-  
   next();
-};
+}
 
-async function validateMedName(req, res, next) {
-  const medicineName = req.params.medName;
+const medNameSchema = Joi.string().trim().required().messages({
+  'string.empty': 'Medicine name is required',
+  'any.required': 'Medicine name is required'
+});
 
-  if (!medicineName) {
-    return res.status(400).json({ error: 'Medicine name is required'});
+function validateMedName(req, res, next) {
+  const { error } = medNameSchema.validate(req.params.medName);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
   }
-
-  try {
-    const docRef = doc(db, 'medications', medicineName);
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) {
-      return res.status(404).json({ error: 'Medicine not found'});
-    }
-
-    next();
-  } catch (error) {
-    res.status(500).json({ error: error.message || 'Failed to validate medicine'});
-  }
+  next();
 }
 
 module.exports = {
