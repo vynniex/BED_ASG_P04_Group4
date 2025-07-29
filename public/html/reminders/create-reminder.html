@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar inter-regular">
         <ul>
-            <li><a href="../../index.html">HOME</a></li>
+            <li><a href="../index.html">HOME</a></li>
             <li><a href="../med-records/records.html">RECORDS</a></li>
             <li><a href="../medicine/medicine.html">MEDICATION</a></li>
             <li><a href="../appointments/appointments.html">APPOINTMENTS</a></li>
@@ -54,6 +54,11 @@
             </div>
 
             <div class="form-group">
+                <label for="timesPerDay">Times per day:</label>
+                <input type="number" id="timesPerDay" name="timesPerDay" min="1" value="1" required>
+            </div>
+
+            <div class="form-group">
                 <label>Frequency :</label>
                 <div class="checkbox-group">
                     <input type="checkbox" id="freqOneTime" name="frequency" value="One-time">
@@ -73,6 +78,9 @@
             </div>
         </form>
     </div>
+
+    <!-- Toast Notification Element -->
+    <div id="toastNotification" class="toast"></div>
 
     <script src="../../javascript/create-reminder.js"></script>
 </body>

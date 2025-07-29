@@ -1,22 +1,42 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const editReminderForm = document.getElementById('editReminderForm');
-    const reminderIdField = document.getElementById('reminderId');
-    const reminderTypeSelect = document.getElementById('editReminderType');
+    // Corrected element IDs to match editreminders.html
+    const reminderIdField = document.getElementById('reminderId'); // Added to get the hidden ID field
+    const reminderTypeInput = document.getElementById('editReminderType');
     const reminderTitleInput = document.getElementById('editReminderTitle');
     const reminderDescriptionTextarea = document.getElementById('editReminderDescription');
     const reminderDateInput = document.getElementById('editReminderDate');
     const reminderTimeInput = document.getElementById('editReminderTime');
-    const frequencyCheckboxes = document.querySelectorAll('input[name="frequency"]');
+    const timesPerDayInput = document.getElementById('timesPerDay'); // This ID already matches HTML
+    const frequencyCheckboxes = document.querySelectorAll('input[name="frequency"]'); // Targets by name, which is correct
+    const toastNotification = document.getElementById('toastNotification'); // Get the toast element
 
-    const API_BASE_URL = 'http://localhost:3000/api/notifications'; // Your Notification API endpoint
+    // --- Function to display toast notifications ---
+    function showToast(message, type = 'success') {
+        toastNotification.textContent = message;
+        toastNotification.className = `toast show ${type}`; // Add 'show' and type class
+        setTimeout(() => {
+            toastNotification.className = toastNotification.className.replace('show', ''); // Hide after 3 seconds
+        }, 3000);
+    }
+
+    // --- Set minimum date for reminderDate input to today ---
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+    const day = today.getDate().toString().padStart(2, '0');
+    const todayFormatted = `${year}-${month}-${day}`;
+    reminderDateInput.setAttribute('min', todayFormatted);
+
+    // --- API Base URL ---
+    const API_BASE_URL = 'http://localhost:3000/api/reminders'; // Your Reminders API endpoint
 
     // Get reminder ID from URL query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const reminderId = urlParams.get('id');
 
     if (!reminderId) {
-        alert('No reminder ID found in URL. Cannot edit.');
-        // --- CORRECTED REDIRECT PATH ---
+        showToast('No reminder ID found in URL. Cannot edit.', 'error');
         window.location.href = '../index.html'; // Redirect if no ID
         return;
     }
@@ -36,20 +56,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             fillFormWithData(reminder);
         } catch (error) {
             console.error('Error loading reminder data:', error);
-            alert('Failed to load reminder data: ' + error.message);
-            // --- CORRECTED REDIRECT PATH ---
+            showToast('Failed to load reminder data: ' + error.message, 'error');
             window.location.href = '../index.html'; // Redirect on error
         }
     }
 
     // --- Function to Fill Form Fields ---
     function fillFormWithData(reminder) {
-        reminderIdField.value = reminder.id;
-        reminderTypeSelect.value = reminder.reminderType || ''; // Use reminderType
-        reminderTitleInput.value = reminder.reminderTitle || ''; // Use reminderTitle
+        // Populate form fields
+        reminderIdField.value = reminder.id || ''; // Set the hidden ID field
+        reminderTypeInput.value = reminder.type || ''; // Use 'type' as per your API structure
+        reminderTitleInput.value = reminder.reminderTitle || '';
         reminderDescriptionTextarea.value = reminder.description || '';
-        reminderDateInput.value = reminder.date ? new Date(reminder.date).toISOString().split('T')[0] : ''; // Format date
+        reminderDateInput.value = reminder.date || '';
         reminderTimeInput.value = reminder.time || '';
+        timesPerDayInput.value = reminder.timesPerDay || 1; // Populate new field, default to 1
 
         // Set frequency checkboxes
         const reminderFrequencies = reminder.frequency || [];
@@ -62,34 +83,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     editReminderForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const id = reminderIdField.value;
-        const type = reminderTypeSelect.value;
+        const id = reminderIdField.value; // Get ID from hidden field
+        const type = reminderTypeInput.value;
         const title = reminderTitleInput.value.trim();
         const description = reminderDescriptionTextarea.value.trim();
         const date = reminderDateInput.value;
         const time = reminderTimeInput.value;
+        const timesPerDay = timesPerDayInput.value; // Get new field value
 
         const frequencies = Array.from(document.querySelectorAll('input[name="frequency"]:checked'))
                                .map(cb => cb.value);
 
         // Basic validation
-        if (!type || !title || !description || !date || !time) {
-            alert('Please fill in all required fields (Reminder Type, Title, Description, Date, Time).');
+        if (!type || !title || !date || !time || !timesPerDay) {
+            showToast('Please fill in all required fields (Reminder Type, Title, Date, Time, Times per day).', 'error');
+            return;
+        }
+
+        // Validate date is not in the past
+        const selectedDateTime = new Date(`${date}T${time}`);
+        if (selectedDateTime < today) {
+            showToast('Reminder date and time cannot be in the past.', 'error');
+            return;
+        }
+
+        // Validate timesPerDay
+        const parsedTimesPerDay = parseInt(timesPerDay);
+        if (isNaN(parsedTimesPerDay) || parsedTimesPerDay <= 0) {
+            showToast('Times per day must be a positive number.', 'error');
             return;
         }
 
         const updatedData = {
-            reminderType: type, // Use reminderType
-            reminderTitle: title, // Use reminderTitle
+            type: type, // Use 'type' as per your API structure
+            reminderTitle: title,
             description: description,
             date: date,
             time: time,
+            timesPerDay: parsedTimesPerDay, // Include new field
             frequency: frequencies
             // Note: createdAt typically not updated
         };
 
         try {
-            const response = await fetch(`${API_BASE_URL}/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/${id}`, { // Use ID from hidden field
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -104,12 +141,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const updatedReminder = await response.json();
             console.log('Reminder updated:', updatedReminder);
-            alert('Reminder updated successfully!');
-            // --- CORRECTED REDIRECT PATH ---
+            showToast('Reminder updated successfully!', 'success');
             window.location.href = '../index.html'; // Redirect to home page
         } catch (error) {
             console.error('Error updating reminder:', error);
-            alert('Failed to update reminder: ' + error.message);
+            showToast('Failed to update reminder: ' + error.message, 'error');
         }
     });
 
