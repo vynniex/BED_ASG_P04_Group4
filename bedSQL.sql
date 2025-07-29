@@ -32,7 +32,7 @@ CREATE TABLE Medications (
 );
 
 INSERT INTO Medications (medicine_id, userId, medicine_name, purpose, per_day, food_timing, created_at)
-(1, 1, 'Aspirin', 'Pain Relief', 2, 'before', GETDATE())
+VALUES (1, 'Aspirin', 'Pain Relief', 2, 'before', GETDATE());
 /* Grace */ 
 CREATE TABLE Appointments (
     appointment_id INT PRIMARY KEY IDENTITY(1,1),
