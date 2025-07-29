@@ -12,11 +12,12 @@ CREATE TABLE Users (
 	email VARCHAR(100) NOT NULL,
     password VARCHAR(255) NOT NULL,
     contact_num VARCHAR(20) NOT NULL,
-    dob DATE NOT NULL,
+    dob DATE NOT NULL
 );
 
 INSERT INTO Users(nric_fin, full_name, email, password, contact_num, dob) VALUES
-('S4512345D', 'Tan Mei Ling', 'meiling.tan@example.com', 'password1', '91234567', '1945-08-15');
+('S4512345D', 'Tan Mei Ling', 'meiling.tan@example.com', 'password1', '91234567', '1945-08-15'),
+('S9988776A', 'Lim Wei Jie', 'weijie.lim@example.com', 'password2', '98765432', '1943-12-09');
 
 /* Xin YI */
 
@@ -34,8 +35,11 @@ CREATE TABLE Appointments (
     clinic VARCHAR(100) NOT NULL,
     reason VARCHAR(50) NOT NULL,
     created_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (userId) REFERENCES Users(userId)
+    FOREIGN KEY (userId) REFERENCES Users(userId)  ON DELETE CASCADE -- Delete data if User is deleted
 );
+
+INSERT INTO Appointments (userId, nric_fin, full_name, email, contact_num, dob, appointment_date, appointment_time, clinic, reason)
+VALUES (1, 'S4512345D', 'Tan Mei Ling', 'meiling.tan@example.com', '91234567', '1945-08-15', '2025-07-01', '9:00 AM', 'Outram Polyclinic', 'General Consultation');
 
 /* Xue Ning */
 CREATE TABLE Records (
@@ -49,7 +53,7 @@ CREATE TABLE Records (
     diastolic INT NULL,
     bloodSugar INT NULL,
     weight FLOAT NULL,
-    FOREIGN KEY (userId) REFERENCES Users(userId)
+    FOREIGN KEY (userId) REFERENCES Users(userId)  ON DELETE CASCADE -- Delete data if User is deleted
 );
 
 INSERT INTO Records (userId, date, doctorName, diagnosis, notes, systolic, diastolic, bloodSugar, weight)
