@@ -17,8 +17,8 @@ CREATE TABLE Users (
 );
 
 INSERT INTO Users(nric_fin, full_name, email, password, contact_num, dob) VALUES
-('S4512345D', 'Tan Mei Ling', 'meiling.tan@example.com', 'password1', '91234567', '1945-08-15'),
-('S9988776A', 'Lim Wei Jie', 'weijie.lim@example.com', 'password2', '98765432', '1943-12-09');
+('$2b$10$DeC0Mk.GQ1sltgSd678LWOEq7ZZW7VU9HwcdCqN.RdZ9YGsBC1sGe', 'BOB TAN', 'bob@gmail.com', '$2b$10$DeC0Mk.GQ1sltgSd678LWO/lxK0ALFKAm1QdBeP5Y8t94/osIi6Ey', '90011234', '1945-08-15');
+-- Sample PIN: Bob123
 
 /* Xin YI */
 CREATE TABLE Medications (
@@ -34,6 +34,7 @@ CREATE TABLE Medications (
 
 INSERT INTO Medications (medicine_id, userId, medicine_name, purpose, per_day, food_timing, created_at)
 VALUES (1, 'Aspirin', 'Pain Relief', 2, 'before', GETDATE());
+
 /* Grace */ 
 CREATE TABLE Appointments (
     appointment_id INT PRIMARY KEY IDENTITY(1,1),
@@ -52,7 +53,7 @@ CREATE TABLE Appointments (
 );
 
 INSERT INTO Appointments (userId, nric_fin, full_name, email, contact_num, dob, appointment_date, appointment_time, clinic, reason)
-VALUES (1, 'S4512345D', 'Tan Mei Ling', 'meiling.tan@example.com', '91234567', '1945-08-15', '2025-07-01', '9:00 AM', 'Outram Polyclinic', 'General Consultation');
+VALUES (1, 'S4512345D', 'BOB TAN', 'bob@gmail.com', '90011234', '1945-08-15', '2025-07-01', '9:00 AM', 'Outram Polyclinic', 'General Consultation');
 
 /* Xue Ning */
 CREATE TABLE Records (
@@ -72,7 +73,7 @@ CREATE TABLE Records (
 INSERT INTO Records (userId, date, doctorName, diagnosis, notes, systolic, diastolic, bloodSugar, weight)
 VALUES 
 (1, '2025-07-25', 'Dr. Tan Wei Ming', 'High blood pressure', 'Monitor blood pressure every morning', 140, 90, NULL, NULL),
-(2, '2025-07-24', 'Dr. Siti Rahimah', 'Type 2 Diabetes', 'Avoid sugary drinks', NULL, NULL, 180, NULL),
+(1, '2025-07-24', 'Dr. Siti Rahimah', 'Type 2 Diabetes', 'Avoid sugary drinks', NULL, NULL, 180, NULL),
 (1, '2025-07-20', 'Dr. Alex Ng', 'Knee pain', 'Apply ice pack if swelling continues', NULL, NULL, NULL, 75.5);
 
 /* Dalton */
