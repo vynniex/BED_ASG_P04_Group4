@@ -32,7 +32,7 @@ CREATE TABLE Medications (
     updated_at DATETIME NULL
 );
 
-INSERT INTO Medications (medicine_id, userId, medicine_name, purpose, per_day, food_timing, created_at)
+INSERT INTO Medications (userId, medicine_name, purpose, per_day, food_timing, created_at)
 VALUES (1, 'Aspirin', 'Pain Relief', 2, 'before', GETDATE());
 
 /* Grace */ 
