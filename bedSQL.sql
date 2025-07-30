@@ -19,6 +19,7 @@ CREATE TABLE Users (
 INSERT INTO Users(nric_fin, full_name, email, password, contact_num, dob) VALUES
 ('$2b$10$DeC0Mk.GQ1sltgSd678LWOEq7ZZW7VU9HwcdCqN.RdZ9YGsBC1sGe', 'BOB TAN', 'bob@gmail.com', '$2b$10$DeC0Mk.GQ1sltgSd678LWO/lxK0ALFKAm1QdBeP5Y8t94/osIi6Ey', '90011234', '1945-08-15');
 -- Sample PIN: Bob123
+-- Sample userId: 7
 
 /* Xin YI */
 CREATE TABLE Medications (
@@ -39,11 +40,6 @@ VALUES (1, 'Aspirin', 'Pain Relief', 2, 'before', GETDATE());
 CREATE TABLE Appointments (
     appointment_id INT PRIMARY KEY IDENTITY(1,1),
     userId INT NOT NULL,  -- Foreign key to Users table
-    nric_fin VARCHAR(100) NOT NULL,
-    full_name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    contact_num VARCHAR(20) NOT NULL,
-    dob DATE NOT NULL,
     appointment_date DATE NOT NULL,
     appointment_time VARCHAR(15) NOT NULL,
     clinic VARCHAR(100) NOT NULL,
@@ -52,8 +48,8 @@ CREATE TABLE Appointments (
     FOREIGN KEY (userId) REFERENCES Users(userId)  ON DELETE CASCADE -- Delete data if User is deleted
 );
 
-INSERT INTO Appointments (userId, nric_fin, full_name, email, contact_num, dob, appointment_date, appointment_time, clinic, reason)
-VALUES (1, 'S4512345D', 'BOB TAN', 'bob@gmail.com', '90011234', '1945-08-15', '2025-07-01', '9:00 AM', 'Outram Polyclinic', 'General Consultation');
+INSERT INTO Appointments (userId, appointment_date, appointment_time, clinic, reason)
+VALUES (7, '2025-08-01', '9:00 AM', 'Outram Polyclinic', 'General Consultation');
 
 /* Xue Ning */
 CREATE TABLE Records (

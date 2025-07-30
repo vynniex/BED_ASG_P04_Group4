@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 appointmentForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-
+    const token = localStorage.getItem("token");
     // collect form data
     const newAppointmentData = {
         appointmentDate: document.getElementById("appointmentDate").value,
@@ -24,6 +24,7 @@ appointmentForm.addEventListener("submit", async (event) => {
         method: "POST", // Specify the HTTP method
         headers: {
             "Content-Type": "application/json", // Tell the API we are sending JSON
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(newAppointmentData), // Send the data as a JSON string in the request body
         });
@@ -38,7 +39,6 @@ appointmentForm.addEventListener("submit", async (event) => {
         if (response.status === 201) {
             alert("Appointment booked successfully!");
             console.log("Created Appointment:", responseBody);
-            localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
             appointmentForm.reset();
         } else if (response.status === 400) {

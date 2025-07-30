@@ -120,6 +120,8 @@ async function createAppointment(req, res) {
   try {
     const appointmentData = req.body;
     const userId = req.user.id;
+    console.log(req.user);
+    console.log(req.user.id);
         
     const newAppointment = await appointmentModel.createAppointment(userId, appointmentData);
     res.status(201).json(newAppointment);

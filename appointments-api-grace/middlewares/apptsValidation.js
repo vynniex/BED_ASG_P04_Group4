@@ -23,35 +23,35 @@ function verifyJWT(req, res, next) {
 };
 
 const apptSchema = Joi.object({
-  nric: Joi.string()
-    .alphanum()
-    .min(9)
-    .max(9)
-    .required()
-    .label("NRIC/FIN"),
+  // nric: Joi.string()
+  //   .alphanum()
+  //   .min(9)
+  //   .max(9)
+  //   .required()
+  //   .label("NRIC/FIN"),
 
-  fullName: Joi.string()
-    .pattern(/^[a-zA-Z\s]+$/)
-    .min(3)
-    .max(100)
-    .required()
-    .label("Full Name"),
+  // fullName: Joi.string()
+  //   .pattern(/^[a-zA-Z\s]+$/)
+  //   .min(3)
+  //   .max(100)
+  //   .required()
+  //   .label("Full Name"),
 
-  email: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required()
-    .label("Email Address"),
+  // email: Joi.string()
+  //   .email({ tlds: { allow: false } })
+  //   .required()
+  //   .label("Email Address"),
 
-  contact: Joi.string()
-    .pattern(/^[89]\d{7}$/) 
-    .required()
-    .label("Contact Number"),
+  // contact: Joi.string()
+  //   .pattern(/^[89]\d{7}$/) 
+  //   .required()
+  //   .label("Contact Number"),
 
-  dob: Joi.date()
-    .less("now")
-    .iso()
-    .required()
-    .label("Date of Birth"),
+  // dob: Joi.date()
+  //   .less("now")
+  //   .iso()
+  //   .required()
+  //   .label("Date of Birth"),
 
   appointmentDate: Joi.date()
     .min("now")
