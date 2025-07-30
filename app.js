@@ -38,13 +38,13 @@ app.put("/api/medications/:medName", validateMedName, validateMedInput, medsCont
 app.delete("/api/medications/:medName", validateMedName, medsController.deleteMed);
 
 // APPOINTMENT ROUTES - Grace
-app.get("/api/appointments/login/users", verifyJWT, apptController.getAllAppointmentsByUser);
+app.get("/api/users/appointments", verifyJWT, apptController.getAllAppointmentsByUser);
 app.post("/api/appointments", validateAppt, apptController.createAppointment);
 app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 app.put("/api/appointments/:id", apptController.updateAppointmentById);
 app.post("/api/appointments/verify", verifyJWT, apptController.verify);
 // signup and login routes
-app.post("/api/appointments/login", validateLogin, apptController.loginUser);
+app.post("/api/users/login", validateLogin, apptController.loginUser);
 app.post("/api/users/signup", apptController.createUser);
 
 // MEDICAL RECORDS ROUTES - XN

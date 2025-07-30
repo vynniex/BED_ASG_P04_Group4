@@ -9,8 +9,6 @@ async function goBack() {
 // Function to fetch appointments from the API and display them
 async function fetchAppointments() {
   try {
-    const nric = localStorage.getItem('nric');
-    const fullName = localStorage.getItem('fullName');
     const token = localStorage.getItem('token');
     
     if (!token) {
@@ -20,7 +18,7 @@ async function fetchAppointments() {
     }
 
     // Make a GET request to your API endpoint
-    const response = await fetch(`${apiBaseUrl}/api/appointments/login/users`, {
+    const response = await fetch(`${apiBaseUrl}/api/users/appointments`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`

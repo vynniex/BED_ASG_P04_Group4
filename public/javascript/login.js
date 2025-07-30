@@ -14,7 +14,7 @@ form.addEventListener('submit', async (event) => {
     const password = document.getElementById('password').value.trim();
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/appointments/login`, {
+      const response = await fetch(`${apiBaseUrl}/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
