@@ -1,15 +1,18 @@
 // Get references to the form and message elements:
 const apiBaseUrl = "http://localhost:3000";
 const verifyForm = document.getElementById("verify-form");
+const token = localStorage.getItem("token");
 
 function makeAppointment() {
-    /* alert("Redirecting to appointment booking page..."); */
-    window.location.href = "make-appointments.html";
+    if (token) {
+        window.location.href = "make-appointments.html";
+    } else {
+        // No token — block and notify user
+        alert("You must be logged in to access this page. Please log in first.");
+    }
 }
 
 function manageAppt() {
-    const token = localStorage.getItem("token");
-
     if (token) {
         // Token exists
         document.getElementById("verify-form").style.display = "flex";
@@ -45,7 +48,6 @@ verifyForm.addEventListener('submit', async (event) => {
     event.preventDefault(); // Prevent page reload on submit
 
     const nric = document.getElementById('nric').value.trim();
-    const token = localStorage.getItem("token");
 
     try {
       const response = await fetch(`${apiBaseUrl}/api/appointments/verify`, {
