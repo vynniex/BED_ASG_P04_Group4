@@ -156,20 +156,16 @@ let connection;
 }
 
 // Create new appointment
-async function createAppointment(appointmentData) {
+async function createAppointment(userId, appointmentData) {
   let connection;
   try {
     connection = await sql.connect(dbConfig);
     const query =
-      `INSERT INTO Appointments (nric_fin, full_name, email, contact_num, dob, appointment_date, appointment_time, clinic, reason) 
-        VALUES (@nric_fin, @full_name, @email, @contact_num, @dob, @appointment_date, @appointment_time, @clinic, @reason); SELECT SCOPE_IDENTITY() AS appointment_id;`;
+      `INSERT INTO Appointments (userId, appointment_date, appointment_time, clinic, reason) 
+        VALUES (@userId, @appointment_date, @appointment_time, @clinic, @reason); SELECT SCOPE_IDENTITY() AS appointment_id;`;
     const request = connection.request();
     console.log("Test:" ,appointmentData);
-    request.input("nric_fin", appointmentData.nric);
-    request.input("full_name", appointmentData.fullName);
-    request.input("email", appointmentData.email);
-    request.input("contact_num", appointmentData.contact);
-    request.input("dob", appointmentData.dob);
+    request.input("userId", userId)
     request.input("appointment_date", appointmentData.appointmentDate);
     request.input("appointment_time", appointmentData.appointmentTime);
     request.input("clinic", appointmentData.clinic);
@@ -199,11 +195,9 @@ async function updateAppointmentById(id, updatedData) {
     connection = await sql.connect(dbConfig);
     const query = `
     UPDATE Appointments
-    SET contact_num = @contact_num, appointment_date = @apptDate, appointment_time = @apptTime, clinic = @clinic
-    WHERE appointment_id = @id
-    `;
+    SET appointment_date = @apptDate, appointment_time = @apptTime, clinic = @clinic
+    WHERE appointment_id = @id`;
     const request = connection.request();
-    request.input("contact_num", updatedData.contact);
     request.input("apptDate", updatedData.appointmentDate);
     request.input("apptTime", updatedData.appointmentTime);
     request.input("clinic", updatedData.clinic);

@@ -12,7 +12,6 @@ async function autofillAppointmentForm(appointmentId) {
     const appt = stored[appointmentId];    
     const date = appt.appointmentDate.split("T")[0];
 
-    document.getElementById("contactNum").value = appt.contactNum;
     document.getElementById("appointmentDate").value = date;
     document.getElementById("appointmentTime").value = appt.appointmentTime;
     document.getElementById("clinic").value = appt.clinic;
@@ -30,14 +29,12 @@ async function submitForm(event) {
   event.preventDefault(); // Prevent page reload
 
   // Get the values from the form
-  const contact = document.getElementById("contactNum").value.trim();
   const appointmentDate = document.getElementById("appointmentDate").value;
   const appointmentTime = document.getElementById("appointmentTime").value;
   const clinic = document.getElementById("clinic").value;
 
   // Construct request body
   const updatedData = {
-    contact: contact,
     appointment_date: appointmentDate,
     appointment_time: appointmentTime,
     clinic: clinic,
