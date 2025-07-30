@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 
 // Get all appointments
 async function getAllAppointmentsByUser(req,res) {
-  const {fullName} = req.user;
+  const userId = req.user.id;
   try {
-    const appointments = await appointmentModel.getAllAppointmentsByUser(fullName);
+    const appointments = await appointmentModel.getAllAppointmentsByUser(userId);
     res.json(appointments);
   } catch (error) {
     console.error("Controller error: ", error);
@@ -54,7 +54,7 @@ async function loginUser(req, res) {
   }
 
   try {
-    const user = await appointmentModel.findUser(email);
+    const user = await appointmentModel.findUserByEmail(email);
     console.log(user);
 
     if (user) {
@@ -84,6 +84,36 @@ async function loginUser(req, res) {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// Verify user
+async function verify(req,res) {
+  const { nric } = req.body;
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!nric || !token) {
+    return res.status(400).json({ message: "NRIC and token are required." });
+  }
+  try {
+    const decoded = jwt.verify(token, "your_appointment_secret");
+    const user = await appointmentModel.findUserById(decoded.id);
+    console.log(user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const isMatch = await bcrypt.compare(nric, user.nric_fin);
+    if (isMatch) {
+      return res.status(200).json({ message: "NRIC verification successful." });
+    } else {
+      return res.status(401).json({ message: "NRIC does not match." });
+    }
+  } catch (error) {
+    console.error("Verification error: ", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
+
 
 // Create new appointment
 async function createAppointment(req, res) {
@@ -161,6 +191,7 @@ module.exports = {
   createAppointment,
   createUser,
   loginUser,
+  verify,
   updateAppointmentById,
   deleteAppointmentById
 }

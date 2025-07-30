@@ -37,7 +37,20 @@
           All information provided is accurate and up to date.
         </p>
       </div>
-      <div><button class="blue-button" onclick="login()">Login</button></div>
+      <div><button class="blue-button" onclick="manageAppt()">Manage Appointment</button></div>
+    </section>
+
+    <section id="verify-form" class="overlay">
+      <form class="form-card merriweather-sans-regular">
+        <h2 class="inter-regular">Security Check</h2>
+          <p class="lato-regular">Please enter your NRIC to proceed.</p>
+          <div class="card-info">
+            <label for="nric">NRIC / FIN:</label>
+            <input type="text" id="nric" name="nric" required>
+          </div>
+
+          <button type="submit" class="green-button">Verify</button>
+      </form>
     </section>
 
     <section id="card">

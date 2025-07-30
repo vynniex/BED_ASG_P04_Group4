@@ -2,6 +2,10 @@
 const dashboard = document.getElementById("dashboard");
 const apiBaseUrl = "http://localhost:3000";
 
+async function goBack() {
+  window.location.href = "appointments.html";
+}
+
 // Function to fetch appointments from the API and display them
 async function fetchAppointments() {
   try {
@@ -182,10 +186,3 @@ async function logoutUser() {
     alert("Something went wrong while logging out.");
   }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    const logoutBtn = document.querySelector(".logout-btn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", logoutUser);
-    }
-});

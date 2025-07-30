@@ -2,14 +2,14 @@ const sql = require("mssql");
 const dbConfig = require("../../dbConfig");
 
 // Get all appointments
-async function getAllAppointmentsByUser(fullName) {
+async function getAllAppointmentsByUser(userId) {
   let connection;
   try {
     connection = await sql.connect(dbConfig);
     const query = `Select * 
-      From Appointments WHERE full_name = @name`; // appointment_id, contact_num, appointment_date, appointment_time, clinic, reason 
+      From Appointments WHERE userId = @userId`; // appointment_id, contact_num, appointment_date, appointment_time, clinic, reason 
     const request = connection.request();
-    request.input("name", fullName);
+    request.input("userId", userId);
     const result = await request.query(query);
 
     return result.recordset.map(appt => {
@@ -79,8 +79,8 @@ async function createUser(userData) {
   }
 }
 
-// Find user 
-async function findUser(email) {
+// Find user by email
+async function findUserByEmail(email) {
   let connection;
   try {
     connection = await sql.connect(dbConfig);
@@ -116,6 +116,31 @@ async function loginUser(fullName) {
     const result = await request.query(query);
 
     return result.recordset; // Return all users with that name
+  } catch(error) {
+    console.error("Database error: ", error);
+    throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch(err) {
+        console.error("Error closing database: ", err);
+      }
+    }
+  }
+}
+
+// Find User by userId
+async function findUserById(userId) {
+let connection;
+  try {
+    connection = await sql.connect(dbConfig);
+    const query = `SELECT * FROM Users WHERE userId = @userId`;
+    const request = connection.request();
+    request.input("userId", userId);
+    const result = await request.query(query);
+
+    return result.recordset[0]; // Return all users with that name
   } catch(error) {
     console.error("Database error: ", error);
     throw error;
@@ -230,7 +255,8 @@ module.exports = {
   getAllAppointmentsByUser,
   createAppointment,
   createUser,
-  findUser,
+  findUserByEmail,
+  findUserById,
   loginUser,
   updateAppointmentById,
   deleteAppointmentById,
