@@ -1,3 +1,5 @@
+const API_BASE = 'http://localhost:3000';
+
 document.addEventListener('DOMContentLoaded', async () => {
   const medicineListEl = document.getElementById('medicine-list');
   const modal = document.getElementById('confirmation-modal');
@@ -7,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function loadMedicines() {
     try {
-      const response = await fetch('/api/medications');
+      const response = await fetch(`${API_BASE}/api/medications`);
       if (!response.ok) throw new Error('Failed to fetch medicines');
 
       const meds = await response.json();
@@ -21,11 +23,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       meds.forEach(med => {
         renderMedicineCard({
-          id: med.medicineName,
-          medicineName: med.medicineName,
+          id: med.medicine_name,
+          medicineName: med.medicine_name,
           purpose: med.purpose,
-          perDay: med.perDay,
-          foodTiming: med.foodTiming
+          perDay: med.per_day,
+          foodTiming: med.food_timing
         });
       });
     } catch (error) {
@@ -64,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         `Are you sure you want to remove ${med.medicineName}?`,
         async () => {
           try {
-            const res = await fetch(`/api/medications/${encodeURIComponent(med.id)}`, {
+            const res = await fetch(`${API_BASE}/api/medications/${encodeURIComponent(med.id)}`, {
               method: 'DELETE',
             });
             if (!res.ok) throw new Error('Failed to delete medicine');
