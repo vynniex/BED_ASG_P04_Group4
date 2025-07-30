@@ -36,15 +36,31 @@ async function getAllAppointmentsByUser(userId) {
     }
   }
 };
-          // Return only selected fields
-          // return {
-          //   appointment_id: doc.id,
-          //   appointment_date: dateStr,
-          //   appointment_time: data.appointment_time,
-          //   clinic: data.clinic,
-          //   reason: data.reason,
-          //   formatted_datetime: `${dateStr} at ${data.appointment_time}`,
-          // };
+
+// Get appointment by appointmentId
+async function getAppointmentById(appointmentId) {
+  let connection;
+  try {
+    connection = await sql.connect(dbConfig);
+    const query = `Select appointment_date, appointment_time, clinic From Appointments WHERE appointment_id = @appointmentId`;
+    const request = connection.request();
+    request.input("appointmentId", appointmentId);
+    const result = await request.query(query);
+
+    return result.recordset[0];
+  } catch(error) {
+    console.error("Database error: ", error);
+    throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch(err) {
+        console.error("Error closing database:", err);
+      }
+    }
+  }
+}
 
 // Create User
 async function createUser(userData) {
@@ -247,6 +263,7 @@ async function deleteAppointmentById(id) {
 
 module.exports = {
   getAllAppointmentsByUser,
+  getAppointmentById,
   createAppointment,
   createUser,
   findUserByEmail,

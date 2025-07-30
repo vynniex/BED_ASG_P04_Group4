@@ -39,6 +39,7 @@ app.delete("/api/medications/:medName", validateMedName, medsController.deleteMe
 
 // APPOINTMENT ROUTES - Grace
 app.get("/api/users/appointments", verifyJWT, apptController.getAllAppointmentsByUser);
+app.get("/api/users/appointments/:id", apptController.getAppointmentById);
 app.post("/api/appointments", verifyJWT, apptController.createAppointment);
 app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 app.put("/api/appointments/:id", apptController.updateAppointmentById);
@@ -86,7 +87,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
   console.log(`Medication API: http://localhost:${port}/api/medications`);
   console.log(`Medical Records API: http://localhost:${port}/api/records`);
-  console.log(`Appointment API: http://localhost:${port}/api/appointments/login/users`);
+  console.log(`Appointment API: http://localhost:${port}/api/users/appointments`);
   console.log(`Notification API: http://localhost:${port}/api/notifications`);
 });
 

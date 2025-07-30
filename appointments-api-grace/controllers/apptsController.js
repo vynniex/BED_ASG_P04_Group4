@@ -14,6 +14,21 @@ async function getAllAppointmentsByUser(req,res) {
   }
 };
 
+// Get appointment by id
+async function getAppointmentById(req,res) {
+  const appointmentId = req.params.id;
+  console.log(appointmentId);
+  try {
+    const appointments = await appointmentModel.getAppointmentById(appointmentId);
+    res.json(appointments);
+    console.log(appointments);
+  } catch (error) {
+    console.error("Controller error: ", error);
+    res.status(500).json({error: "Error retrieving appointment's information for user."});
+  }
+};
+
+
 // create user account
 async function createUser(req,res) {
   const userData = req.body;
@@ -179,6 +194,7 @@ async function deleteAppointmentById(req,res) {
 
 module.exports = {
   getAllAppointmentsByUser,
+  getAppointmentById,
   createAppointment,
   createUser,
   loginUser,

@@ -8,12 +8,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function autofillAppointmentForm(appointmentId) {
   try {
-    const stored = JSON.parse(sessionStorage.getItem("updatedFields"));
-    const appt = stored[appointmentId];    
-    const date = appt.appointmentDate.split("T")[0];
+    const response = await fetch(`/api/users/appointments/${appointmentId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+
+    if (!response) {
+      const errorBody = response.headers
+        .get("content-type")
+        ?.includes("application/json")
+        ? await response.json()
+        : { message: response.statusText };
+      throw new Error(
+        `HTTP error! status: ${response.status}, message: ${errorBody.message}`
+      );
+    }
+
+    const appt = await response.json();
+    const date = appt.appointment_date.split("T")[0];
 
     document.getElementById("appointmentDate").value = date;
-    document.getElementById("appointmentTime").value = appt.appointmentTime;
+    document.getElementById("appointmentTime").value = appt.appointment_time;
     document.getElementById("clinic").value = appt.clinic;
 
   } catch(error) {

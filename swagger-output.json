@@ -14,29 +14,6 @@
     "/api/medications": {
       "post": {
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "medicineName": {
-                  "example": "any"
-                },
-                "purpose": {
-                  "example": "any"
-                },
-                "perDay": {
-                  "example": "any"
-                },
-                "foodTiming": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -92,27 +69,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "medicineName": {
-                  "example": "any"
-                },
-                "purpose": {
-                  "example": "any"
-                },
-                "perDay": {
-                  "example": "any"
-                },
-                "foodTiming": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -146,36 +102,29 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/appointments/users/{nric}/{fullName}": {
+    "/api/users/appointments": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "nric",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "fullName",
-            "in": "path",
-            "required": true,
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error"
@@ -186,9 +135,22 @@
     "/api/appointments": {
       "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error"
@@ -197,49 +159,6 @@
       }
     },
     "/api/appointments/{id}": {
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "contact": {
-                  "example": "any"
-                },
-                "appointment_date": {
-                  "example": "any"
-                },
-                "appointment_time": {
-                  "example": "any"
-                },
-                "clinic": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
       "delete": {
         "description": "",
         "parameters": [
@@ -264,12 +183,57 @@
             "description": "Internal Server Error"
           }
         }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "appointment_date": {
+                  "example": "any"
+                },
+                "appointment_time": {
+                  "example": "any"
+                },
+                "clinic": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
-    "/api/appointments/login": {
+    "/api/appointments/verify": {
       "post": {
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -277,9 +241,6 @@
               "type": "object",
               "properties": {
                 "nric": {
-                  "example": "any"
-                },
-                "fullName": {
                   "example": "any"
                 }
               }
@@ -295,6 +256,87 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/users/signup": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "nric": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
           },
           "500": {
             "description": "Internal Server Error"
@@ -323,22 +365,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "weight": {
-                  "example": "any"
-                },
                 "date": {
                   "example": "any"
                 },
-                "feeling": {
-                  "example": "any"
-                },
-                "systolic": {
-                  "example": "any"
-                },
-                "diastolic": {
-                  "example": "any"
-                },
-                "bloodSugar": {
+                "userId": {
                   "example": "any"
                 }
               }
@@ -359,6 +389,31 @@
       }
     },
     "/api/records/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
       "put": {
         "description": "",
         "parameters": [
@@ -374,22 +429,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "weight": {
-                  "example": "any"
-                },
                 "date": {
                   "example": "any"
                 },
-                "feeling": {
-                  "example": "any"
-                },
-                "systolic": {
-                  "example": "any"
-                },
-                "diastolic": {
-                  "example": "any"
-                },
-                "bloodSugar": {
+                "userId": {
                   "example": "any"
                 }
               }
