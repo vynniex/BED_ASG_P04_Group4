@@ -1,41 +1,7 @@
 const sql = require('mssql');
 const dbConfig = require('../../dbConfig');
 
-// Get all medicines
-async function getAllMeds() {
-  try {
-    const pool = await sql.connect(dbConfig);
-    const result = await pool.request().query('SELECT * FROM Medications');
-
-    return result.recordset.map(row => ({
-      id: row.medicine_id,
-      ...row
-    }));
-  } catch (error) {
-    throw new Error(`Failed to retrieve medicines: ${error.message}`);
-  }
-}
-
-// Get medicine by name
-async function getMedByName(medicineName) {
-  try {
-    const pool = await sql.connect(dbConfig);
-    const result = await pool.request()
-      .input('medicine_name', sql.VarChar, medicineName)
-      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
-
-    if (result.recordset.length === 0) return null;
-
-    return {
-      id: result.recordset[0].medicine_id,
-      ...result.recordset[0]
-    };
-  } catch (error) {
-    throw new Error(`Failed to retrieve medicine: ${error.message}`);
-  }
-}
-
-// Get medicines by userId
+// Get all medicines for a specific user
 async function getMedsByUserId(userId) {
   try {
     const pool = await sql.connect(dbConfig);
@@ -43,36 +9,44 @@ async function getMedsByUserId(userId) {
       .input('userId', sql.Int, userId)
       .query('SELECT * FROM Medications WHERE userId = @userId');
 
-    return result.recordset.map(row => ({
-      id: row.medicine_id,
-      ...row
-    }));
+    return result.recordset;
   } catch (error) {
     throw new Error(`Failed to retrieve medicines for user: ${error.message}`);
   }
+}
+
+// Get a single medicine by its ID
+async function getMedById(medId) {
+    try {
+        const pool = await sql.connect(dbConfig);
+        const result = await pool.request()
+            .input('medId', sql.Int, medId)
+            .query('SELECT * FROM Medications WHERE medicine_id = @medId');
+
+        if (result.recordset.length === 0) return null;
+
+        return result.recordset[0];
+    } catch (error) {
+        throw new Error(`Failed to retrieve medicine: ${error.message}`);
+    }
 }
 
 // Create new medicine
 async function createMed(medData) {
   try {
     const { userId, medicine_name, purpose, per_day, food_timing } = medData;
-
-    if (!medicine_name) {
-      throw new Error('Data for medicine is incomplete');
-    }
-
     const pool = await sql.connect(dbConfig);
 
-    // Check if exists
+    // Check if a medicine with the same name already exists FOR THIS USER
     const check = await pool.request()
+      .input('userId', sql.Int, userId)
       .input('medicine_name', sql.VarChar, medicine_name)
-      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
+      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name AND userId = @userId');
 
     if (check.recordset.length > 0) {
-      throw new Error('Medication already exists');
+      throw new Error('You have already registered this medication.');
     }
 
-    // Insert new
     const result = await pool.request()
       .input('userId', sql.Int, userId)
       .input('medicine_name', sql.VarChar, medicine_name)
@@ -85,74 +59,44 @@ async function createMed(medData) {
         VALUES (@userId, @medicine_name, @purpose, @per_day, @food_timing)
       `);
 
-    return {
-      id: result.recordset[0].medicine_id,
-      ...result.recordset[0]
-    };
+    return result.recordset[0];
   } catch (error) {
     throw new Error(`Failed to create medicine: ${error.message}`);
   }
 }
 
-// Update medicine
-async function updateMed(medicineName, updates) {
+// Update medicine by its ID
+async function updateMed(medId, updates) {
   try {
-    const { purpose, per_day, food_timing } = updates;
-
+    const { medicine_name, purpose, per_day, food_timing } = updates;
     const pool = await sql.connect(dbConfig);
-
-    const check = await pool.request()
-      .input('medicine_name', sql.VarChar, medicineName)
-      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
-
-    if (check.recordset.length === 0) {
-      throw new Error('Medicine not found');
-    }
-
     const result = await pool.request()
-      .input('medicine_name', sql.VarChar, medicineName)
+      .input('medId', sql.Int, medId)
+      .input('medicine_name', sql.VarChar, medicine_name)
       .input('purpose', sql.VarChar, purpose)
       .input('per_day', sql.Int, per_day)
       .input('food_timing', sql.VarChar, food_timing)
       .query(`
         UPDATE Medications
-        SET purpose = @purpose,
+        SET medicine_name = @medicine_name,
+            purpose = @purpose,
             per_day = @per_day,
             food_timing = @food_timing,
             updated_at = GETDATE()
         OUTPUT INSERTED.*
-        WHERE medicine_name = @medicine_name
+        WHERE medicine_id = @medId
       `);
 
-    return {
-      id: result.recordset[0].medicine_id,
-      ...result.recordset[0]
-    };
-  } catch (error) {
-    throw new Error(`Failed to update medicine: ${error.message}`);
-  }
-}
-
-// Delete medicine by name
-async function deleteMed(medicineName) {
-  try {
-    const pool = await sql.connect(dbConfig);
-
-    const check = await pool.request()
-      .input('medicine_name', sql.VarChar, medicineName)
-      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
-
-    if (check.recordset.length === 0) {
-      throw new Error('Medicine not found');
+    if (result.recordset.length === 0) {
+      throw new Error('Update failed: Medicine not found.');
     }
-
-    await pool.request()
-      .input('medicine_name', sql.VarChar, medicineName)
-      .query('DELETE FROM Medications WHERE medicine_name = @medicine_name');
-
-    return medicineName;
+    return result.recordset[0];
   } catch (error) {
-    throw new Error(`Failed to delete medicine: ${error.message}`);
+    // Handle potential unique constraint violation on 'medicine_name'
+    if (error.message.includes('UNIQUE KEY constraint')) {
+        throw new Error('This medicine name is already taken.');
+    }
+    throw new Error(`Failed to update medicine: ${error.message}`);
   }
 }
 
@@ -160,29 +104,38 @@ async function deleteMed(medicineName) {
 async function deleteMedById(medId) {
   try {
     const pool = await sql.connect(dbConfig);
-
-    const check = await pool.request()
-      .input('medId', sql.Int, medId)
-      .query('SELECT * FROM Medications WHERE medicine_id = @medId');
-
-    if (check.recordset.length === 0) {
-      throw new Error('Medicine not found');
-    }
-
-    await pool.request()
+    const result = await pool.request()
       .input('medId', sql.Int, medId)
       .query('DELETE FROM Medications WHERE medicine_id = @medId');
 
+    if (result.rowsAffected[0] === 0) {
+        throw new Error('Medicine not found for deletion.');
+    }
     return medId;
   } catch (error) {
     throw new Error(`Failed to delete medicine: ${error.message}`);
   }
 }
 
+// This function is kept in case it's needed for other features, but is not used in the main CRUD flow.
+async function getMedByName(medicineName) {
+  try {
+    const pool = await sql.connect(dbConfig);
+    const result = await pool.request()
+      .input('medicine_name', sql.VarChar, medicineName)
+      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
+    if (result.recordset.length === 0) return null;
+    return result.recordset[0];
+  } catch (error) {
+    throw new Error(`Failed to retrieve medicine by name: ${error.message}`);
+  }
+}
+
 module.exports = {
-  getAllMeds,
   getMedsByUserId,
+  getMedById,
   createMed,
   updateMed,
-  deleteMedById
+  deleteMedById,
+  getMedByName
 };

@@ -2,8 +2,8 @@ const API_BASE = 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const medicineListEl = document.getElementById('medicine-list');
-
     const token = localStorage.getItem('token');
+
     if (!token) {
         medicineListEl.innerHTML = `
       <div style="text-align:center; padding: 10px;">
@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         <button class="btn-remove">REMOVE</button>
       </div>
     `;
+        
+        medItem.querySelector('.btn-edit').addEventListener('click', () => {
+            window.location.href = `edit-medicine.html?id=${med.id}`;
+        });
 
         medItem.querySelector('.btn-remove').addEventListener('click', () => {
             const modal = document.getElementById('confirmation-modal');
@@ -127,7 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function showToast(message, type = 'success') {
         const toastContainer = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        toast.className = `toast ${type}`; // e.g., 'toast success'
+        toast.className = `toast ${type}`;
         toast.textContent = message;
         
         toastContainer.appendChild(toast);
