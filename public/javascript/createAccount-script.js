@@ -46,9 +46,7 @@ signUpForm.addEventListener("submit", async (event) => {
             alert(`Validation Error: ${responseBody.message}`);
         } else {
             // Handle other potential API errors (e.g., 500 from error handling middleware)
-            throw new Error(
-                `API error! status: ${response.status}, message: ${responseBody.message || "No message."}`
-            );
+            throw new Error(responseBody.message || "Unkown error");
         }
     }catch (error) {
         console.error("Error creating user:", error);

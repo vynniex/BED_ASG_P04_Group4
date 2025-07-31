@@ -1,6 +1,4 @@
 const appointmentModel = require("../models/apptsModel");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 // Get all appointments
 async function getAllAppointmentsByUser(req,res) {

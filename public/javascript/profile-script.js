@@ -104,7 +104,7 @@ async function handleDeleteClick(event) {
         localStorage.clear();
         window.location.href = "index.html";
       }
-      else if (response.status === 404) {
+      else if (response.status === 400) {
         alert("User still has exisitng appointments and cannot be deleted.");
       }
       else {

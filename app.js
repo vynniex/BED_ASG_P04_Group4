@@ -45,7 +45,7 @@ app.post("/api/appointments", verifyJWT, apptController.createAppointment);
 app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 app.put("/api/appointments/:id", apptController.updateAppointmentById);
 app.post("/api/appointments/verify", verifyJWT, userController.verify);
-// signup and login routes
+// signup and login routes - Grace
 app.post("/api/users/login", validateLogin, userController.loginUser);
 app.post("/api/users/signup", userController.createUser);
 app.get("/api/users/profile", verifyJWT, userController.getUserDetailsById);

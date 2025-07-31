@@ -11,11 +11,11 @@ async function createUser(req,res) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    const existingUser = await userModel.findUser(userData.email);
+    const existingUser = await userModel.findUserByEmail(userData.email);
     console.log(existingUser);
 
     if (existingUser) {
-      return res.status(409).json({message: "User already exisits. "}) // 409 conflict - prevent duplicates
+      return res.status(409).json({message: "User's email already exisits. "}) // 409 conflict - prevent duplicates
     }
 
     // Hash password and nric
@@ -126,12 +126,14 @@ async function deleteUserById(req,res) {
       return res.status(400).json({ error: "Invalid userId" });
     }
 
+    // check if user still have appointments
     const appointments = await appointmentModel.getAllAppointmentsByUser(id);
     if (appointments.length > 0) {
       return res.status(400).json({ error: "User has exisitng appointments and cannot be deleted." });
     }
     
-    await appointmentModel.deleteUserById(id);
+    // if not, delete user
+    await userModel.deleteUserById(id);
     return res.status(204).send();
   } catch (error) {
     console.error("Controller error:", error);
