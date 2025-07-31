@@ -35,6 +35,23 @@ async function getMedByName(medicineName) {
   }
 }
 
+// Get medicines by userId
+async function getMedsByUserId(userId) {
+  try {
+    const pool = await sql.connect(dbConfig);
+    const result = await pool.request()
+      .input('userId', sql.Int, userId)
+      .query('SELECT * FROM Medications WHERE userId = @userId');
+
+    return result.recordset.map(row => ({
+      id: row.medicine_id,
+      ...row
+    }));
+  } catch (error) {
+    throw new Error(`Failed to retrieve medicines for user: ${error.message}`);
+  }
+}
+
 // Create new medicine
 async function createMed(medData) {
   try {
@@ -116,7 +133,7 @@ async function updateMed(medicineName, updates) {
   }
 }
 
-// Delete medicine
+// Delete medicine by name
 async function deleteMed(medicineName) {
   try {
     const pool = await sql.connect(dbConfig);
@@ -139,10 +156,33 @@ async function deleteMed(medicineName) {
   }
 }
 
+// Delete medicine by ID
+async function deleteMedById(medId) {
+  try {
+    const pool = await sql.connect(dbConfig);
+
+    const check = await pool.request()
+      .input('medId', sql.Int, medId)
+      .query('SELECT * FROM Medications WHERE medicine_id = @medId');
+
+    if (check.recordset.length === 0) {
+      throw new Error('Medicine not found');
+    }
+
+    await pool.request()
+      .input('medId', sql.Int, medId)
+      .query('DELETE FROM Medications WHERE medicine_id = @medId');
+
+    return medId;
+  } catch (error) {
+    throw new Error(`Failed to delete medicine: ${error.message}`);
+  }
+}
+
 module.exports = {
   getAllMeds,
-  getMedByName,
+  getMedsByUserId,
   createMed,
   updateMed,
-  deleteMed
+  deleteMedById
 };
