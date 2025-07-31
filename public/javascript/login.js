@@ -34,7 +34,7 @@ form.addEventListener('submit', async (event) => {
       alert(`Login sucessful! Welcome ${data.user.fullName}.`);
 
       // After login success
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('token', data.token);
       window.location.href = "index.html";
 

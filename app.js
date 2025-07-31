@@ -47,6 +47,7 @@ app.post("/api/appointments/verify", verifyJWT, apptController.verify);
 // signup and login routes
 app.post("/api/users/login", validateLogin, apptController.loginUser);
 app.post("/api/users/signup", apptController.createUser);
+app.get("/api/users/profile", verifyJWT, apptController.getUserDetailsById);
 
 // MEDICAL RECORDS ROUTES - XN
 app.get("/api/records", recsController.getAllRecords);

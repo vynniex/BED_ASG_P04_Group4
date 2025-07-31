@@ -129,6 +129,18 @@ async function verify(req,res) {
   }
 }
 
+// Get user's info by userId
+async function getUserDetailsById(req,res) {
+  const userId = req.user.id;
+  try {
+    const user = await appointmentModel.findUserById(userId);
+    console.log(user);
+    res.json(user);
+  } catch(error) {
+    console.error("Controller error: ", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+}
 
 // Create new appointment
 async function createAppointment(req, res) {
@@ -199,6 +211,7 @@ module.exports = {
   createUser,
   loginUser,
   verify,
+  getUserDetailsById,
   updateAppointmentById,
   deleteAppointmentById
 }
