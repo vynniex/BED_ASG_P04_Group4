@@ -16,7 +16,7 @@ async function getAllMeds(req, res) {
 // Get medicines for a specific user by userId (from query)
 async function getMedsByUserId(req, res) {
   try {
-    const userId = parseInt(req.query.userId, 10);
+    const userId = req.user.id;
 
     if (isNaN(userId)) {
       return res.status(400).json({ error: 'Missing or invalid userId' });

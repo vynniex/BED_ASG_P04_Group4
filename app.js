@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, "public"))); // Static files
 // MEDICATION ROUTES - XY
 app.post("/api/medications", validateMedInput, medsController.createMed);
 app.get("/api/medications", medsController.getAllMeds);
-app.get('/api/medications/user/:userId', medsController.getMedsByUserId);
+app.get('/api/medications/user/:userId', verifyJWT, medsController.getMedsByUserId);
 app.put("/api/medications/:medName", validateMedName, validateMedInput, medsController.updateMed);
 app.delete("/api/medications/id/:medId", medsController.deleteMedById);
 

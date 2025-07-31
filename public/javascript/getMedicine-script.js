@@ -1,21 +1,49 @@
 const API_BASE = 'http://localhost:3000';
 
+// change to based on token so if no token will show ur msg
 document.addEventListener('DOMContentLoaded', async () => {
   const medicineListEl = document.getElementById('medicine-list');
-  const modal = document.getElementById('confirmation-modal');
-  const modalMessage = document.getElementById('modal-message');
-  const modalCancel = document.getElementById('modal-cancel');
-  const modalConfirm = document.getElementById('modal-confirm');
+
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    medicineListEl.innerHTML = `
+      <div style="text-align:center; padding: 10px;">
+        <p class="inter-regular">Please LOGIN or SIGNUP to view/add your medicines</p>
+        <button id="login-redirect-btn" style="
+          padding: 5px 20px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+        ">Go to Login</button>
+      </div>
+    `;
+
+    document.getElementById('login-redirect-btn').addEventListener('click', () => {
+      window.location.href = '../login.html';
+    });
+
+    return;
+  }
 
   async function loadMedicines() {
     try {
-      const response = await fetch(`${API_BASE}/api/medications`);
+      const response = await fetch(`${API_BASE}/api/medications`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
       if (!response.ok) throw new Error('Failed to fetch medicines');
 
       const meds = await response.json();
 
       if (!meds.length) {
-        medicineListEl.innerHTML = `<p class="inter-regular">No medication records</p>`;
+        medicineListEl.innerHTML = `<p>No medication records found.</p>`;
         return;
       }
 
@@ -23,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       meds.forEach(med => {
         renderMedicineCard({
-          id: med.medicine_name,
+          id: med.medicine_id,
           medicineName: med.medicine_name,
           purpose: med.purpose,
           perDay: med.per_day,
@@ -32,10 +60,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     } catch (error) {
       medicineListEl.innerHTML = `
-        <div class="error-message inter-regular">
-          Failed to load medicines<br>${error.message}
+        <div class="error-message">
+          Failed to load medicines.<br>${error.message}
         </div>
       `;
+      console.error(error);
     }
   }
 
@@ -50,71 +79,39 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     medItem.innerHTML = `
       <div class="medicine-info">
-        <h2 class="inter-regular"><u><b>${med.medicineName}</b></u></h2>
-        <p class="inter-regular"><b>For:</b> ${med.purpose}</p>
-        <p class="inter-regular"><b>Times/day:</b> ${med.perDay}</p>
-        <p class="inter-regular"><b>B/A:</b> ${foodTimingText}</p>
+        <h2><b>${med.medicineName}</b></h2>
+        <p><b>For:</b> ${med.purpose}</p>
+        <p><b>Times/day:</b> ${med.perDay}</p>
+        <p><b>B/A:</b> ${foodTimingText}</p>
       </div>
       <div class="medicine-actions">
-        <button class="btn-edit inter-regular">EDIT</button>
-        <button class="btn-remove inter-regular">REMOVE</button>
+        <button class="btn-edit">EDIT</button>
+        <button class="btn-remove">REMOVE</button>
       </div>
     `;
 
-    medItem.querySelector('.btn-remove').addEventListener('click', () => {
-      showConfirmationModal(
-        `Are you sure you want to remove ${med.medicineName}?`,
-        async () => {
-          try {
-            const res = await fetch(`${API_BASE}/api/medications/${encodeURIComponent(med.id)}`, {
-              method: 'DELETE',
-            });
-            if (!res.ok) throw new Error('Failed to delete medicine');
+    medItem.querySelector('.btn-remove').addEventListener('click', async () => {
+      try {
+        const confirmed = confirm(`Are you sure you want to remove ${med.medicineName}?`);
+        if (!confirmed) return;
 
-            medItem.remove();
-            showToast(`${med.medicineName} successfully removed!`, 'success');
-          } catch (error) {
-            console.error('Removal failed:', error);
-            showToast(`Removal of ${med.medicineName} failed`, 'error');
-          }
+        const res = await fetch(`${API_BASE}/api/medications/id/${encodeURIComponent(med.id)}`, {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error('Failed to delete medicine');
+
+        medItem.remove();
+
+        if (!medicineListEl.querySelector('.medicine-card')) {
+          medicineListEl.innerHTML = `<p>No medication records found.</p>`;
         }
-      );
+      } catch (error) {
+        console.error('Removal failed:', error);
+        alert(`Removal of ${med.medicineName} failed`);
+      }
     });
 
     medicineListEl.appendChild(medItem);
-  }
-
-  function showConfirmationModal(message, confirmCallback) {
-    document.body.classList.add('modal-open');
-    modalMessage.textContent = message;
-    modal.style.display = 'flex';
-
-    const cleanUp = () => {
-      document.body.classList.remove('modal-open');
-      modalConfirm.onclick = null;
-      modalCancel.onclick = null;
-      modal.style.display = 'none';
-    };
-
-    modalConfirm.onclick = () => {
-      confirmCallback();
-      cleanUp();
-    };
-
-    modalCancel.onclick = cleanUp;
-  }
-
-  function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    document.getElementById('toast-container').appendChild(toast);
-
-    setTimeout(() => toast.classList.add('show'), 10);
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
   }
 
   loadMedicines();
