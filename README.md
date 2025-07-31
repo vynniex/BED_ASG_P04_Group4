@@ -25,6 +25,15 @@ CRUD Operations done by each member is listed below.
 
 
 ### Chua Wee Teng Grace
+Appointments:
+Create - Create Appointment
+Read - View Appointment by userId
+Update - Update Appointment by appointmentId
+Delete - Delete Appointment by appointmentId
+
+Sign up / Login:
+Create - Create account
+Read - View account profile
 
 ## Node Packages Utilised
 **Dependencies**
@@ -36,3 +45,4 @@ CRUD Operations done by each member is listed below.
 - firebase
 
 ## References
+<a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>

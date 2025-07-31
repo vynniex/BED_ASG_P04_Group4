@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     autofillUserDetails(token);
 });
 
+async function goBack() {
+    window.location.href = "index.html";
+}
+
 async function autofillUserDetails(token) {
     try {
         const response = await fetch("/api/users/profile", {
