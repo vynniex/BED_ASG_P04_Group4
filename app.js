@@ -32,10 +32,10 @@ app.use(express.static(path.join(__dirname, "public"))); // Static files
 // ================= Routes ====================
 // MEDICATION ROUTES - XY
 app.post("/api/medications", verifyJWT, validateMedInput, medsController.createMed);
-app.get("/api/medications", medsController.getAllMeds);
-app.get('/api/medications/user/:userId', verifyJWT, medsController.getMedsByUserId);
-app.put("/api/medications/:medName", validateMedName, validateMedInput, medsController.updateMed);
-app.delete("/api/medications/id/:medId", medsController.deleteMedById);
+app.get("/api/medications", verifyJWT, medsController.getMedsByUserId);
+app.get("/api/medications/id/:medId", verifyJWT, medsController.getMedById);
+app.put("/api/medications/id/:medId", verifyJWT, validateMedInput, medsController.updateMed);
+app.delete("/api/medications/id/:medId", verifyJWT, medsController.deleteMedById);
 
 // APPOINTMENT ROUTES - Grace
 app.get("/api/users/appointments", verifyJWT, apptController.getAllAppointmentsByUser);

@@ -1,14 +1,13 @@
 const Joi = require('joi');
 
-const VALID_FOOD_TIMINGS = ['before', 'after'];
-
 const medInputSchema = Joi.object({
+  // medicine_name is now always required in the body for POST and PUT
   medicine_name: Joi.string().trim().required().messages({
-    'string.empty': 'Medicine name must be a non-empty string',
+    'string.empty': 'Medicine name is required',
     'any.required': 'Medicine name is required'
   }),
   purpose: Joi.string().trim().required().messages({
-    'string.empty': 'Purpose must be a non-empty string',
+    'string.empty': 'Purpose is required',
     'any.required': 'Purpose is required'
   }),
   per_day: Joi.number().integer().min(1).required().messages({
@@ -17,8 +16,8 @@ const medInputSchema = Joi.object({
     'number.min': 'Per day must be at least 1',
     'any.required': 'Per day is required'
   }),
-  food_timing: Joi.string().valid(...VALID_FOOD_TIMINGS).required().messages({
-    'any.only': `Food timing must be one of: ${VALID_FOOD_TIMINGS.join(', ')}`,
+  food_timing: Joi.string().valid('before', 'after').required().messages({
+    'any.only': 'Food timing must be either "before" or "after"',
     'any.required': 'Food timing is required'
   }),
 });
@@ -32,6 +31,7 @@ function validateMedInput(req, res, next) {
   next();
 }
 
+// This schema is no longer used for the PUT route but can be kept for other potential uses.
 const medNameSchema = Joi.string().trim().required().messages({
   'string.empty': 'Medicine name is required',
   'any.required': 'Medicine name is required'
