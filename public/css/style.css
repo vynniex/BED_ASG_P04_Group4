@@ -821,6 +821,47 @@ button {
     display: flex;
 }
 
+/* Profile */
+#profile-section h2{
+    font-size: 2em;
+}
+
+#profile-container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: auto;
+    display: flex;
+    gap: 70px;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.profile-row {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-row span {
+    margin-bottom: 5px;
+}
+
+.profile-row label {
+    font-weight: bold;
+}
+
+.user-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+}
+
 
 /* Responsive Adjustments */
 @media (max-width: 600px) {
