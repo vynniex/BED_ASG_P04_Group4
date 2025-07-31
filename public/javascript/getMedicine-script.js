@@ -1,13 +1,11 @@
 const API_BASE = 'http://localhost:3000';
 
-// change to based on token so if no token will show ur msg
 document.addEventListener('DOMContentLoaded', async () => {
-  const medicineListEl = document.getElementById('medicine-list');
+    const medicineListEl = document.getElementById('medicine-list');
 
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    medicineListEl.innerHTML = `
+    const token = localStorage.getItem('token');
+    if (!token) {
+        medicineListEl.innerHTML = `
       <div style="text-align:center; padding: 10px;">
         <p class="inter-regular">Please LOGIN or SIGNUP to view/add your medicines</p>
         <button id="login-redirect-btn" style="
@@ -21,63 +19,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         ">Go to Login</button>
       </div>
     `;
-
-    document.getElementById('login-redirect-btn').addEventListener('click', () => {
-      window.location.href = '../login.html';
-    });
-
-    return;
-  }
-
-  async function loadMedicines() {
-    try {
-      const response = await fetch(`${API_BASE}/api/medications`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) throw new Error('Failed to fetch medicines');
-
-      const meds = await response.json();
-
-      if (!meds.length) {
-        medicineListEl.innerHTML = `<p>No medication records found.</p>`;
-        return;
-      }
-
-      medicineListEl.innerHTML = '';
-
-      meds.forEach(med => {
-        renderMedicineCard({
-          id: med.medicine_id,
-          medicineName: med.medicine_name,
-          purpose: med.purpose,
-          perDay: med.per_day,
-          foodTiming: med.food_timing
+        document.getElementById('login-redirect-btn').addEventListener('click', () => {
+            window.location.href = '../login.html';
         });
-      });
-    } catch (error) {
-      medicineListEl.innerHTML = `
-        <div class="error-message">
-          Failed to load medicines.<br>${error.message}
-        </div>
-      `;
-      console.error(error);
+        return;
     }
-  }
 
-  function renderMedicineCard(med) {
-    const medItem = document.createElement('div');
-    medItem.classList.add('medicine-card');
-    medItem.dataset.id = med.id;
+    async function loadMedicines() {
+        try {
+            const response = await fetch(`${API_BASE}/api/medications`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            if (!response.ok) throw new Error('Failed to fetch medicines');
+            const meds = await response.json();
+            if (!meds.length) {
+                medicineListEl.innerHTML = `<p>No medication records found.</p>`;
+                return;
+            }
+            medicineListEl.innerHTML = '';
+            meds.forEach(med => {
+                renderMedicineCard({
+                    id: med.medicine_id,
+                    medicineName: med.medicine_name,
+                    purpose: med.purpose,
+                    perDay: med.per_day,
+                    foodTiming: med.food_timing
+                });
+            });
+        } catch (error) {
+            medicineListEl.innerHTML = `<div class="error-message">Failed to load medicines.<br>${error.message}</div>`;
+            console.error(error);
+        }
+    }
 
-    const foodTimingText = med.foodTiming
-      ? med.foodTiming.charAt(0).toUpperCase() + med.foodTiming.slice(1)
-      : 'Not specified';
+    function renderMedicineCard(med) {
+        const medItem = document.createElement('div');
+        medItem.classList.add('medicine-card');
+        medItem.dataset.id = med.id;
 
-    medItem.innerHTML = `
+        const foodTimingText = med.foodTiming ? med.foodTiming.charAt(0).toUpperCase() + med.foodTiming.slice(1) : 'Not specified';
+
+        medItem.innerHTML = `
       <div class="medicine-info">
         <h2><b>${med.medicineName}</b></h2>
         <p><b>For:</b> ${med.purpose}</p>
@@ -90,33 +75,76 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
 
-    medItem.querySelector('.btn-remove').addEventListener('click', async () => {
-      try {
-        const confirmed = confirm(`Are you sure you want to remove ${med.medicineName}?`);
-        if (!confirmed) return;
+        medItem.querySelector('.btn-remove').addEventListener('click', () => {
+            const modal = document.getElementById('confirmation-modal');
+            const modalMessage = document.getElementById('modal-message');
+            const confirmBtn = document.getElementById('modal-confirm');
+            const cancelBtn = document.getElementById('modal-cancel');
 
-        const res = await fetch(`${API_BASE}/api/medications/id/${encodeURIComponent(med.id)}`, {
-          method: 'DELETE'
+            modalMessage.textContent = `Are you sure you want to remove ${med.medicineName}?`;
+            modal.style.display = 'block';
+            document.body.classList.add('modal-open');
+
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+            const hideModal = () => {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            };
+
+            newConfirmBtn.onclick = async () => {
+                try {
+                    const res = await fetch(`${API_BASE}/api/medications/id/${encodeURIComponent(med.id)}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+
+                    if (!res.ok) {
+                        const errorData = await res.json();
+                        throw new Error(errorData.error || `Failed to delete ${med.medicineName}`);
+                    }
+                    
+                    medItem.remove();
+                    showToast(`${med.medicineName} removed successfully!`, 'success');
+
+                } catch (error) {
+                    console.error('Removal failed:', error);
+                    showToast(error.message, 'error');
+                } finally {
+                    hideModal();
+                }
+            };
+
+            cancelBtn.onclick = () => {
+                hideModal();
+            };
         });
-        if (!res.ok) throw new Error('Failed to delete medicine');
 
-        medItem.remove();
+        medicineListEl.appendChild(medItem);
+    }
 
-        if (!medicineListEl.querySelector('.medicine-card')) {
-          medicineListEl.innerHTML = `<p>No medication records found.</p>`;
-        }
-      } catch (error) {
-        console.error('Removal failed:', error);
-        alert(`Removal of ${med.medicineName} failed`);
-      }
+    function showToast(message, type = 'success') {
+        const toastContainer = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`; // e.g., 'toast success'
+        toast.textContent = message;
+        
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            toast.addEventListener('transitionend', () => toast.remove());
+        }, 3000);
+    }
+
+    loadMedicines();
+
+    document.querySelector('.btn-add')?.addEventListener('click', () => {
+        window.location.href = 'create-medicine.html';
     });
-
-    medicineListEl.appendChild(medItem);
-  }
-
-  loadMedicines();
-
-  document.querySelector('.btn-add')?.addEventListener('click', () => {
-    window.location.href = 'create-medicine.html';
-  });
 });

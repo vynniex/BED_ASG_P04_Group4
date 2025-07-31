@@ -33,11 +33,16 @@ async function getMedsByUserId(req, res) {
 // Create new medicine
 async function createMed(req, res) {
   try {
-    const newMed = await medsModel.createMed(req.body);
+    const medData = {
+      userId: req.user.id,
+      ...req.body
+    };
+
+    const newMed = await medsModel.createMed(medData);
     res.status(201).json(newMed);
   } catch (error) {
     console.error('Controller Error: ', error);
-    const status = error.message.includes('already exists') ? 400 : 500;
+    const status = error.message.includes('already exists') ? 409 : 500;
     res.status(status).json({
       error: error.message || "Could not create medicine"
     });
