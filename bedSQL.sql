@@ -35,7 +35,7 @@ CREATE TABLE Medications (
 );
 
 INSERT INTO Medications (userId, medicine_name, purpose, per_day, food_timing, created_at)
-VALUES (7, 'Aspirin', 'Pain Relief', 2, 'before', GETDATE());
+VALUES (1, 'Aspirin', 'Pain Relief', 2, 'before', GETDATE());
 
 /* Grace */ 
 CREATE TABLE Appointments (
@@ -50,7 +50,7 @@ CREATE TABLE Appointments (
 );
 
 INSERT INTO Appointments (userId, appointment_date, appointment_time, clinic, reason)
-VALUES (7, '2025-08-01', '9:00 AM', 'Outram Polyclinic', 'General Consultation');
+VALUES (1, '2025-08-01', '9:00 AM', 'Outram Polyclinic', 'General Consultation');
 
 /* Xue Ning */
 CREATE TABLE Records (
