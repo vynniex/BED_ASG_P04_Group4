@@ -23,7 +23,7 @@ async function createUser(req,res) {
     userData.password = await bcrypt.hash(userData.password, salt);
     userData.nric = await bcrypt.hash(userData.nric, salt);
 
-    const newUser = await appointmentModel.createUser(userData);
+    const newUser = await userModel.createUser(userData);
     console.log(newUser);
     res.status(201).json(newUser);
   } catch(error) {
