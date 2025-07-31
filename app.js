@@ -11,6 +11,7 @@ const medsController = require("./medicine-api-xinyi/controllers/medsController.
 const { validateMedInput, validateMedName } = require("./medicine-api-xinyi/middlewares/medsValidation.js");
 
 const apptController = require("./appointments-api-grace/controllers/apptsController.js");
+const userController = require("./appointments-api-grace/controllers/userController.js");
 const {verifyJWT, validateAppt, validateLogin } = require("./appointments-api-grace/middlewares/apptsValidation.js");
 
 const recsController = require("./records-api-xuening/controllers/recsController");
@@ -43,11 +44,12 @@ app.get("/api/users/appointments/:id", apptController.getAppointmentById);
 app.post("/api/appointments", verifyJWT, apptController.createAppointment);
 app.delete("/api/appointments/:id", apptController.deleteAppointmentById);
 app.put("/api/appointments/:id", apptController.updateAppointmentById);
-app.post("/api/appointments/verify", verifyJWT, apptController.verify);
+app.post("/api/appointments/verify", verifyJWT, userController.verify);
 // signup and login routes
-app.post("/api/users/login", validateLogin, apptController.loginUser);
-app.post("/api/users/signup", apptController.createUser);
-app.get("/api/users/profile", verifyJWT, apptController.getUserDetailsById);
+app.post("/api/users/login", validateLogin, userController.loginUser);
+app.post("/api/users/signup", userController.createUser);
+app.get("/api/users/profile", verifyJWT, userController.getUserDetailsById);
+app.delete("/api/users/:id", userController.deleteUserById);
 
 // MEDICAL RECORDS ROUTES - XN
 app.get("/api/records", recsController.getAllRecords);
