@@ -2,7 +2,7 @@
 const apptsController = require("../appointments-api-grace/controllers/apptsController");
 const apptsModel = require("../appointments-api-grace/models/apptsModel");
 
-// Mock the Book model
+// Mock the Appointment model
 jest.mock("../appointments-api-grace/models/apptsModel");
 
 // mock the Express response object
@@ -20,7 +20,7 @@ describe("apptsController", () => {
     });
 
     it("getAllAppointmentsByUser should return all appointments for the user", async () => {
-        const req = { user: { id: "1" } };
+        const req = { user: { id: "1"} };
         const res = mockResponse();
 
         const mockAppointments = [{ appointment_id: "2", appointment_date: "2025-08-01", appointment_time: "10:00 AM", 
