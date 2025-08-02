@@ -170,7 +170,8 @@
     },
     "/api/users/appointments": {
       "get": {
-        "description": "",
+        "tags": ["Appointments"],
+        "description": "Get all Appointments by User",
         "parameters": [
           {
             "name": "authorization",
@@ -196,7 +197,8 @@
     },
     "/api/users/appointments/{id}": {
       "get": {
-        "description": "",
+        "tags": ["Appointments"],
+        "description": "Get Appointment info by appointmentId",
         "parameters": [
           {
             "name": "id",
@@ -217,17 +219,75 @@
     },
     "/api/appointments": {
       "post": {
-        "description": "",
+        "tags": ["Appointments"],
+        "summary": "Create new appointment",
         "parameters": [
-          {
+            {
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "appointmentDate",
+            "in": "body",
+            "description": "Date of the appointment",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "appointmentDate": {
+                  "example": "2025-08-03"
+                }
+              },
+              "format": "date"
+            }
+          },
+          {
+            "name": "appointmentTime",
+            "in": "body",
+            "description": "Time of the appointment",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "appointmentTime": {
+                  "example": "2:00PM"
+                }
+              }
+            }
+          },
+          {
+            "name": "clinic",
+            "in": "body",
+            "description": "Clinic name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "clinic": {
+                  "example": "Paris Ris Polyclinic"
+                }
+              }
+            }
+          },
+          {
+            "name": "reason",
+            "in": "body",
+            "description": "Reason for the appointment",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "properties": {
+                "reason": {
+                  "example": "General Consultation"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Appointment Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -243,7 +303,8 @@
     },
     "/api/appointments/{id}": {
       "delete": {
-        "description": "",
+        "tags": ["Appointments"],
+        "description": "Delete appointments by appointmentId",
         "parameters": [
           {
             "name": "id",
@@ -268,7 +329,8 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Appointments"],
+        "description": "Update existing appointment",
         "parameters": [
           {
             "name": "id",
@@ -310,7 +372,8 @@
     },
     "/api/appointments/verify": {
       "post": {
-        "description": "",
+        "tags": ["Appointments"],
+        "description": "Verify using NRIC",
         "parameters": [
           {
             "name": "authorization",
@@ -774,5 +837,19 @@
         }
       }
     }
-  }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

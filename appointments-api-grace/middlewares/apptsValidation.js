@@ -3,6 +3,7 @@ const Joi = require("joi"); // Import Joi for validation
 
 function verifyJWT(req, res, next) {
     const authHeader = req.headers.authorization;
+    console.log(authHeader);
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ message: "Unauthorized: Token missing" });

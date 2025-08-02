@@ -1,6 +1,6 @@
 // recsModel.test.js
 const sql = require("mssql");
-const recsModel = require("../records-api-xuening/models/recsModel");
+const recsModel = require("../../records-api-xuening/models/recsModel");
 
 jest.mock("mssql");
 

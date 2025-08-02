@@ -5,7 +5,22 @@ const doc = {
     title: 'BED Assg API',
     description: 'Medical Care For Seniors API'
   },
-  host: 'localhost:3000'
+  host: 'localhost:3000',
+  schemes: ['http'],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'Bearer',
+        bearerFormat: 'JWT',
+      },
+    },
+  },
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
 };
 
 const outputFile = './swagger-output.json';

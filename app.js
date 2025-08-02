@@ -83,7 +83,7 @@ app.use((err, req, res, next) => {
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 
-// to update: node swagger
+// to update: node app.js 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Start server

@@ -1,6 +1,6 @@
 // apptsController.test.js
-const apptsController = require("../appointments-api-grace/controllers/apptsController");
-const apptsModel = require("../appointments-api-grace/models/apptsModel");
+const apptsController = require("../../appointments-api-grace/controllers/apptsController");
+const apptsModel = require("../../appointments-api-grace/models/apptsModel");
 
 // Mock the Appointment model
 jest.mock("../appointments-api-grace/models/apptsModel");
