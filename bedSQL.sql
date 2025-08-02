@@ -19,7 +19,7 @@ CREATE TABLE Users (
 INSERT INTO Users(nric_fin, full_name, email, password, contact_num, dob) VALUES
 ('$2b$10$DeC0Mk.GQ1sltgSd678LWOEq7ZZW7VU9HwcdCqN.RdZ9YGsBC1sGe', 'BOB TAN', 'bob@gmail.com', '$2b$10$DeC0Mk.GQ1sltgSd678LWO/lxK0ALFKAm1QdBeP5Y8t94/osIi6Ey', '90011234', '1945-08-15');
 -- Sample PIN: Bob123
--- Sample userId: 7
+-- Sample userId: 1
 
 /* Xin YI */
 CREATE TABLE Medications (
@@ -70,7 +70,6 @@ CREATE TABLE Records (
 INSERT INTO Records (userId, date, doctorName, diagnosis, notes, systolic, diastolic, bloodSugar, weight)
 VALUES 
 (1, '2025-07-25', 'Dr. Tan Wei Ming', 'High blood pressure', 'Monitor blood pressure every morning', 140, 90, NULL, NULL),
-(1, '2025-07-24', 'Dr. Siti Rahimah', 'Type 2 Diabetes', 'Avoid sugary drinks', NULL, NULL, 180, NULL),
-(1, '2025-07-20', 'Dr. Alex Ng', 'Knee pain', 'Apply ice pack if swelling continues', NULL, NULL, NULL, 75.5);
+(1, '2025-07-24', 'Dr. Siti Rahimah', 'Type 2 Diabetes', 'Avoid sugary drinks', NULL, NULL, 180, 75.5);
 
 /* Dalton */
