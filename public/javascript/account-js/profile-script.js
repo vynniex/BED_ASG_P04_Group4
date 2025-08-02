@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // const userData = localStorage.getItem('user');
   token = localStorage.getItem("token");
 
+  // Check if token exists 
+  if (!token) {
+    alert("You are not logged in. Please log in to view your profile.");
+    window.location.href = "../account/login.html"; // or wherever your login page is
+    return;
+  }
+
+  // Token exists (User is logged in)
   autofillUserDetails(token);
   getUserId(token);
     
@@ -18,7 +26,7 @@ async function goBack() {
 
 async function autofillUserDetails(token) {
     try {
-      const response = await fetch("/api/users/profile", {
+      const response = await fetch(`${apiBaseUrl}/api/users/profile`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -123,7 +131,6 @@ async function handleDeleteClick(event) {
     }
 };
 
-
 // logout user
 async function logoutUser() {
   const confirmLogout = confirm("Are you sure you want to log out?");
@@ -131,7 +138,6 @@ async function logoutUser() {
 
   try {
     localStorage.clear();
-
 
     // Redirect to login
     window.location.href = "../index.html";
