@@ -3,10 +3,13 @@ const API_BASE = 'http://localhost:3000';
 document.addEventListener("DOMContentLoaded", async () => {
   const recordsList = document.getElementById("records-list");
   const emptyState = document.querySelector(".record-empty-state");
+  const addRecordBtnContainer = document.getElementById("add-record-btn-container");
   const token = localStorage.getItem('token');
 
   // User is not logged in
   if (!token) {
+    if (addRecordBtnContainer) addRecordBtnContainer.style.display = "none";
+
     recordsList.innerHTML = `
       <div style="text-align:center; padding: 10px;">
         <p class="inter-regular">Please LOGIN or SIGNUP to view/add your medical records.</p>
@@ -30,71 +33,73 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (emptyState) emptyState.style.display = "none";
 
     return;
-  }
+  } else {
+    if (addRecordBtnContainer) addRecordBtnContainer.style.display = "block";
 
-  // User is logged in, fetch records
-  try {
-    const response = await fetch(`${API_BASE}/api/records`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
+    // User is logged in, fetch records
+    try {
+      const response = await fetch(`${API_BASE}/api/records`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
       }
-    });
+      const records = await response.json();
 
-    if (!response.ok) {
-      throw new Error(`HTTP error status: ${response.status}`);
-    }
-    const records = await response.json();
+      if (records.length === 0) {
+        emptyState.style.display = "block";
+        recordsList.style.display = "none";
+      } else {
+        emptyState.style.display = "none";
+        recordsList.style.display = "block";
+        recordsList.innerHTML = ""; // clear before appending
 
-    if (records.length === 0) {
+        // Add each medical record to page
+        records.forEach(record => {
+          const recordCard = renderRecordCard(record);
+          recordsList.appendChild(recordCard);
+        });
+
+        // Event listeners for delete buttons
+        document.querySelectorAll(".btn-remove").forEach(btn => {
+          btn.addEventListener("click", async (e) => {
+            const id = e.target.closest('.record-card').dataset.id;
+            if (confirm("Are you sure you want to delete this record?")) {
+              try {
+                const delRes = await fetch(`${API_BASE}/api/records/${id}`, {
+                  method: "DELETE",
+                  headers: {
+                    "Authorization": `Bearer ${token}`
+                  }
+                });
+                if (!delRes.ok) throw new Error("Failed to delete record");
+                alert("Record has been deleted successfully.");
+                location.reload();
+              } catch (err) {
+                alert("Error deleting record: " + err.message);
+              }
+            }
+          });
+        });
+
+        // Event listeners for edit buttons
+        document.querySelectorAll(".btn-edit").forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            const id = e.target.closest('.record-card').dataset.id;
+            window.location.href = `edit-record.html?id=${encodeURIComponent(id)}`;
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch records:", error);
+      emptyState.innerHTML = `<h2 class="inter-regular">Error loading medical records. Please try again later.</h2>`;
       emptyState.style.display = "block";
       recordsList.style.display = "none";
-    } else {
-      emptyState.style.display = "none";
-      recordsList.style.display = "block";
-      recordsList.innerHTML = ""; // clear before appending
-
-      // Add each medical record to page
-      records.forEach(record => {
-        const recordCard = renderRecordCard(record);
-        recordsList.appendChild(recordCard);
-      });
-
-      // Event listeners for delete buttons
-      document.querySelectorAll(".btn-remove").forEach(btn => {
-        btn.addEventListener("click", async (e) => {
-          const id = e.target.closest('.record-card').dataset.id;
-          if (confirm("Are you sure you want to delete this record?")) {
-            try {
-              const delRes = await fetch(`${API_BASE}/api/records/${id}`, {
-                method: "DELETE",
-                headers: {
-                  "Authorization": `Bearer ${token}`
-                }
-              });
-              if (!delRes.ok) throw new Error("Failed to delete record");
-              alert("Record has been deleted successfully.");
-              location.reload();
-            } catch (err) {
-              alert("Error deleting record: " + err.message);
-            }
-          }
-        });
-      });
-
-      // Event listeners for edit buttons
-      document.querySelectorAll(".btn-edit").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          const id = e.target.closest('.record-card').dataset.id;
-          window.location.href = `edit-record.html?id=${encodeURIComponent(id)}`;
-        });
-      });
     }
-  } catch (error) {
-    console.error("Failed to fetch records:", error);
-    emptyState.innerHTML = `<h2 class="inter-regular">Error loading medical records. Please try again later.</h2>`;
-    emptyState.style.display = "block";
-    recordsList.style.display = "none";
   }
 });
 
