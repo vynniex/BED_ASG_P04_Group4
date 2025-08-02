@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courgette&family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Marck+Script&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css" />
+    <title>Edit Profile</title>
+  </head>
+  <body>
+    <nav class="navbar inter-regular">
+      <ul>
+        <li><a href="../index.html">HOME</a></li>
+        <li><a href="../med-records/records.html">RECORDS</a></li>
+        <li><a href="../medicine/medicine.html">MEDICATION</a></li>
+        <li><a href="../appointments/appointments.html">APPOINTMENTS</a></li>
+      </ul>
+    </nav>
+
+    <section id="profile-section">
+        <div>
+            <h2 class="merriweather-sans-regular">Profile</h2>
+        </div>
+
+        <div id="profile-container" class="lato-regular">
+            <div class="profile-icon">
+                <img src="../user.png" width="150px" height="150px" alt="User Icon">
+            </div>
+
+            <form id="edit-profile-form" class="lato-regular">
+                <div class="profile-row">
+                    <label for="full-name">Full Name:</label>
+                    <input type="text" id="full-name" name="full_name" required />
+                </div>
+
+                <div class="profile-row">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required />
+                </div>
+
+                <div class="profile-row">
+                    <label for="contact-num">Contact Number:</label>
+                    <input type="tel" id="contact-num" name="contact_num" pattern="[0-9]{8}" title="Enter 8 digit Singapore contact number" required />
+                </div>
+
+                <div class="profile-row">
+                    <label for="dob">DOB:</label>
+                    <input type="date" id="dob" name="dob" required />
+                </div>
+
+                <div class="form-actions merriweather-sans-regular">
+                    <button type="submit" class="save-btn">Save</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+                </form>
+    </section>
+
+    <script src="../../javascript/account-js/editProfile-script.js"></script>
+  </body>
+</html>

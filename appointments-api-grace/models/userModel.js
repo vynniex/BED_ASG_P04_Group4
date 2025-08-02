@@ -84,7 +84,43 @@ let connection;
   }
 }
 
-// Delete User
+// Update user by Id
+async function updateUserById(userId, updatedData) {
+  let connection;
+  try {
+    connection = await sql.connect(dbConfig);
+    const query = `
+      UPDATE Users
+      SET full_name = @full_name,
+          email = @email,
+          contact_num = @contact_num,
+          dob = @dob
+      WHERE userId = @userId`;
+
+    const request = connection.request();
+    request.input("userId", userId);
+    request.input("full_name", updatedData.fullName);
+    request.input("email", updatedData.email);
+    request.input("contact_num", updatedData.contact);
+    request.input("dob", updatedData.dob);
+
+    const result = await request.query(query);
+    return result.rowsAffected[0];
+  } catch (error) {
+    console.error("Database error (updateUserById): ", error);
+    throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error("Error closing DB: ", err);
+      }
+    }
+  }
+}
+
+// Delete User by Id
 async function deleteUserById(userId) {
   let connection;
   try {
@@ -113,5 +149,6 @@ module.exports = {
     createUser,
     findUserByEmail,
     findUserById,
+    updateUserById,
     deleteUserById
 }

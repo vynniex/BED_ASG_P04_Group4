@@ -14,11 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Token exists (User is logged in)
   autofillUserDetails(token);
   getUserId(token);
-    
+  
+  document.querySelector(".edit-btn").addEventListener("click", () => {
+    window.location.href = "../account/edit-profile.html";
+  });
+  
   document.querySelector(".delete-btn").addEventListener("click", handleDeleteClick);
 });
-
-
 
 async function goBack() {
     window.location.href = "../index.html";

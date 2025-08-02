@@ -49,14 +49,15 @@ app.post("/api/appointments/verify", verifyJWT, userController.verify);
 app.post("/api/users/login", validateLogin, userController.loginUser);
 app.post("/api/users/signup", userController.createUser);
 app.get("/api/users/profile", verifyJWT, userController.getUserDetailsById);
+app.put("/api/users/profile", verifyJWT, userController.updateUserById);
 app.delete("/api/users/:id", userController.deleteUserById);
 
 // MEDICAL RECORDS ROUTES - XN
-app.get("/api/records", recsController.getAllRecords);
-app.get("/api/records/:id", recsController.getRecordById);
-app.post("/api/records", validateRecord, recsController.createRecord);
-app.put("/api/records/:id", validateRecord, recsController.updateRecordById);
-app.delete("/api/records/:id", recsController.deleteRecordById);
+app.get("/api/records", verifyJWT, recsController.getAllRecords);
+app.get("/api/records/:id", verifyJWT, recsController.getRecordById);
+app.post("/api/records",verifyJWT, validateRecord, recsController.createRecord);
+app.put("/api/records/:id", verifyJWT, validateRecord, recsController.updateRecordById);
+app.delete("/api/records/:id", verifyJWT, recsController.deleteRecordById);
 
 // NOTIFICATION ROUTES - Dalton
 app.post("/api/notifications", validateNotif, notifsController.createNotification);

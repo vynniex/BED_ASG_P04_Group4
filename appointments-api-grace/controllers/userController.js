@@ -116,6 +116,33 @@ async function getUserDetailsById(req,res) {
   }
 }
 
+// Update user by Id
+async function updateUserById(req, res) {
+  const userId = req.user.id;
+  const { full_name, email, contact_num, dob } = req.body;
+
+  try {
+    if (!full_name || !email || !contact_num || !dob) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const updatedUser = await userModel.updateUserById(userId, {
+      fullName: full_name,
+      email: email,
+      contact: contact_num,
+      dob: dob
+    });
+
+    if (updatedUser === 0) {
+      return res.status(404).json({ message: "User not found or update failed." });
+    }
+
+    return res.status(200).json({ message: "User profile updated successfully." });
+  } catch (error) {
+    console.error("Controller error:", error);
+    return res.status(500).json({ message: "Server error while updating profile." });
+}}
+
 // Delete user by Id
 async function deleteUserById(req,res) {
   try {
@@ -146,5 +173,6 @@ module.exports = {
     loginUser,
     verify,
     getUserDetailsById,
+    updateUserById,
     deleteUserById
 }
