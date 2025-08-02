@@ -72,21 +72,17 @@ VALUES
 (1, '2025-07-25', 'Dr. Tan Wei Ming', 'High blood pressure', 'Monitor blood pressure every morning', 140, 90, NULL, NULL),
 (1, '2025-07-24', 'Dr. Siti Rahimah', 'Type 2 Diabetes', 'Avoid sugary drinks', NULL, NULL, 180, 75.5);
 
-/* Dalton - Reminders Table */
-CREATE TABLE Reminders (
-    reminderId INT PRIMARY KEY IDENTITY(1,1),
+/* Dalton - Notifications Table */
+CREATE TABLE Notifications (
+    notificationId INT PRIMARY KEY IDENTITY(1,1),
     userId INT NOT NULL,
     reminderType VARCHAR(50) NOT NULL,
     reminderTitle VARCHAR(100) NOT NULL,
     description NVARCHAR(MAX),
     reminderDate DATE NOT NULL,
-    reminderTime TIME NOT NULL,
+    reminderTimes NVARCHAR(MAX) NOT NULL, -- Changed to store multiple times as a JSON string
     timesPerDay INT,
-    frequency NVARCHAR(200), -- Storing as a JSON string array e.g., '["Daily", "Weekly"]'
+    frequency NVARCHAR(200),
     createdAt DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (userId) REFERENCES Users(userId) ON DELETE CASCADE
 );
-
--- Sample insert for a reminder
-INSERT INTO Reminders (userId, reminderType, reminderTitle, description, reminderDate, reminderTime, timesPerDay, frequency)
-VALUES (1, 'Medication', 'Take Panadol', 'For headache relief', '2025-09-15', '10:00:00', 2, '["Daily"]');

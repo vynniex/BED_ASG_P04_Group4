@@ -1,34 +1,40 @@
 const sql = require('mssql');
-const dbConfig = require('../../dbConfig'); // Path to your db config
+const dbConfig = require('../../dbConfig'); 
 
-// NOTE: In a real app, you'd get this from the logged-in user's session/token.
-const TEMP_USER_ID = 1; // Placeholder for the logged-in user's ID
+const TEMP_USER_ID = 1;
 
-// Helper function to parse frequency
-const parseFrequency = (notification) => {
-    if (notification && notification.frequency) {
-        try {
-            notification.frequency = JSON.parse(notification.frequency);
-        } catch (e) {
-            console.error(`Failed to parse frequency for notification ${notification.notificationId}:`, e);
-            notification.frequency = []; // Default to empty array on error
+// Helper function to parse JSON fields from the database
+const parseJSONFields = (notification) => {
+    if (notification) {
+        // Parse frequency
+        if (notification.frequency) {
+            try {
+                notification.frequency = JSON.parse(notification.frequency);
+            } catch (e) {
+                notification.frequency = [];
+            }
+        }
+        // Parse reminderTimes
+        if (notification.reminderTimes) {
+            try {
+                notification.reminderTimes = JSON.parse(notification.reminderTimes);
+            } catch (e) {
+                notification.reminderTimes = [];
+            }
         }
     }
     return notification;
 };
 
-
-// CREATE: Add a new notification to the SQL database
+// CREATE: Add a new notification
 const addNotif = async (notifData) => {
-  // The frontend sends 'type', 'date', 'time' etc. but the DB columns are named for reminders.
-  // We'll map them here. The frontend uses 'reminderTitle', etc.
-  const { reminderType, reminderTitle, description, date, time, timesPerDay, frequency } = notifData;
+  const { reminderType, reminderTitle, description, date, reminderTimes, timesPerDay, frequency } = notifData;
   const connection = await sql.connect(dbConfig);
   try {
     const query = `
-      INSERT INTO Notifications (userId, reminderType, reminderTitle, description, reminderDate, reminderTime, timesPerDay, frequency)
-      OUTPUT INSERTED.notificationId, INSERTED.userId, INSERTED.reminderType, INSERTED.reminderTitle, INSERTED.description, INSERTED.reminderDate, INSERTED.reminderTime, INSERTED.timesPerDay, INSERTED.frequency
-      VALUES (@userId, @reminderType, @reminderTitle, @description, @reminderDate, @reminderTime, @timesPerDay, @frequency);
+      INSERT INTO Notifications (userId, reminderType, reminderTitle, description, reminderDate, reminderTimes, timesPerDay, frequency)
+      OUTPUT INSERTED.*
+      VALUES (@userId, @reminderType, @reminderTitle, @description, @reminderDate, @reminderTimes, @timesPerDay, @frequency);
     `;
     const result = await connection.request()
       .input('userId', sql.Int, TEMP_USER_ID)
@@ -36,27 +42,26 @@ const addNotif = async (notifData) => {
       .input('reminderTitle', sql.VarChar, reminderTitle)
       .input('description', sql.NVarChar, description)
       .input('reminderDate', sql.Date, date)
-      .input('reminderTime', sql.Time, time)
+      .input('reminderTimes', sql.NVarChar, JSON.stringify(reminderTimes || []))
       .input('timesPerDay', sql.Int, timesPerDay)
-      .input('frequency', sql.NVarChar, JSON.stringify(frequency || [])) // Store frequency array as a JSON string
+      .input('frequency', sql.NVarChar, JSON.stringify(frequency || []))
       .query(query);
       
-    return parseFrequency(result.recordset[0]);
+    return parseJSONFields(result.recordset[0]);
   } finally {
     await connection.close();
   }
 };
 
-// READ: Get all notifications from the SQL database for a user
+// READ: Get all notifications
 const getAllNotifs = async () => {
   const connection = await sql.connect(dbConfig);
   try {
     const result = await connection.request()
       .input('userId', sql.Int, TEMP_USER_ID)
-      .query('SELECT notificationId, reminderType, reminderTitle, description, reminderDate, reminderTime, timesPerDay, frequency FROM Notifications WHERE userId = @userId');
+      .query('SELECT * FROM Notifications WHERE userId = @userId');
     
-    // Parse frequency string back to array for each notification
-    return result.recordset.map(parseFrequency);
+    return result.recordset.map(parseJSONFields);
   } finally {
     await connection.close();
   }
@@ -68,17 +73,17 @@ const getNotifById = async (id) => {
   try {
     const result = await connection.request()
       .input('id', sql.Int, id)
-      .query('SELECT notificationId, reminderType, reminderTitle, description, reminderDate, reminderTime, timesPerDay, frequency FROM Notifications WHERE notificationId = @id');
+      .query('SELECT * FROM Notifications WHERE notificationId = @id');
     
-    return parseFrequency(result.recordset[0]);
+    return parseJSONFields(result.recordset[0]);
   } finally {
     await connection.close();
   }
 };
 
-// UPDATE: Update a notification in the SQL database by its ID
+// UPDATE: Update a notification by ID
 const updateNotifById = async (id, notifData) => {
-  const { reminderType, reminderTitle, description, date, time, timesPerDay, frequency } = notifData;
+  const { reminderType, reminderTitle, description, date, reminderTimes, timesPerDay, frequency } = notifData;
   const connection = await sql.connect(dbConfig);
   try {
     const query = `
@@ -88,7 +93,7 @@ const updateNotifById = async (id, notifData) => {
         reminderTitle = @reminderTitle,
         description = @description,
         reminderDate = @reminderDate,
-        reminderTime = @reminderTime,
+        reminderTimes = @reminderTimes,
         timesPerDay = @timesPerDay,
         frequency = @frequency
       WHERE notificationId = @id;
@@ -99,18 +104,18 @@ const updateNotifById = async (id, notifData) => {
       .input('reminderTitle', sql.VarChar, reminderTitle)
       .input('description', sql.NVarChar, description)
       .input('reminderDate', sql.Date, date)
-      .input('reminderTime', sql.Time, time)
+      .input('reminderTimes', sql.NVarChar, JSON.stringify(reminderTimes || []))
       .input('timesPerDay', sql.Int, timesPerDay)
       .input('frequency', sql.NVarChar, JSON.stringify(frequency || []))
       .query(query);
       
-    return { notificationId: id, ...notifData }; // Return the updated data
+    return { notificationId: id, ...notifData };
   } finally {
     await connection.close();
   }
 };
 
-// DELETE: Delete a notification from the SQL database by its ID
+// DELETE: Delete a notification by ID
 const deleteNotifById = async (id) => {
   const connection = await sql.connect(dbConfig);
   try {

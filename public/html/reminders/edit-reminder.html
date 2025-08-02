@@ -22,7 +22,7 @@
     <div class="main-content form-page">
         <h2>Edit Reminder</h2>
         <form id="editReminderForm" class="reminder-form">
-            <input type="hidden" id="reminderId" name="id"> <!-- Hidden field to store reminder ID -->
+            <input type="hidden" id="reminderId" name="id">
 
             <div class="form-group">
                 <label for="editReminderType">Reminder Type :</label>
@@ -51,9 +51,12 @@
             </div>
 
             <div class="form-group">
-                <label for="editReminderTime">Time :</label>
-                <input type="time" id="editReminderTime" name="time" required>
+                <label for="timesPerDay">Times per day:</label>
+                <input type="number" id="timesPerDay" name="timesPerDay" min="1" value="1" required>
             </div>
+
+            <!-- This wrapper will hold the dynamically generated time inputs -->
+            <div id="timeInputsWrapper" class="form-group"></div>
 
             <div class="form-group">
                 <label>Frequency :</label>
