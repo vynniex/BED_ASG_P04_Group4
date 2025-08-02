@@ -49,14 +49,12 @@
             </div>
 
             <div class="form-group">
-                <label for="reminderTime">Time :</label>
-                <input type="time" id="reminderTime" name="time" required>
-            </div>
-
-            <div class="form-group">
                 <label for="timesPerDay">Times per day:</label>
                 <input type="number" id="timesPerDay" name="timesPerDay" min="1" value="1" required>
             </div>
+
+            <!-- This wrapper will hold the dynamically generated time inputs -->
+            <div id="timeInputsWrapper" class="form-group"></div>
 
             <div class="form-group">
                 <label>Frequency :</label>
