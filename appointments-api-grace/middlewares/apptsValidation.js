@@ -3,7 +3,6 @@ const Joi = require("joi"); // Import Joi for validation
 
 function verifyJWT(req, res, next) {
     const authHeader = req.headers.authorization;
-    console.log(authHeader);
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ message: "Unauthorized: Token missing" });
@@ -72,7 +71,7 @@ const apptSchema = Joi.object({
 
 // Middleware to validate appt data (for POST/PUT)
 function validateAppt(req, res, next) {
-  // Validate the request body against the bookSchema
+  // Validate the request body against the apptSchema
   const { error } = apptSchema.validate(req.body, { abortEarly: false }); // abortEarly: false collects all errors
 
   if (error) {
@@ -93,7 +92,7 @@ const loginSchema = Joi.object({
 })
 
 function validateLogin(req, res, next) {
-  // Validate the request body against the bookSchema
+  // Validate the request body against the loginSchema
   const { error } = loginSchema.validate(req.body, { abortEarly: false }); // abortEarly: false collects all errors
 
   if (error) {
