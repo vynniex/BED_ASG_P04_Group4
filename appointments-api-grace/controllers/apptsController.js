@@ -33,6 +33,7 @@ async function createAppointment(req, res) {
     const userId = req.user.id;
     console.log(req.user);
     console.log(req.user.id);
+    console.log(appointmentData);
         
     const newAppointment = await appointmentModel.createAppointment(userId, appointmentData);
     res.status(201).json(newAppointment);

@@ -1,7 +1,7 @@
 // userController.test.js
-const userController = require("../appointments-api-grace/controllers/userController");
-const apptsModel = require("../appointments-api-grace/models/apptsModel");
-const userModel = require("../appointments-api-grace/models/userModel");
+const userController = require("../../appointments-api-grace/controllers/userController");
+const apptsModel = require("../../appointments-api-grace/models/apptsModel");
+const userModel = require("../../appointments-api-grace/models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 

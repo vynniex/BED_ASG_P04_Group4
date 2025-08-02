@@ -40,6 +40,10 @@ Read - View account profile
 - dotenv:
 - firebase:
 - cors:
+- express:
+- joi:
+- jsonwebtoken:
+- mssql:
 
 ## External Sources Utilised
 - firebase

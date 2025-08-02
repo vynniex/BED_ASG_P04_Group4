@@ -1,6 +1,6 @@
 // userModel.test.js
 const { request } = require("express");
-const userModel = require("../appointments-api-grace/models/userModel");
+const userModel = require("../../appointments-api-grace/models/userModel");
 const sql = require("mssql");
 
 jest.mock("mssql"); // Mock the mssql library\

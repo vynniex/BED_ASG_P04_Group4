@@ -1,3 +1,5 @@
 node_modules
 .env
 firebase.js
+swagger.js
+swagger-output.json

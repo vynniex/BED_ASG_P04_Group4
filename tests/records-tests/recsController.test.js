@@ -1,5 +1,5 @@
-const recsController = require("../records-api-xuening/controllers/recsController");
-const recsModel = require("../records-api-xuening/models/recsModel");
+const recsController = require("../../records-api-xuening/controllers/recsController");
+const recsModel = require("../../records-api-xuening/models/recsModel");
 
 jest.mock("../records-api-xuening/models/recsModel");
 
