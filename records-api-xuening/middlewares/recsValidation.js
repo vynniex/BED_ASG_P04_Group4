@@ -48,19 +48,24 @@ const recordSchema = Joi.object({
     "string.base": "Notes must be a string",
     "string.max": "Notes must be within 100 characters",
   }),
-  weight: Joi.number().positive().precision(2).allow(null).optional().messages({
+  weight: Joi.number().min(30).max(300).precision(2).allow(null).optional().messages({
     "number.base": "Weight must be a number",
+    "number.min": "Weight is unrealistically low",
+    "number.max": "Weight is unrealistically high",
     "number.positive": "Weight must be a positive number",
   }),
-  bloodSugar: Joi.number().min(0).max(600).allow(null),
-  
+  bloodSugar: Joi.number().min(40).max(400).allow(null).optional().messages({
+    "number.base": "Blood sugar must be a number",
+    "number.min": "Blood sugar is too low to be realistic",
+    "number.max": "Blood sugar is too high to be realistic",
+  }),
   systolic: Joi.number().integer().min(70).max(250).allow(null).optional().messages({
     "number.base": "Systolic must be a number",
     "number.integer": "Systolic must be an integer",
     "number.min": "Systolic is too low",
     "number.max": "Systolic is too high",
   }),
-  diastolic: Joi.number().integer().min(40).max(150).allow(null).optional().messages({
+  diastolic: Joi.number().integer().min(60).max(150).allow(null).optional().messages({
     "number.base": "Diastolic must be a number",
     "number.integer": "Diastolic must be an integer",
     "number.min": "Diastolic is too low",

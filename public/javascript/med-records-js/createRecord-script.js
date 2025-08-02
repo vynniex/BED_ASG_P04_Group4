@@ -9,6 +9,17 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = '../../html/account/login.html';
     return;
   }
+
+  // Set default date to today
+  const dateInput = document.getElementById('date');
+  if (dateInput) {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    dateInput.value = `${yyyy}-${mm}-${dd}`;
+  }
+
   // Convert YYYY-MM-DD to DD-MM-YYYY
   function convertDateToDDMMYYYY(dateStr) {
     const [year, month, day] = dateStr.split("-");
