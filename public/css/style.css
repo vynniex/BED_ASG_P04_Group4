@@ -643,7 +643,6 @@ button {
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
-    transition: all 0.2s ease;
     flex: 0.3;
     font-weight: bold;
 }
@@ -900,4 +899,218 @@ button {
     margin-top: 1rem;
     width: 100%;
   }
+}
+
+/* ============================================================= */
+/* STYLES FOR HOME & REMINDER PAGES (Dalton's Pages) - APPENDED */
+/* ============================================================= */
+
+/* Hero Section (Home Page) */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    background-color: #EEE2DF;
+    padding: 40px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+}
+
+.hero-text h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.hero-text p {
+    font-size: 1.2em;
+    color: #555;
+}
+
+.hero-image img {
+    border-radius: 12px;
+    max-width: 250px;
+}
+
+/* Reminders Section (Home Page) */
+.reminders-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.reminders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.reminders-header h2 {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+}
+
+.add-new-reminder-btn {
+    background-color: #4A9ACB;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-new-reminder-btn:hover {
+    background-color: #3a8acb;
+}
+
+.reminder-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.reminder-item {
+    background-color: #F9F0EE;
+    border: 1px solid #E0D2CC;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.reminder-details h3 {
+    margin-top: 0;
+    font-family: "Inter", sans-serif;
+}
+
+.reminder-details p {
+    margin: 5px 0;
+    color: #444;
+}
+
+.reminder-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* General Form Styling for Reminder Pages */
+.form-page {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.form-page h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-family: "Inter", sans-serif;
+}
+
+/* Scoping .form-group to reminder forms to avoid conflicts */
+.reminder-form .form-group {
+    margin-bottom: 20px;
+}
+
+.reminder-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-family: "Merriweather Sans", sans-serif;
+}
+
+.reminder-form input[type="text"],
+.reminder-form input[type="date"],
+.reminder-form input[type="time"],
+.reminder-form input[type="number"],
+.reminder-form select,
+.reminder-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.reminder-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+#timeInputsWrapper .form-group-inline {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+#timeInputsWrapper label {
+    margin-bottom: 0;
+    flex-basis: 80px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Scoping this label to avoid conflict */
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.form-actions button {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+
+.form-actions button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+}
+
+.form-actions button[type="button"] {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* User section on home page */
+#user-section {
+    text-align: center;
+    margin-bottom: 20px;
 }
