@@ -35,7 +35,7 @@ form.addEventListener('submit', async (event) => {
 
       // After login success
       localStorage.setItem('token', data.token);
-      window.location.href = "index.html";
+      window.location.href = "../index.html";
 
 
     } catch (error) {

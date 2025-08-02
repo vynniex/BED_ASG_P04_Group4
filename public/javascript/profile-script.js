@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 async function goBack() {
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
 }
 
 async function autofillUserDetails(token) {
@@ -130,12 +130,11 @@ async function logoutUser() {
   if (!confirmLogout) return;
 
   try {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.clear();
 
 
     // Redirect to login
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
   } catch (error) {
     console.error("Logout failed:", error);
     alert("Something went wrong while logging out.");
