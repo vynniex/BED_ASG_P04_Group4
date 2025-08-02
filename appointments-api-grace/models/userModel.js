@@ -69,7 +69,7 @@ let connection;
     request.input("userId", userId);
     const result = await request.query(query);
 
-    return result.recordset[0]; // Return all users with that name
+    return result.recordset[0]; // Return all users with that userId
   } catch(error) {
     console.error("Database error: ", error);
     throw error;
