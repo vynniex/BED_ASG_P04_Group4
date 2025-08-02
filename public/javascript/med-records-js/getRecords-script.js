@@ -1,9 +1,46 @@
+const API_BASE = 'http://localhost:3000';
+
 document.addEventListener("DOMContentLoaded", async () => {
   const recordsList = document.getElementById("records-list");
   const emptyState = document.querySelector(".record-empty-state");
+  const token = localStorage.getItem('token');
 
+  // User is not logged in
+  if (!token) {
+    recordsList.innerHTML = `
+      <div style="text-align:center; padding: 10px;">
+        <p class="inter-regular">Please LOGIN or SIGNUP to view/add your medical records.</p>
+        <button id="login-redirect-btn" style="
+          padding: 5px 20px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+        ">Go to Login</button>
+      </div>
+    `;
+
+    document.getElementById('login-redirect-btn').addEventListener('click', () => {
+      window.location.href = '../../html/account/login.html';
+    });
+
+    // Hide the empty state, since we are showing a custom message here
+    if (emptyState) emptyState.style.display = "none";
+
+    return;
+  }
+
+  // User is logged in, fetch records
   try {
-    const response = await fetch("http://localhost:3000/api/records");
+    const response = await fetch(`${API_BASE}/api/records`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error status: ${response.status}`);
     }
@@ -17,19 +54,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       recordsList.style.display = "block";
       recordsList.innerHTML = ""; // clear before appending
 
+      // Add each medical record to page
       records.forEach(record => {
-        const recordCard = createRecordCard(record);
+        const recordCard = renderRecordCard(record);
         recordsList.appendChild(recordCard);
       });
 
-      // Add event listeners for delete buttons
+      // Event listeners for delete buttons
       document.querySelectorAll(".btn-remove").forEach(btn => {
         btn.addEventListener("click", async (e) => {
           const id = e.target.closest('.record-card').dataset.id;
           if (confirm("Are you sure you want to delete this record?")) {
             try {
-              const delRes = await fetch(`http://localhost:3000/api/records/${id}`, {
-                method: "DELETE"
+              const delRes = await fetch(`${API_BASE}/api/records/${id}`, {
+                method: "DELETE",
+                headers: {
+                  "Authorization": `Bearer ${token}`
+                }
               });
               if (!delRes.ok) throw new Error("Failed to delete record");
               alert("Record has been deleted successfully.");
@@ -41,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
       });
 
-      // Add event listeners for edit buttons
+      // Event listeners for edit buttons
       document.querySelectorAll(".btn-edit").forEach(btn => {
         btn.addEventListener("click", (e) => {
           const id = e.target.closest('.record-card').dataset.id;
@@ -57,7 +98,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-function createRecordCard(record) {
+// Render/build an existing saved medical record
+function renderRecordCard(record) {
   const card = document.createElement('div');
   card.classList.add('record-card');
   card.dataset.id = record.recordId || record.id;
@@ -83,6 +125,5 @@ function createRecordCard(record) {
       <button class="btn-remove inter-regular">REMOVE</button>
     </div>
   `;
-
   return card;
 }
