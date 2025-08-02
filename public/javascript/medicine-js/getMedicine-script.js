@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!token) {
         medicineListEl.innerHTML = `
       <div style="text-align:center; padding: 10px;">
-        <p class="inter-regular">Please LOGIN or SIGNUP to view/add your medicines</p>
+        <p class="inter-regular">Please LOGIN or SIGNUP to view/add your medicines.</p>
         <button id="login-redirect-btn" style="
           padding: 5px 20px;
           background-color: #007bff;
