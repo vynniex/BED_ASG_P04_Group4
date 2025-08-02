@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
         document.getElementById('login-redirect-btn').addEventListener('click', () => {
-            window.location.href = '../login.html';
+            window.location.href = '../../html/account/login.html';
         });
         return;
     }
