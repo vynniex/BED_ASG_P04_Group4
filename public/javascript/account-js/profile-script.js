@@ -112,7 +112,7 @@ async function handleDeleteClick(event) {
       if (response.status === 204) {
         alert("Account deleted successfully.");
         localStorage.clear();
-        window.location.href = "index.html";
+        window.location.href = "../index.html";
       }
       else if (response.status === 400) {
         alert("User still has exisitng appointments and cannot be deleted.");

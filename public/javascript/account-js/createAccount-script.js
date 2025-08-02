@@ -39,6 +39,7 @@ signUpForm.addEventListener("submit", async (event) => {
         if (response.status === 201) {
             alert("User created successfully!");
             console.log("Created User:", responseBody);
+            window.location.href = "../../html/account/login.html";
 
             signUpForm.reset();
         } else if (response.status === 400) {
