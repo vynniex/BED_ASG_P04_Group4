@@ -1,10 +1,11 @@
 const recsModel = require("../models/recsModel");
 const { isDuplicateDate } = require("../models/recsModel");
 
-// GET all records
+// GET all records from logged in user
 async function getAllRecords(req, res) {
+  const userId = req.user.id;  // get userId from verified JWT
   try {
-    const records = await recsModel.getAllRecords();
+    const records = await recsModel.getRecordsByUserId(userId);
     res.json(records);
   } catch (error) {
     console.error("Controller error:", error);
@@ -12,8 +13,9 @@ async function getAllRecords(req, res) {
   }
 }
 
-// GET record by ID
+// GET record by recordId
 async function getRecordById(req, res) {
+  const userId = req.user.id;
   try {
     const id = parseInt(req.params.id);
     if (isNaN(id)) {
@@ -25,6 +27,11 @@ async function getRecordById(req, res) {
       return res.status(404).json({ error: "Record not found" });
     }
 
+    // Check if the record belongs to the logged-in user
+    if (record.userId !== userId) {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
     res.json(record);
   } catch (error) {
     console.error("Controller error:", error);
@@ -34,12 +41,16 @@ async function getRecordById(req, res) {
 
 // POST a new record
 async function createRecord(req, res) {
+  const userId = req.user.id;
   const data = req.body;
   if (!data) return res.status(400).json({ message: "Missing record data" });
 
+  // Override client data
+  data.userId = userId; 
+
   try {
     // Check for duplicate date for the user before creating
-    const duplicate = await isDuplicateDate(data.userId, data.date);
+    const duplicate = await isDuplicateDate(userId, data.date);
     if (duplicate) {
       return res.status(400).json({ error: "A record for this date already exists." });
     }
@@ -54,12 +65,26 @@ async function createRecord(req, res) {
 
 // UPDATE record by ID 
 async function updateRecordById(req, res) {
+  const userId = req.user.id;
   try {
     const id = parseInt(req.params.id);
 
     if (isNaN(id) || id <= 0) {
       return res.status(400).json({ error: "Invalid record ID" });
     }
+
+    const existingRecord = await recsModel.getRecordById(id);
+    if (!existingRecord) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+
+    if (existingRecord.userId !== userId) {
+      return res.status(403).json({ error: "Access denied" });
+    }
+
+    // Override userId with logged-in user ID
+    const data = req.body;
+    data.userId = userId;
 
     // Check for duplicate date excluding this record's own id
     const duplicate = await isDuplicateDate(req.body.userId, req.body.date, id);
@@ -81,10 +106,18 @@ async function updateRecordById(req, res) {
 
 // DELETE record by ID
 async function deleteRecordById(req, res) {
+  const userId = req.user.id;
   try {
     const id = req.params.id;
     if (!id) {
       return res.status(400).json({ error: "Invalid record ID" });
+    }
+
+    const existingRecord = await recsModel.getRecordById(id);
+    if (!existingRecord) return res.status(404).json({ error: "Record not found" });
+
+    if (existingRecord.userId !== userId) {
+      return res.status(403).json({ error: "Access denied" });
     }
 
     const result = await recsModel.deleteRecordById(id);

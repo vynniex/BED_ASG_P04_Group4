@@ -59,7 +59,25 @@ async function getAllRecords() {
   }
 }
 
-// GET record by ID
+// GET record by userId
+async function getRecordsByUserId(userId) {
+  let connection;
+  try {
+    connection = await sql.connect(dbConfig);
+    const query = `SELECT * FROM Records WHERE userId = @userId`;
+    const request = connection.request();
+    request.input("userId", sql.Int, userId);
+    const result = await request.query(query);
+    return result.recordset;
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  } finally {
+    if (connection) await connection.close();
+  }
+}
+
+// GET record by recordId
 async function getRecordById(id) {
   let connection;
   try {
@@ -207,6 +225,7 @@ async function deleteRecordById(id) {
 module.exports = {
   isDuplicateDate,
   getAllRecords,
+  getRecordsByUserId,
   getRecordById,
   createRecord,
   updateRecordById,
