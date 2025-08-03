@@ -36,10 +36,10 @@ Update - Update user account details by userId
 
 ### Seah Yi Kit Dalton
 Reminders:
-Create - 
-Read - 
-Update - 
-Delete - 
+Create - Create Medical Reminders
+Read - Get all Medical Reminders
+Update - Update Medical Reminders by notifID
+Delete - Update Medical Reminders by notifID
 
 ### Chua Wee Teng Grace
 Appointments:
