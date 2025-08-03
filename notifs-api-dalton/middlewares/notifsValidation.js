@@ -1,7 +1,7 @@
-// Renamed to validateNotif to match the context
+// This validation is updated to handle multiple time inputs.
 const validateNotif = (req, res, next) => {
-  // Fields based on the wireframe for "Create New Reminder"
-  const { reminderType, reminderTitle, description, date, time, frequency } = req.body;
+  // Fields based on the "Create New Reminder" form with multiple times
+  const { reminderType, reminderTitle, description, date, reminderTimes, timesPerDay } = req.body;
   const errors = [];
 
   if (!reminderType) {
@@ -16,11 +16,12 @@ const validateNotif = (req, res, next) => {
   if (!date) {
     errors.push("Date is required.");
   }
-  if (!time) {
-    errors.push("Time is required.");
+  // Check for the array of times instead of a single time
+  if (!reminderTimes || !Array.isArray(reminderTimes) || reminderTimes.length === 0) {
+    errors.push("At least one reminder time is required.");
   }
-  if (!frequency) {
-    errors.push("Frequency is required.");
+  if (timesPerDay === undefined || timesPerDay === null) {
+    errors.push("Times per day is required.");
   }
 
   if (errors.length > 0) {

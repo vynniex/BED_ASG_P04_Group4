@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             if (!response.ok) throw new Error('Failed to update reminder.');
             showToast('Reminder updated successfully!', 'success');
-            window.location.href = '../../index.html';
+            window.location.href = '../index.html';
         } catch (error) {
             showToast(error.message, 'error');
         }

@@ -25,11 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Function to fetch and display reminders ---
     async function loadReminders() {
-        // In a real application, you would send the token to the server
-        // to get reminders for the logged-in user.
-        // const headers = { 'Authorization': `Bearer ${token}` };
         try {
-            const response = await fetch(API_BASE_URL); // Add { headers } if your API requires it
+            const response = await fetch(API_BASE_URL); 
             if (!response.ok) {
                 if (response.status === 401 || response.status === 403) {
                     throw new Error('Authentication error. Please log in again.');
@@ -57,8 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const reminderEl = document.createElement('div');
             reminderEl.className = 'reminder-item';
             
-            const reminderDate = new Date(reminder.reminderDate).toLocaleDateString('en-CA');
-            let reminderTime = reminder.reminderTime.substring(0, 5);
+            const reminderDate = new Date(reminder.reminderDate).toLocaleString('en-CA');
+            
+            // --- FIX: This section is updated to handle the array of times ---
+            // It joins the array of times into a single string for display.
+            const timesText = Array.isArray(reminder.reminderTimes) && reminder.reminderTimes.length > 0
+                ? reminder.reminderTimes.join(', ')
+                : 'No time set';
+            
             const frequencyText = Array.isArray(reminder.frequency) ? reminder.frequency.join(', ') : 'Not set';
 
             reminderEl.innerHTML = `
@@ -67,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p><strong>Type:</strong> ${reminder.reminderType}</p>
                     <p><strong>Description:</strong> ${reminder.description || 'N/A'}</p>
                     <p><strong>Date:</strong> ${reminderDate}</p>
-                    <p><strong>Time:</strong> ${reminderTime}</p>
+                    <p><strong>Times:</strong> ${timesText}</p> 
                     <p><strong>Frequency:</strong> ${frequencyText}</p>
                 </div>
                 <div class="reminder-actions">
@@ -126,22 +129,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initial Load based on Authentication State ---
     if (token) {
-        // User is logged in
         userSection.innerHTML = `<button class="profile-button">My Profile</button>`;
         document.querySelector(".profile-button").addEventListener('click', () => {
-            window.location.href = "account/profile.html"; // Adjusted path
+            window.location.href = "account/profile.html"; 
         });
-        // Load reminders for the logged-in user
         loadReminders();
     } else {
-        // User is not logged in
         userSection.innerHTML = `<button class="login-button">Login</button>`;
         document.querySelector(".login-button").addEventListener('click', () => {
-            window.location.href = 'account/login.html'; // Adjusted path
+            window.location.href = 'account/login.html';
         });
-        // Display a message to log in
         remindersContainer.innerHTML = '<p>Please log in to view and manage your reminders.</p>';
-        // Hide the "Add New Reminder" button if the user is not logged in
         const addNewBtn = document.querySelector('.add-new-reminder-btn');
         if (addNewBtn) {
             addNewBtn.style.display = 'none';
