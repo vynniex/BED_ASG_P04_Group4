@@ -3,6 +3,7 @@ USE bed_asg1_db;
 DROP TABLE IF EXISTS Medications;
 DROP TABLE IF EXISTS Records;
 DROP TABLE IF EXISTS Appointments;
+DROP TABLE IF EXISTS Notifications;
 DROP TABLE IF EXISTS Users;
 
 /* Login User info */
