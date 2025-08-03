@@ -62,15 +62,15 @@ Read - View account profile
 - mssql
 
 ## External Sources Utilised
-**Designing**
+1. Designing**
 - Figma [https://www.figma.com/]
-**API Testing**
+1. API Testing**
 - Postman [https://www.postman.com/]
-**Database and Storage**
+1. Database and Storage**
 - Microsoft SQL Server (MSSQL) [https://www.microsoft.com/sql-server]
-**Version Control**
+1. Version Control**
 GitHub [https://github.com/]
-**AI & Assistant Tools**
+1. AI & Assistant Tools**
 - ChatGPT [https://chat.openai.com/]
 - Google Gemini [https://gemini.google.com/]
 
