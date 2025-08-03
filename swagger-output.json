@@ -13,13 +13,47 @@
   "paths": {
     "/api/medications": {
       "post": {
-        "tags": ["Medications"],
-        "description": " Create medication record",
+        "tags": [
+          "Medications"
+        ],
+        "description": "Create a new medication record",
         "parameters": [
           {
             "name": "authorization",
             "in": "header",
-            "type": "string"
+            "type": "string",
+            "description": "Bearer token for authentication"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "The medication data to create.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "medicine_name": {
+                  "type": "string",
+                  "example": "Aspirin"
+                },
+                "purpose": {
+                  "type": "string",
+                  "example": "Pain Relief"
+                },
+                "per_day": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "food_timing": {
+                  "type": "string",
+                  "example": "after",
+                  "enum": [
+                    "before",
+                    "after"
+                  ]
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -34,12 +68,17 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict - Medicine already exists"
           }
         }
       },
       "get": {
-        "tags": ["Medications"],
-        "description": "Get all Medicine records by user",
+        "tags": [
+          "Medications"
+        ],
+        "description": "Get all of the logged-in user's medicine records",
         "parameters": [
           {
             "name": "authorization",
@@ -50,9 +89,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -68,14 +104,16 @@
     },
     "/api/medications/id/{medId}": {
       "get": {
-        "tags": ["Medications"],
-        "description": "",
+        "tags": [
+          "Medications"
+        ],
+        "description": "Get a single medicine record by its ID",
         "parameters": [
           {
             "name": "medId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "authorization",
@@ -87,9 +125,6 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "401": {
             "description": "Unauthorized"
           },
@@ -98,26 +133,56 @@
           },
           "404": {
             "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       },
       "put": {
-        "tags": ["Medications"],
-        "description": "update medicine records",
+        "tags": [
+          "Medications"
+        ],
+        "description": "Update an existing medicine record by its ID",
         "parameters": [
           {
             "name": "medId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "The medication data to update.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "medicine_name": {
+                  "type": "string",
+                  "example": "Ibuprofen"
+                },
+                "purpose": {
+                  "type": "string",
+                  "example": "Headache Relief"
+                },
+                "per_day": {
+                  "type": "integer",
+                  "example": 3
+                },
+                "food_timing": {
+                  "type": "string",
+                  "example": "after",
+                  "enum": [
+                    "before",
+                    "after"
+                  ]
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -139,14 +204,16 @@
         }
       },
       "delete": {
-        "tags": ["Medications"],
-        "description": "delete medicine record",
+        "tags": [
+          "Medications"
+        ],
+        "description": "Delete a medicine record by its ID",
         "parameters": [
           {
             "name": "medId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "name": "authorization",
@@ -157,9 +224,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
