@@ -8,7 +8,7 @@ const sql = require("mssql");
 dotenv.config();
 
 const medsController = require("./medicine-api-xinyi/controllers/medsController.js");
-const { validateMedInput, validateMedName } = require("./medicine-api-xinyi/middlewares/medsValidation.js");
+const { validateMedInput } = require("./medicine-api-xinyi/middlewares/medsValidation.js");
 
 const apptController = require("./appointments-api-grace/controllers/apptsController.js");
 const userController = require("./appointments-api-grace/controllers/userController.js");

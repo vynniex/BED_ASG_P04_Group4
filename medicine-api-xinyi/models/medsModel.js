@@ -117,25 +117,10 @@ async function deleteMedById(medId) {
   }
 }
 
-// This function is kept in case it's needed for other features, but is not used in the main CRUD flow.
-async function getMedByName(medicineName) {
-  try {
-    const pool = await sql.connect(dbConfig);
-    const result = await pool.request()
-      .input('medicine_name', sql.VarChar, medicineName)
-      .query('SELECT * FROM Medications WHERE medicine_name = @medicine_name');
-    if (result.recordset.length === 0) return null;
-    return result.recordset[0];
-  } catch (error) {
-    throw new Error(`Failed to retrieve medicine by name: ${error.message}`);
-  }
-}
-
 module.exports = {
   getMedsByUserId,
   getMedById,
   createMed,
   updateMed,
   deleteMedById,
-  getMedByName
 };

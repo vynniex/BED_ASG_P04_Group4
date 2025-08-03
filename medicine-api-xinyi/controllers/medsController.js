@@ -70,7 +70,7 @@ async function updateMed(req, res) {
       return res.status(400).json({ error: 'Invalid medicine ID' });
     }
 
-    // Security check: First, get the medicine to ensure it belongs to the user
+    // Security check: Get the medicine to ensure it belongs to the user
     const existingMed = await medsModel.getMedById(medId);
     if (!existingMed) {
         return res.status(404).json({ error: 'Medicine not found' });

@@ -17,10 +17,11 @@ CRUD Operations done by each member is listed below.
 
 ### Wee Xin Yi
 Medcine:
-Create - 
-Read - 
-Update - 
-Delete - 
+Create - Create Medicines
+Read - Get all Medicines created
+Read - Get Medicines created by medId
+Update - Update existing Medicine by medId
+Delete - Delete existing Medicine by medId
 
 ### Loh Xue Ning
 Medical Records:

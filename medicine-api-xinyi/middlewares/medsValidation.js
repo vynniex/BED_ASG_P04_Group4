@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
+// This schema is used for both POST and PUT. It validates the entire request body.
 const medInputSchema = Joi.object({
-  // medicine_name is now always required in the body for POST and PUT
   medicine_name: Joi.string().trim().required().messages({
     'string.empty': 'Medicine name is required',
     'any.required': 'Medicine name is required'
@@ -31,21 +31,6 @@ function validateMedInput(req, res, next) {
   next();
 }
 
-// This schema is no longer used for the PUT route but can be kept for other potential uses.
-const medNameSchema = Joi.string().trim().required().messages({
-  'string.empty': 'Medicine name is required',
-  'any.required': 'Medicine name is required'
-});
-
-function validateMedName(req, res, next) {
-  const { error } = medNameSchema.validate(req.params.medName);
-  if (error) {
-    return res.status(400).json({ error: error.details[0].message });
-  }
-  next();
-}
-
 module.exports = {
-  validateMedInput,
-  validateMedName
+  validateMedInput
 };
