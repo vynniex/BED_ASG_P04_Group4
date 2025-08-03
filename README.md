@@ -1,78 +1,75 @@
 # BED_ASG_P04_Group4
-BED 2025 Assignment
+_BED 2025 Assignment_
 
-# Lions Befriender
+## Lions Befriender
+
+Lions Befriender is a web application designed to help the elderly easily manage their health needs, such as medications, appointments, daily mood tracking, and more.
 
 ## Team Members
-- **Wee Xin Yi** - S10270487
-- **Loh Xue Ning** - S10267391
-- **Seah Yi Kit Dalton** - S10270492
-- **Chua Wee Teng Grace** - S10269093
 
-## Introduction
-Lions Befriender is a web application designed to assist the elderly with their health needs like medications, appointments, daily mood tracking, etc. with ease.
+-   **Wee Xin Yi** - `S10270487`
+-   **Loh Xue Ning** - `S10267391`
+-   **Seah Yi Kit Dalton** - `S10270492`
+-   **Chua Wee Teng Grace** - `S10269093`
 
 ## CRUD Operations
-CRUD Operations done by each member is listed below.
+
+Here is a breakdown of the CRUD operations handled by each team member.
 
 ### Wee Xin Yi
-Medcine:</b>
-Create - Create Medicines</b>
-Read - Get all Medicines created</b>
-Read - Get Medicines created by medId</b>
-Update - Update existing Medicine by medId</b>
-Delete - Delete existing Medicine by medId</b>
+
+-   **Medicine**
+    -   **Create:** Add new medicines.
+    -   **Read:** Get all medicines or a specific medicine by `medId`.
+    -   **Update:** Update an existing medicine by `medId`.
+    -   **Delete:** Delete an existing medicine by `medId`.
 
 ### Loh Xue Ning
-Medical Records:</b>
-Create - Create Medical Record</b>
-Read - Get all Medical Records</b>
-Read - Get Medical Record by recordId</b>
-Update - Update Medical Record by recordId</b>
-Delete - Delete Medical Record by recordId</b>
 
-Sign up / Login:</b>
-Update - Update user account details by userId</b>
+-   **Medical Records**
+    -   **Create:** Create a new medical record.
+    -   **Read:** Get all medical records or a specific record by `recordId`.
+    -   **Update:** Update a medical record by `recordId`.
+    -   **Delete:** Delete a medical record by `recordId`.
+-   **User Account**
+    -   **Update:** Update user account details by `userId`.
 
 ### Seah Yi Kit Dalton
-Reminders:</b>
-Create - </b>
-Read - </b>
-Update - </b>
-Delete - </b>
+
+-   **Reminders**
+    -   **Create:** *(In progress)*
+    -   **Read:** *(In progress)*
+    -   **Update:** *(In progress)*
+    -   **Delete:** *(In progress)*
 
 ### Chua Wee Teng Grace
-Appointments:</b>
-Create - Create Appointment</b>
-Read - View Appointment by userId</b>
-Update - Update Appointment by appointmentId</b>
-Delete - Delete Appointment by appointmentId</b>
 
-Sign up / Login:</b>
-Create - Create account</b>
-Read - View account profile</b>
+-   **Appointments**
+    -   **Create:** Create a new appointment.
+    -   **Read:** View appointments by `userId`.
+    -   **Update:** Update an appointment by `appointmentId`.
+    -   **Delete:** Delete an appointment by `appointmentId`.
+-   **User Account**
+    -   **Create:** Create a new user account (Sign Up).
+    -   **Read:** View user account profile (Login).
 
-## Node Packages Utilised
-**Dependencies**
-- dotenv
-- cors
-- express
-- joi
-- jsonwebtoken
-- mssql
+## Tech Stack & Tools
+### Dependencies
 
-## External Sources Utilised
-1. Designing
-- Figma [https://www.figma.com/]
-1. API Testing
-- Postman [https://www.postman.com/]
-1. Database and Storage
-- Microsoft SQL Server (MSSQL) [https://www.microsoft.com/sql-server]
-1. Version Control
-GitHub [https://github.com/]
-1. AI & Assistant Tools
-- ChatGPT [https://chat.openai.com/]
-- Google Gemini [https://gemini.google.com/]
+-   `dotenv`
+-   `cors`
+-   `express`
+-   `joi`
+-   `jsonwebtoken`
+-   `mssql`
 
-## References
-<a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
+### External Tools & Services
+-   **Design:** [Figma](https://www.figma.com/)
+-   **API Testing:** [Postman](https://www.postman.com/)
+-   **Database:** [Microsoft SQL Server (MSSQL)](https://www.microsoft.com/sql-server)
+-   **Version Control:** [GitHub](https://github.com/)
+-   **AI Assistance:** [ChatGPT](https://chat.openai.com/), [Google Gemini](https://gemini.google.com/)
+
+## Acknowledgements
+
+-   [User icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/user)
