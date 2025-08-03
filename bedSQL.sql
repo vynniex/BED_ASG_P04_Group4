@@ -26,7 +26,7 @@ INSERT INTO Users(nric_fin, full_name, email, password, contact_num, dob) VALUES
 CREATE TABLE Medications (
     medicine_id INT PRIMARY KEY IDENTITY(1,1),
     userId INT NOT NULL, -- Foreign key to Users table
-    medicine_name VARCHAR(100) NOT NULL UNIQUE,
+    medicine_name VARCHAR(100) NOT NULL,
     purpose VARCHAR(200) NOT NULL,
     per_day INT NOT NULL CHECK(per_day > 0),
     food_timing VARCHAR(10) NOT NULL CHECK(food_timing IN ('before', 'after')),
