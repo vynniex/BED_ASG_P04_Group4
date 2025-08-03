@@ -31,7 +31,7 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(express.static(path.join(__dirname, "public"))); // Static files
 
 // ================= Routes ====================
-// MEDICATION ROUTES - XY
+// MEDICATION ROUTES - Xin Yi
 app.post("/api/medications", verifyJWT, validateMedInput, medsController.createMed);
 app.get("/api/medications", verifyJWT, medsController.getMedsByUserId);
 app.get("/api/medications/id/:medId", verifyJWT, medsController.getMedById);
@@ -52,7 +52,7 @@ app.get("/api/users/profile", verifyJWT, userController.getUserDetailsById);
 app.put("/api/users/profile", verifyJWT, userController.updateUserById);
 app.delete("/api/users/:id", userController.deleteUserById);
 
-// MEDICAL RECORDS ROUTES - XN
+// MEDICAL RECORDS ROUTES - Xue Ning
 app.get("/api/records", verifyJWT, recsController.getAllRecords);
 app.get("/api/records/:id", verifyJWT, recsController.getRecordById);
 app.post("/api/records",verifyJWT, validateRecord, recsController.createRecord);
