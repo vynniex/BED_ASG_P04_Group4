@@ -37,10 +37,10 @@ Here is a breakdown of the CRUD operations handled by each team member.
 ### Seah Yi Kit Dalton
 
 -   **Reminders**
-    -   **Create:** *Create Medical Reminders*
-    -   **Read:** *Get all Medical Reminders*
-    -   **Update:** *Update Medical Reminders by `notifID`*
-    -   **Delete:** *Delete Medical Reminders by `notifID`*
+    -   **Create:** Create Medical Reminders
+    -   **Read:** Get all Medical Reminders
+    -   **Update:** Update Medical Reminders by `notifID`
+    -   **Delete:** Delete Medical Reminders by `notifID`
 
 ### Chua Wee Teng Grace
 
