@@ -1,9 +1,8 @@
 // userModel.test.js
-const { request } = require("express");
 const userModel = require("../../appointments-api-grace/models/userModel");
 const sql = require("mssql");
 
-jest.mock("mssql"); // Mock the mssql library\
+jest.mock("mssql"); // Mock the mssql library
 
 describe("userModel", () => {
     let mockRequest, mockConnection;
@@ -67,6 +66,22 @@ describe("userModel", () => {
         expect(mockRequest.input).toHaveBeenCalledWith('userId', 1);
         expect(user).toEqual(expectedUser);
     });
+
+    test('updateUserById updates the user and returns rowsAffected', async () => {
+        mockRequest.query.mockResolvedValue({ rowsAffected: [1] });
+
+        const result = await userModel.updateUserById(1, {
+            fullName: 'Updated Name',
+            email: 'updated@example.com',
+            contact: '88887777',
+            dob: '1960-01-01'
+        });
+
+        expect(mockRequest.input).toHaveBeenCalledWith('userId', 1);
+        expect(mockRequest.query).toHaveBeenCalled();
+        expect(result).toBe(1);
+    });
+
 
     test('deleteUserById can only be deletd if there is no existing appointments', async () => {
         mockRequest.query.mockResolvedValue({ rowsAffected: [1] });

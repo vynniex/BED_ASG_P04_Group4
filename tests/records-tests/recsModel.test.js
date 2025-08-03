@@ -1,4 +1,3 @@
-// recsModel.test.js
 const sql = require("mssql");
 const recsModel = require("../../records-api-xuening/models/recsModel");
 
@@ -61,14 +60,14 @@ describe("Records Model", () => {
     });
   });
 
-  // Test GEt record by Id
+  // Test GET record by recordId
   describe("getRecordById", () => {
     test("returns record if found", async () => {
       const record = { recordId: 1, userId: 1, date: "2025-07-25", doctorName: "Dr. Tan Wei Ming", diagnosis: "High blood pressure", notes: "Monitor blood pressure every morning" };
       mockRequest.query.mockResolvedValue({ recordset: [record] });
       const result = await recsModel.getRecordById(1);
       expect(result).toEqual(record);
-      expect(mockRequest.input).toHaveBeenCalledWith("id", 1);
+      expect(mockRequest.input).toHaveBeenCalledWith("id", sql.Int, 1);
     });
 
     test("returns null if record not found", async () => {
@@ -165,7 +164,7 @@ describe("updateRecordById", () => {
   });
 });
 
-  // Test DELETE record by Id
+  // Test DELETE record by recordId
   describe("deleteRecordById", () => {
     test("deletes record and returns 1", async () => {
       mockRequest.query.mockResolvedValue({ rowsAffected: [1] });

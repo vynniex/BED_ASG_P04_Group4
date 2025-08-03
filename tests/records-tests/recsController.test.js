@@ -1,7 +1,7 @@
 const recsController = require("../../records-api-xuening/controllers/recsController");
 const recsModel = require("../../records-api-xuening/models/recsModel");
 
-jest.mock("../records-api-xuening/models/recsModel");
+jest.mock("../../records-api-xuening/models/recsModel");
 
 const mockResponse = () => {
   const res = {};
@@ -17,10 +17,10 @@ describe("Records Controller", () => {
 
   // Test GET all records
   test("getAllRecords - success", async () => {
-    const req = {};
+    const req = { user: { id: 1 } };
     const res = mockResponse();
     const mockRecords = [{ recordId: 1 }, { recordId: 2 }];
-    recsModel.getAllRecords.mockResolvedValue(mockRecords);
+    recsModel.getRecordsByUserId.mockResolvedValue(mockRecords);
 
     await recsController.getAllRecords(req, res);
 
@@ -29,7 +29,7 @@ describe("Records Controller", () => {
 
   // Test GET record by Id
   test("getRecordById - success", async () => {
-    const req = { params: { id: "1" } };
+    const req = { params: { id: "1" }, user: { id: 2 } };
     const res = mockResponse();
     const mockRecord = { recordId: 1, userId: 2 };
     recsModel.getRecordById.mockResolvedValue(mockRecord);
@@ -40,7 +40,7 @@ describe("Records Controller", () => {
   });
 
   test("getRecordById - invalid id", async () => {
-    const req = { params: { id: "abc" } };
+    const req = { params: { id: "abc" }, user: { id: 2 } };
     const res = mockResponse();
 
     await recsController.getRecordById(req, res);
@@ -50,7 +50,7 @@ describe("Records Controller", () => {
   });
 
   test("getRecordById - not found", async () => {
-    const req = { params: { id: "99" } };
+    const req = { params: { id: "99" }, user: { id: 2 } };
     const res = mockResponse();
     recsModel.getRecordById.mockResolvedValue(null);
 
@@ -63,8 +63,8 @@ describe("Records Controller", () => {
   // Test POST a new record
   test("createRecord - success", async () => {
     const req = {
+      user: { id: 1 },
       body: {
-        userId: 1,
         date: "2025-07-26",
         doctorName: "Dr. A",
         diagnosis: "Fever",
@@ -76,7 +76,7 @@ describe("Records Controller", () => {
     };
     const res = mockResponse();
     recsModel.isDuplicateDate.mockResolvedValue(false);
-    recsModel.createRecord.mockResolvedValue({ recordId: 10, ...req.body });
+    recsModel.createRecord.mockResolvedValue({ recordId: 10, userId: 1, ...req.body });
 
     await recsController.createRecord(req, res);
 
@@ -86,8 +86,8 @@ describe("Records Controller", () => {
 
   test("createRecord - duplicate date", async () => {
     const req = {
+      user: { id: 1 },
       body: {
-        userId: 1,
         date: "2025-07-26",
       },
     };
@@ -101,7 +101,7 @@ describe("Records Controller", () => {
   });
 
   test("createRecord - missing body", async () => {
-    const req = {};
+    const req = { user: { id: 2 } };
     const res = mockResponse();
 
     await recsController.createRecord(req, res);
@@ -110,12 +110,12 @@ describe("Records Controller", () => {
     expect(res.json).toHaveBeenCalledWith({ message: "Missing record data" });
   });
 
-  // Test UPDATE record by Id
+  // Test UPDATE record by recordId
   test("updateRecordById - success", async () => {
     const req = {
+      user: { id: 2 },
       params: { id: "1" },
       body: {
-        userId: 1,
         date: "2025-07-26",
         doctorName: "Updated",
         diagnosis: "Cold",
@@ -126,8 +126,9 @@ describe("Records Controller", () => {
       },
     };
     const res = mockResponse();
+    recsModel.getRecordById.mockResolvedValue({ recordId: 1, userId: 2 });
     recsModel.isDuplicateDate.mockResolvedValue(false);
-    recsModel.updateRecordById.mockResolvedValue({ recordId: 1, ...req.body });
+    recsModel.updateRecordById.mockResolvedValue({ recordId: 1, userId: 2, ...req.body });
 
     await recsController.updateRecordById(req, res);
 
@@ -137,10 +138,12 @@ describe("Records Controller", () => {
 
   test("updateRecordById - duplicate", async () => {
     const req = {
+      user: { id: 1 },
       params: { id: "1" },
       body: { userId: 1, date: "2025-07-26" },
     };
     const res = mockResponse();
+    recsModel.getRecordById.mockResolvedValue({ recordId: 1, userId: 1 });
     recsModel.isDuplicateDate.mockResolvedValue(true);
 
     await recsController.updateRecordById(req, res);
@@ -153,12 +156,12 @@ describe("Records Controller", () => {
 
   test("updateRecordById - not found", async () => {
     const req = {
+      user: { id: 2 },
       params: { id: "1" },
       body: { userId: 1, date: "2025-07-26" },
     };
     const res = mockResponse();
-    recsModel.isDuplicateDate.mockResolvedValue(false);
-    recsModel.updateRecordById.mockResolvedValue(null);
+    recsModel.getRecordById.mockResolvedValue(null);
 
     await recsController.updateRecordById(req, res);
 
@@ -167,7 +170,7 @@ describe("Records Controller", () => {
   });
 
   test("updateRecordById - invalid ID", async () => {
-    const req = { params: { id: "-1" }, body: {} };
+    const req = { user: { id: 1 }, params: { id: "-1" }, body: {} };
     const res = mockResponse();
 
     await recsController.updateRecordById(req, res);
@@ -178,8 +181,9 @@ describe("Records Controller", () => {
 
   // Test DELETE record by Id
   test("deleteRecordById - success", async () => {
-    const req = { params: { id: "1" } };
+    const req = { user: { id: 1 }, params: { id: "1" } };
     const res = mockResponse();
+    recsModel.getRecordById.mockResolvedValue({ recordId: 1, userId: 1 });
     recsModel.deleteRecordById.mockResolvedValue(1);
 
     await recsController.deleteRecordById(req, res);
@@ -189,7 +193,7 @@ describe("Records Controller", () => {
   });
 
   test("deleteRecordById - not found", async () => {
-    const req = { params: { id: "999" } };
+    const req = { user: { id: 1 }, params: { id: "999" } };
     const res = mockResponse();
     recsModel.deleteRecordById.mockResolvedValue(0);
 
@@ -200,7 +204,7 @@ describe("Records Controller", () => {
   });
 
   test("deleteRecordById - invalid ID", async () => {
-    const req = { params: { id: "" } };
+    const req = { user: { id: 1 }, params: { id: "" } };
     const res = mockResponse();
 
     await recsController.deleteRecordById(req, res);

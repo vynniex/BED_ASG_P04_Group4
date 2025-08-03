@@ -3,7 +3,7 @@ const apptsController = require("../../appointments-api-grace/controllers/apptsC
 const apptsModel = require("../../appointments-api-grace/models/apptsModel");
 
 // Mock the Appointment model
-jest.mock("../appointments-api-grace/models/apptsModel");
+jest.mock("../../appointments-api-grace/models/apptsModel");
 
 // mock the Express response object
 const mockResponse = () => {
