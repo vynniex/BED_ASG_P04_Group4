@@ -68,8 +68,10 @@ Here is a breakdown of the CRUD operations handled by each team member.
 -   **API Testing:** [Postman](https://www.postman.com/)
 -   **Database:** [Microsoft SQL Server (MSSQL)](https://www.microsoft.com/sql-server)
 -   **Version Control:** [GitHub](https://github.com/)
--   **AI Assistance:** [ChatGPT](https://chat.openai.com/), [Google Gemini](https://gemini.google.com/)
+-   **AI Assistance:** [ChatGPT](https://chat.openai.com/), [Google Gemini](https://gemini.google.com/)  
+-   **API Documentation:**[Swagger UI](https://swagger.io/tools/swagger-ui/)
 
 ## Acknowledgements
 
 -   [User icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/user)
+r
