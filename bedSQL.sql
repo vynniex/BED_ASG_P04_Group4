@@ -87,3 +87,9 @@ CREATE TABLE Notifications (
     createdAt DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (userId) REFERENCES Users(userId) ON DELETE CASCADE
 );
+
+-- Sample INSERT statement for a reminder (Notification)
+INSERT INTO Notifications (userId, reminderType, reminderTitle, description, reminderDate, reminderTimes, timesPerDay, frequency)
+VALUES 
+(1, 'Medication', 'Take Morning Pills', 'Take one pill with breakfast.', '2025-08-04', '["08:00"]', 1, '["Daily"]'),
+(1, 'Exercise', 'Afternoon Walk', 'Walk for 30 minutes.', '2025-08-04', '["15:00"]', 1, '["Daily", "Weekly"]');
