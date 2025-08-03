@@ -36,10 +36,10 @@ Update - Update user account details by userId
 
 ### Seah Yi Kit Dalton
 Reminders:
-Create - Create Medical Reminders
-Read - Get all Medical Reminders
-Update - Update Medical Reminders by notifID
-Delete - Update Medical Reminders by notifID
+Create - 
+Read - 
+Update - 
+Delete - 
 
 ### Chua Wee Teng Grace
 Appointments:
@@ -54,15 +54,25 @@ Read - View account profile
 
 ## Node Packages Utilised
 **Dependencies**
-- dotenv:
-- cors:
-- express:
-- joi:
-- jsonwebtoken:
-- mssql:
+- dotenv
+- cors
+- express
+- joi
+- jsonwebtoken
+- mssql
 
 ## External Sources Utilised
-NIL
+**Designing**
+- Figma [https://www.figma.com/]
+**API Testing**
+- Postman [https://www.postman.com/]
+**Database and Storage**
+- Microsoft SQL Server (MSSQL) [https://www.microsoft.com/sql-server]
+**Version Control**
+GitHub [https://github.com/]
+**AI & Assistant Tools**
+- ChatGPT [https://chat.openai.com/]
+- Google Gemini [https://gemini.google.com/]
 
 ## References
 <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
