@@ -8,16 +8,18 @@ const customJoi = Joi.extend((joi) => ({
     'customDate.format': '{{#label}} must be in dd-mm-yyyy format',
   },
   validate(value, helpers) {
-    const dateFormat = /^\d{2}-\d{2}-\d{4}$/;
+    const dateFormat = /^\d{2}-\d{2}-\d{4}$/; // "\d" means any digit (0–9)
     if (!dateFormat.test(value)) {
       return { value, errors: helpers.error('customDate.format') };
     }
 
+    // Split the date string and check if it is a valid calendar date
     const [dd, mm, yyyy] = value.split('-').map(Number);
+    // Create a JavaScript Date object using yyyy-mm-dd format (ISO format)
     const dateObj = new Date(`${yyyy}-${mm}-${dd}`);
     if (
       dateObj.getDate() !== dd ||
-      dateObj.getMonth() + 1 !== mm ||
+      dateObj.getMonth() + 1 !== mm || // months starts from 0 (January is 0), so +1 for comparison
       dateObj.getFullYear() !== yyyy
     ) {
       return { value, errors: helpers.error('customDate.format') };

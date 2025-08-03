@@ -1,7 +1,7 @@
 # BED_ASG_P04_Group4
 BED 2025 Assignment
 
-# (Project Name)
+# Lions Befriender
 
 ## Team Members
 - **Wee Xin Yi** - S10270487
@@ -16,13 +16,29 @@ Lions Befriender is a web application designed to assist the elderly with their 
 CRUD Operations done by each member is listed below.
 
 ### Wee Xin Yi
-
+Medcine:
+Create - 
+Read - 
+Update - 
+Delete - 
 
 ### Loh Xue Ning
+Medical Records:
+Create - Create Medical Record
+Read - Get all Medical Records
+Read - Get Medical Record by recordId
+Update - Update Medical Record by recordId
+Delete - Delete Medical Record by recordId
 
+Sign up / Login:
+Update - Update user account details by userId
 
 ### Seah Yi Kit Dalton
-
+Reminders:
+Create - 
+Read - 
+Update - 
+Delete - 
 
 ### Chua Wee Teng Grace
 Appointments:
@@ -38,7 +54,6 @@ Read - View account profile
 ## Node Packages Utilised
 **Dependencies**
 - dotenv:
-- firebase:
 - cors:
 - express:
 - joi:
@@ -46,7 +61,7 @@ Read - View account profile
 - mssql:
 
 ## External Sources Utilised
-- firebase
+NIL
 
 ## References
 <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>

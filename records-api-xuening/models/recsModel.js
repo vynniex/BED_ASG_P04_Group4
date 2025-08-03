@@ -1,19 +1,22 @@
 const sql = require("mssql");
 const dbConfig = require("../../dbConfig");
 
+// Check if a record already exists for the user on the same date
+// Used to prevent duplicate entries for the same day
 async function isDuplicateDate(userId, date, excludeRecordId = null) {
   let connection;
   try {
     connection = await sql.connect(dbConfig);
 
-    // Count how many records exist for the user on that date
+    // Count number of records that exist for the user on that date
     let query = `SELECT COUNT(*) AS count FROM Records WHERE userId = @userId AND date = @date`;
+
     // If updating a record: exclude the record itself from the duplicate check
     if (excludeRecordId) {
       query += ` AND recordId != @excludeId`;
     }
 
-    // query parameters
+    // Query parameters
     const request = connection.request();
     request.input("userId", sql.Int, userId);
     request.input("date", sql.Date, date);
@@ -35,8 +38,8 @@ async function isDuplicateDate(userId, date, excludeRecordId = null) {
   }
 }
 
-
-// GET all records
+// GET all records 
+// NOTE: function should be restricted by user in controller
 async function getAllRecords() {
   let connection; 
   try {
@@ -77,21 +80,21 @@ async function getRecordsByUserId(userId) {
   }
 }
 
-// GET record by recordId
+// GET a single record by recordId
 async function getRecordById(id) {
   let connection;
   try {
     connection = await sql.connect(dbConfig);
     const query = "SELECT * FROM Records WHERE recordId = @id";
     const request = connection.request();
-    request.input("id", id);
+    request.input("id", sql.Int, id);
     const result = await request.query(query);
 
     if (result.recordset.length === 0) {
       return null; // Record not found
     }
 
-    return result.recordset[0];
+    return result.recordset[0]; // Return the single record
   } catch (error) {
     console.error("Database error:", error);
     throw error;
@@ -106,7 +109,7 @@ async function getRecordById(id) {
   }
 }
 
-// POST a new record
+// POST a new record for a user
 async function createRecord(data) {
   let connection;
   try {
@@ -130,8 +133,9 @@ async function createRecord(data) {
     request.input("weight", sql.Float, data.weight || null);
 
     const result = await request.query(query);
-
     const newRecordId = result.recordset[0].recordId;
+
+    // Retrieve and return the full record after insertion
     return await getRecordById(newRecordId);
   } catch (error) {
     console.error("Database error:", error);
@@ -147,7 +151,7 @@ async function createRecord(data) {
   }
 }
 
-// UPDATE a record by ID
+// UPDATE an existing record by recordId
 async function updateRecordById(id, data) {
   let connection;
   try {
@@ -183,7 +187,7 @@ async function updateRecordById(id, data) {
       return null; // Record not found
     }
 
-    return await getRecordById(id);
+    return await getRecordById(id); // Return updated record
   } catch (error) {
     console.error("Database error:", error);
     throw error;
@@ -198,7 +202,7 @@ async function updateRecordById(id, data) {
   }
 }
 
-// DELETE record by ID
+// DELETE a record by recordId
 async function deleteRecordById(id) {
   let connection;
   try {
@@ -207,7 +211,9 @@ async function deleteRecordById(id) {
     const request = connection.request();
     request.input("id", sql.Int, id);
     const result = await request.query(query);
-    return result.rowsAffected[0]; // 0 = not found, 1 = deleted
+
+    // Returns 0 = not found, 1 = deleted
+    return result.rowsAffected[0]; 
   } catch (error) {
     console.error("Database error:", error);
     throw error;
