@@ -16,41 +16,41 @@ Lions Befriender is a web application designed to assist the elderly with their 
 CRUD Operations done by each member is listed below.
 
 ### Wee Xin Yi
-Medcine:
-Create - Create Medicines
-Read - Get all Medicines created
-Read - Get Medicines created by medId
-Update - Update existing Medicine by medId
-Delete - Delete existing Medicine by medId
+Medcine:</b>
+Create - Create Medicines</b>
+Read - Get all Medicines created</b>
+Read - Get Medicines created by medId</b>
+Update - Update existing Medicine by medId</b>
+Delete - Delete existing Medicine by medId</b>
 
 ### Loh Xue Ning
-Medical Records:
-Create - Create Medical Record
-Read - Get all Medical Records
-Read - Get Medical Record by recordId
-Update - Update Medical Record by recordId
-Delete - Delete Medical Record by recordId
+Medical Records:</b>
+Create - Create Medical Record</b>
+Read - Get all Medical Records</b>
+Read - Get Medical Record by recordId</b>
+Update - Update Medical Record by recordId</b>
+Delete - Delete Medical Record by recordId</b>
 
-Sign up / Login:
-Update - Update user account details by userId
+Sign up / Login:</b>
+Update - Update user account details by userId</b>
 
 ### Seah Yi Kit Dalton
-Reminders:
-Create - 
-Read - 
-Update - 
-Delete - 
+Reminders:</b>
+Create - </b>
+Read - </b>
+Update - </b>
+Delete - </b>
 
 ### Chua Wee Teng Grace
-Appointments:
-Create - Create Appointment
-Read - View Appointment by userId
-Update - Update Appointment by appointmentId
-Delete - Delete Appointment by appointmentId
+Appointments:</b>
+Create - Create Appointment</b>
+Read - View Appointment by userId</b>
+Update - Update Appointment by appointmentId</b>
+Delete - Delete Appointment by appointmentId</b>
 
-Sign up / Login:
-Create - Create account
-Read - View account profile
+Sign up / Login:</b>
+Create - Create account</b>
+Read - View account profile</b>
 
 ## Node Packages Utilised
 **Dependencies**
@@ -62,15 +62,15 @@ Read - View account profile
 - mssql
 
 ## External Sources Utilised
-1. Designing**
+1. Designing
 - Figma [https://www.figma.com/]
-1. API Testing**
+1. API Testing
 - Postman [https://www.postman.com/]
-1. Database and Storage**
+1. Database and Storage
 - Microsoft SQL Server (MSSQL) [https://www.microsoft.com/sql-server]
-1. Version Control**
+1. Version Control
 GitHub [https://github.com/]
-1. AI & Assistant Tools**
+1. AI & Assistant Tools
 - ChatGPT [https://chat.openai.com/]
 - Google Gemini [https://gemini.google.com/]
 
