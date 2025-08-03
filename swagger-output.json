@@ -13,47 +13,12 @@
   "paths": {
     "/api/medications": {
       "post": {
-        "tags": [
-          "Medications"
-        ],
-        "description": "Create a new medication record",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
             "in": "header",
-            "type": "string",
-            "description": "Bearer token for authentication"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "The medication data to create.",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "medicine_name": {
-                  "type": "string",
-                  "example": "Aspirin"
-                },
-                "purpose": {
-                  "type": "string",
-                  "example": "Pain Relief"
-                },
-                "per_day": {
-                  "type": "integer",
-                  "example": 2
-                },
-                "food_timing": {
-                  "type": "string",
-                  "example": "after",
-                  "enum": [
-                    "before",
-                    "after"
-                  ]
-                }
-              }
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -68,17 +33,11 @@
           },
           "403": {
             "description": "Forbidden"
-          },
-          "409": {
-            "description": "Conflict - Medicine already exists"
           }
         }
       },
       "get": {
-        "tags": [
-          "Medications"
-        ],
-        "description": "Get all of the logged-in user's medicine records",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -89,6 +48,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -104,16 +66,13 @@
     },
     "/api/medications/id/{medId}": {
       "get": {
-        "tags": [
-          "Medications"
-        ],
-        "description": "Get a single medicine record by its ID",
+        "description": "",
         "parameters": [
           {
             "name": "medId",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "authorization",
@@ -125,6 +84,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -133,56 +95,25 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
-        "tags": [
-          "Medications"
-        ],
-        "description": "Update an existing medicine record by its ID",
+        "description": "",
         "parameters": [
           {
             "name": "medId",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "The medication data to update.",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "medicine_name": {
-                  "type": "string",
-                  "example": "Ibuprofen"
-                },
-                "purpose": {
-                  "type": "string",
-                  "example": "Headache Relief"
-                },
-                "per_day": {
-                  "type": "integer",
-                  "example": 3
-                },
-                "food_timing": {
-                  "type": "string",
-                  "example": "after",
-                  "enum": [
-                    "before",
-                    "after"
-                  ]
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -204,16 +135,13 @@
         }
       },
       "delete": {
-        "tags": [
-          "Medications"
-        ],
-        "description": "Delete a medicine record by its ID",
+        "description": "",
         "parameters": [
           {
             "name": "medId",
             "in": "path",
             "required": true,
-            "type": "integer"
+            "type": "string"
           },
           {
             "name": "authorization",
@@ -224,6 +152,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -239,8 +170,7 @@
     },
     "/api/users/appointments": {
       "get": {
-        "tags": ["Appointments"],
-        "description": "Get all Appointments by User",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -266,8 +196,7 @@
     },
     "/api/users/appointments/{id}": {
       "get": {
-        "tags": ["Appointments"],
-        "description": "Get Appointment info by appointmentId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -288,39 +217,17 @@
     },
     "/api/appointments": {
       "post": {
-        "tags": ["Appointments"],
-        "summary": "Create new appointment",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "appointmentDate": {
-                  "example": "2025-09-15"
-                },
-                "appointmentTime": {
-                  "example": "11:00AM"
-                },
-                "clinic": {
-                  "example": "Punggol Polyclinic"
-                },
-                "reason": {
-                  "example": "General Consultation"
-                }
-              }
-            }
           }
         ],
         "responses": {
           "201": {
-            "description": "Appointment Created"
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -336,8 +243,7 @@
     },
     "/api/appointments/{id}": {
       "delete": {
-        "tags": ["Appointments"],
-        "description": "Delete appointments by appointmentId",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -348,7 +254,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No Content - Appointment deleted successfully"
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request"
@@ -362,8 +268,7 @@
         }
       },
       "put": {
-        "tags": ["Appointments"],
-        "description": "Update existing appointment",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -378,13 +283,13 @@
               "type": "object",
               "properties": {
                 "appointment_date": {
-                  "example": "2025-09-15"
+                  "example": "any"
                 },
                 "appointment_time": {
-                  "example": "11:00AM"
+                  "example": "any"
                 },
                 "clinic": {
-                  "example": "Punggol Polyclinic"
+                  "example": "any"
                 }
               }
             }
@@ -405,8 +310,7 @@
     },
     "/api/appointments/verify": {
       "post": {
-        "tags": ["Appointments"],
-        "description": "Verify using NRIC",
+        "description": "",
         "parameters": [
           {
             "name": "authorization",
@@ -450,7 +354,6 @@
     },
     "/api/users/login": {
       "post": {
-        "tags": ["User"],
         "description": "",
         "parameters": [
           {
@@ -487,7 +390,6 @@
     },
     "/api/users/signup": {
       "post": {
-        "tags": ["User"],
         "description": "",
         "parameters": [
           {
@@ -496,23 +398,14 @@
             "schema": {
               "type": "object",
               "properties": {
-                "nric": {
-                  "example": "S6212345F"
-                },
-                "fullName": {
-                  "example": "Tay Bee Hua"
+                "email": {
+                  "example": "any"
                 },
                 "password": {
-                  "example": "password3"
+                  "example": "any"
                 },
-                "email": {
-                  "example": "bee.hua@gmail.com"
-                },
-                "contact": {
-                  "example": "95783124"
-                },
-                "dob": {
-                  "example": "1962-09-09"
+                "nric": {
+                  "example": "any"
                 }
               }
             }
@@ -520,7 +413,7 @@
         ],
         "responses": {
           "201": {
-            "description": "User account Created"
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"
@@ -536,7 +429,6 @@
     },
     "/api/users/profile": {
       "get": {
-        "tags": ["User"],
         "description": "",
         "parameters": [
           {
@@ -561,9 +453,8 @@
         }
       },
       "put": {
-        "tags": ["User"],
-        "description": "Update user's details",
-        "parameters":[
+        "description": "",
+        "parameters": [
           {
             "name": "authorization",
             "in": "header",
@@ -575,17 +466,17 @@
             "schema": {
               "type": "object",
               "properties": {
-                "fullName": {
-                  "example": "BOB TAN"
+                "full_name": {
+                  "example": "any"
                 },
                 "email": {
-                  "example": "bob@gmail.com"
+                  "example": "any"
                 },
-                "contact": {
-                  "example": "9001123"
+                "contact_num": {
+                  "example": "any"
                 },
                 "dob": {
-                  "example": "1950-02-28"
+                  "example": "any"
                 }
               }
             }
@@ -593,10 +484,19 @@
         ],
         "responses": {
           "200": {
-            "description": "User updated successfully"
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
-            "description": "User Not Found"
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -606,8 +506,7 @@
     },
     "/api/users/{id}": {
       "delete": {
-        "tags": ["User"],
-        "description": "Delete user account",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -618,7 +517,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No Content - User acccount deleted successfully"
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request"
@@ -631,11 +530,23 @@
     },
     "/api/records": {
       "get": {
-        "tags": ["Records"],
-        "description": "Get all medical records by user",
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error"
@@ -643,9 +554,13 @@
         }
       },
       "post": {
-        "tags": ["Records"],
-        "description": "Create medical records for user",
+        "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -669,6 +584,12 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -677,13 +598,17 @@
     },
     "/api/records/{id}": {
       "get": {
-        "tags": ["Records"],
         "description": "",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -694,6 +619,12 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -703,13 +634,17 @@
         }
       },
       "put": {
-        "tags": ["Records"],
-        "description": "update medical records",
+        "description": "",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -735,6 +670,12 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -744,13 +685,17 @@
         }
       },
       "delete": {
-        "tags": ["Records"],
-        "description": "delete medical records by id",
+        "description": "",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -760,6 +705,12 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
@@ -772,8 +723,7 @@
     },
     "/api/notifications": {
       "post": {
-        "tags": ["Notifications"],
-        "description": "create notifications ",
+        "description": "",
         "parameters": [
           {
             "name": "body",
@@ -793,10 +743,10 @@
                 "date": {
                   "example": "any"
                 },
-                "time": {
+                "reminderTimes": {
                   "example": "any"
                 },
-                "frequency": {
+                "timesPerDay": {
                   "example": "any"
                 }
               }
@@ -816,8 +766,7 @@
         }
       },
       "get": {
-        "tags": ["Notifications"],
-        "description": "Get All Notifications by user",
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
@@ -830,7 +779,6 @@
     },
     "/api/notifications/{id}": {
       "get": {
-        "tags": ["Notifications"],
         "description": "",
         "parameters": [
           {
@@ -853,8 +801,7 @@
         }
       },
       "put": {
-        "tags": ["Notifications"],
-        "description": "Update notifications details",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -880,10 +827,10 @@
                 "date": {
                   "example": "any"
                 },
-                "time": {
+                "reminderTimes": {
                   "example": "any"
                 },
-                "frequency": {
+                "timesPerDay": {
                   "example": "any"
                 }
               }
@@ -906,8 +853,7 @@
         }
       },
       "delete": {
-        "tags": ["Notifications"],
-        "description": "Delete Notification",
+        "description": "",
         "parameters": [
           {
             "name": "id",
