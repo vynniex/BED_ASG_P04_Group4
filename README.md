@@ -74,4 +74,3 @@ Here is a breakdown of the CRUD operations handled by each team member.
 ## Acknowledgements
 
 -   [User icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/user)
-r
