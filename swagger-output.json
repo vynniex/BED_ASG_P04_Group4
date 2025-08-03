@@ -13,7 +13,8 @@
   "paths": {
     "/api/medications": {
       "post": {
-        "description": "",
+        "tags": ["Medications"],
+        "description": " Create medication record",
         "parameters": [
           {
             "name": "authorization",
@@ -37,7 +38,8 @@
         }
       },
       "get": {
-        "description": "",
+        "tags": ["Medications"],
+        "description": "Get all Medicine records by user",
         "parameters": [
           {
             "name": "authorization",
@@ -66,6 +68,7 @@
     },
     "/api/medications/id/{medId}": {
       "get": {
+        "tags": ["Medications"],
         "description": "",
         "parameters": [
           {
@@ -102,7 +105,8 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Medications"],
+        "description": "update medicine records",
         "parameters": [
           {
             "name": "medId",
@@ -135,7 +139,8 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Medications"],
+        "description": "delete medicine record",
         "parameters": [
           {
             "name": "medId",
@@ -222,62 +227,26 @@
         "tags": ["Appointments"],
         "summary": "Create new appointment",
         "parameters": [
-            {
+          {
             "name": "authorization",
             "in": "header",
             "type": "string"
           },
           {
-            "name": "appointmentDate",
+            "name": "body",
             "in": "body",
-            "description": "Date of the appointment",
-            "required": true,
             "schema": {
-              "type": "string",
+              "type": "object",
               "properties": {
                 "appointmentDate": {
-                  "example": "2025-08-03"
-                }
-              },
-              "format": "date"
-            }
-          },
-          {
-            "name": "appointmentTime",
-            "in": "body",
-            "description": "Time of the appointment",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "properties": {
+                  "example": "2025-09-15"
+                },
                 "appointmentTime": {
-                  "example": "2:00PM"
-                }
-              }
-            }
-          },
-          {
-            "name": "clinic",
-            "in": "body",
-            "description": "Clinic name",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "properties": {
+                  "example": "11:00AM"
+                },
                 "clinic": {
-                  "example": "Paris Ris Polyclinic"
-                }
-              }
-            }
-          },
-          {
-            "name": "reason",
-            "in": "body",
-            "description": "Reason for the appointment",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "properties": {
+                  "example": "Punggol Polyclinic"
+                },
                 "reason": {
                   "example": "General Consultation"
                 }
@@ -315,7 +284,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "No Content - Appointment deleted successfully"
           },
           "400": {
             "description": "Bad Request"
@@ -345,13 +314,13 @@
               "type": "object",
               "properties": {
                 "appointment_date": {
-                  "example": "any"
+                  "example": "2025-09-15"
                 },
                 "appointment_time": {
-                  "example": "any"
+                  "example": "11:00AM"
                 },
                 "clinic": {
-                  "example": "any"
+                  "example": "Punggol Polyclinic"
                 }
               }
             }
@@ -417,6 +386,7 @@
     },
     "/api/users/login": {
       "post": {
+        "tags": ["User"],
         "description": "",
         "parameters": [
           {
@@ -453,6 +423,7 @@
     },
     "/api/users/signup": {
       "post": {
+        "tags": ["User"],
         "description": "",
         "parameters": [
           {
@@ -461,14 +432,23 @@
             "schema": {
               "type": "object",
               "properties": {
-                "email": {
-                  "example": "any"
+                "nric": {
+                  "example": "S6212345F"
+                },
+                "fullName": {
+                  "example": "Tay Bee Hua"
                 },
                 "password": {
-                  "example": "any"
+                  "example": "password3"
                 },
-                "nric": {
-                  "example": "any"
+                "email": {
+                  "example": "bee.hua@gmail.com"
+                },
+                "contact": {
+                  "example": "95783124"
+                },
+                "dob": {
+                  "example": "1962-09-09"
                 }
               }
             }
@@ -476,7 +456,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "User account Created"
           },
           "400": {
             "description": "Bad Request"
@@ -492,6 +472,7 @@
     },
     "/api/users/profile": {
       "get": {
+        "tags": ["User"],
         "description": "",
         "parameters": [
           {
@@ -514,11 +495,55 @@
             "description": "Internal Server Error"
           }
         }
+      },
+      "put": {
+        "tags": ["User"],
+        "description": "Update user's details",
+        "parameters":[
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fullName": {
+                  "example": "BOB TAN"
+                },
+                "email": {
+                  "example": "bob@gmail.com"
+                },
+                "contact": {
+                  "example": "9001123"
+                },
+                "dob": {
+                  "example": "1950-02-28"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          },
+          "404": {
+            "description": "User Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/api/users/{id}": {
       "delete": {
-        "description": "",
+        "tags": ["User"],
+        "description": "Delete user account",
         "parameters": [
           {
             "name": "id",
@@ -529,7 +554,7 @@
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "No Content - User acccount deleted successfully"
           },
           "400": {
             "description": "Bad Request"
@@ -542,7 +567,8 @@
     },
     "/api/records": {
       "get": {
-        "description": "",
+        "tags": ["Records"],
+        "description": "Get all medical records by user",
         "responses": {
           "200": {
             "description": "OK"
@@ -553,7 +579,8 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": ["Records"],
+        "description": "Create medical records for user",
         "parameters": [
           {
             "name": "body",
@@ -586,6 +613,7 @@
     },
     "/api/records/{id}": {
       "get": {
+        "tags": ["Records"],
         "description": "",
         "parameters": [
           {
@@ -611,7 +639,8 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Records"],
+        "description": "update medical records",
         "parameters": [
           {
             "name": "id",
@@ -651,7 +680,8 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Records"],
+        "description": "delete medical records by id",
         "parameters": [
           {
             "name": "id",
@@ -678,7 +708,8 @@
     },
     "/api/notifications": {
       "post": {
-        "description": "",
+        "tags": ["Notifications"],
+        "description": "create notifications ",
         "parameters": [
           {
             "name": "body",
@@ -721,7 +752,8 @@
         }
       },
       "get": {
-        "description": "",
+        "tags": ["Notifications"],
+        "description": "Get All Notifications by user",
         "responses": {
           "200": {
             "description": "OK"
@@ -734,6 +766,7 @@
     },
     "/api/notifications/{id}": {
       "get": {
+        "tags": ["Notifications"],
         "description": "",
         "parameters": [
           {
@@ -756,7 +789,8 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": ["Notifications"],
+        "description": "Update notifications details",
         "parameters": [
           {
             "name": "id",
@@ -808,7 +842,8 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": ["Notifications"],
+        "description": "Delete Notification",
         "parameters": [
           {
             "name": "id",
