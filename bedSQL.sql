@@ -31,7 +31,7 @@ CREATE TABLE Medications (
     food_timing VARCHAR(10) NOT NULL CHECK(food_timing IN ('before', 'after')),
     created_at DATETIME DEFAULT GETDATE(),
     updated_at DATETIME NULL
-    FOREIGN KEY (userId) REFERENCES Users(userId) 
+    FOREIGN KEY (userId) REFERENCES Users(userId) ON DELETE CASCADE
 );
 
 INSERT INTO Medications (userId, medicine_name, purpose, per_day, food_timing, created_at)
